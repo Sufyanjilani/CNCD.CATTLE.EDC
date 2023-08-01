@@ -61,6 +61,82 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <org.eazegraph.lib.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/piechart2"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="6dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    android:text="Number of Animals"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <org.eazegraph.lib.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/piechart3"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:padding="6dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    android:text="Number of Animals"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center_vertical">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:id="@+id/addFarmer"
+                    android:textColor="@color/textcolor"
+                    android:backgroundTint="@color/primaryblue"
+                    android:layout_gravity="center_vertical"
+                    android:text="Add Farmer"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/textcolor"
+                    android:backgroundTint="@color/primaryblue"
+                    android:layout_gravity="center_vertical"
+                    android:text="Add Farmer"/>
+
+
+            </LinearLayout>
+
+
 
 
         </LinearLayout>
@@ -73,11 +149,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:headerLayout="@layout/nav_header"
-        android:layout_marginTop="100dp"
         android:id="@+id/navigationView"
         android:layout_gravity="start|left"
-        android:fitsSystemWindows="false"
-        app:menu="@menu/drawaermenu"/>
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawaermenu">
+
+        <include layout="@layout/nav_header"/>
+
+    </com.google.android.material.navigation.NavigationView>
 
 
 

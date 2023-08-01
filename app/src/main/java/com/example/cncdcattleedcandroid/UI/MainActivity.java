@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
 
+
+
+
         startActivity(new Intent(this,ActivityDashboard.class));
 
 
