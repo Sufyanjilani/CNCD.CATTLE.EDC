@@ -1,6 +1,7 @@
 package com.example.cncdcattleedcandroid.UI;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -90,6 +91,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 if (s != null){
 
                     Loadgetjavascript(s);
+
                 }
                 else{
 
@@ -227,6 +229,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     public void setUpWebView(){
 
         webViewSurveyFormBinding.surveyWebView.getSettings().setJavaScriptEnabled(true);
@@ -237,6 +240,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         webViewSurveyFormBinding.surveyWebView.getSettings().setAllowFileAccess(true);
         webViewSurveyFormBinding.surveyWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webViewSurveyFormBinding.surveyWebView.getSettings().setDomStorageEnabled(true);
+        webViewSurveyFormBinding.surveyWebView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
 
         webViewSurveyFormBinding.surveyWebView.addJavascriptInterface(new JavaScriptInterface(), "Android");
 
@@ -298,7 +302,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 String imageFileName = "IMG_" + timeStamp + ".jpg";
                 Logger.i("1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣1️⃣");
                 // Get the directory where the image file will be stored (e.g., Pictures directory)
-                File storageDir = new File(android.os.Environment.getExternalStoragePublicDirectory(
+                File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_DCIM), "CNCDImages");
                 Logger.i("StorageDir 🤚🤚🤚🤚🤚🤚🤚🤚🤚", storageDir);
                 // If the directory doesn't exist, create it
@@ -326,7 +330,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     try {
                         //photoFile = 'Utility.createImageFile()';
                         photoFile = createImageFile();
-                        com.orhanobut.logger.Logger.i("Image-File-Path", photoFile.getAbsolutePath());
+                        Logger.i("Image-File-Path", photoFile.getAbsolutePath());
                         Logger.i("filechooserparams",String.valueOf(fileChooserParams));
                         takePictureIntent.putExtra("PhotoPath", mCM);
                     } catch (Exception ex) {
@@ -363,6 +367,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
         });
+
+        webViewSurveyFormBinding.surveyWebView.loadUrl("file:///android_asset/html/index.html");
+        //webViewSurveyFormBinding.surveyWebView.loadUrl("https://www.google.com");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            webViewSurveyFormBinding.surveyWebView.setForceDarkAllowed(true);
+
+        }
     }
 
     class JavaScriptInterface{

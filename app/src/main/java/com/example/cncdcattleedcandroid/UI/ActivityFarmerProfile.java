@@ -36,6 +36,14 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             }
         });
 
+        farmerProfileBinding.addcattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ActivityFarmerProfile.this, ActivityCattleProfile.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     public void InitializeRecyclerView(){

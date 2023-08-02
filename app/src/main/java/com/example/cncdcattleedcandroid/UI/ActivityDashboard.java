@@ -112,9 +112,6 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
 
-
-
-
     }
 
 
@@ -199,14 +196,14 @@ public class ActivityDashboard extends AppCompatActivity {
     private void setDarkTheme() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         Log.d("tag","dark");
-        this.recreate();
+
 
     }
 
     private void setLightTheme() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Log.d("tag","Light");
-        this.recreate();
+
 
     }
 
@@ -341,7 +338,8 @@ public class ActivityDashboard extends AppCompatActivity {
 
         View headerView = navigationView.getHeaderView(0);
         TextView appversiontextview = headerView.findViewById(R.id.textViewVersion);
-        
+
+
     }
 
 

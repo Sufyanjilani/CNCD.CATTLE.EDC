@@ -6,5 +6,6 @@
     <string name="userName">Research Officer</string>
     <string name="addFarmer">Add Farmer</string>
     <string name="cowName">Cattle Name</string>
+    <string name="addcattle">Add cattle</string>
 
 </resources>

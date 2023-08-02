@@ -61,6 +61,7 @@
                     android:layout_width="150dp"
                     android:layout_height="60dp"
                     android:id="@+id/btnAddFarmer"
+                    app:cornerRadius="15dp"
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/primaryblue"
                     android:text="@string/addFarmer"
@@ -96,13 +97,33 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:layout_constraintVertical_bias="0.056">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="CATTLES"
-            android:textColor="@color/textcolor"
-            android:textSize="25dp" />
+            android:padding="10dp">
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CATTLES"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/textcolor"
+                android:textSize="25dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_vertical"
+                app:cornerRadius="15dp"
+                android:id="@+id/addcattle"
+                android:backgroundTint="@color/primaryblue"
+                android:text="@string/addcattle"
+                android:textColor="@color/textcolor" />
+
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyccattle"

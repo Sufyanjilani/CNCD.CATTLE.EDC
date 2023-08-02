@@ -8,7 +8,7 @@ import retrofit2.http.Path;
 
 public interface ApiEndPoints {
 
-    @POST("")
+    @POST("form_json/{id}")
     Call<JsonObject> getjsonApi(@Path("id") String id);
 
 }
