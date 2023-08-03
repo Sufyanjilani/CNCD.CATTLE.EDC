@@ -5,8 +5,10 @@
     <color name="primaryblue">#03A9F4</color>
     <color name="secondaryblue">#2175F3</color>
     <color name="textcolor">#0C0B0B</color>
-
-
+    <color name="backgroundColorpanel">#EFF2FE</color>
+    <color name="textdashboardMenu">#9F9E9E</color>
+    <color name="dashcardcolor">#03A9F4</color>
+    <color name="btncolor">#FFFFFF</color>
 
     
 </resources>

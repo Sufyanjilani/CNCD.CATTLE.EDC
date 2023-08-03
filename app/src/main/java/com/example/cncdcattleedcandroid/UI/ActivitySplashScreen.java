@@ -16,7 +16,5 @@ public class ActivitySplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         splashScreenBinding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(splashScreenBinding.getRoot());
-
-
     }
 }
