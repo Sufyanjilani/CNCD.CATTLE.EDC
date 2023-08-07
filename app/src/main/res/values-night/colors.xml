@@ -6,8 +6,10 @@
     <color name="textcolor">#ffffff</color>
     <color name="backgroundColorpanel">#191C3B</color>
     <color name="textdashboardMenu">#FFFFFF</color>
-    <color name="dashcardcolor">#191C3B</color>
+    <color name="dashcardcolor">#0D47A1</color>
     <color name="btncolor">#0D47A1</color>
+    <color name="farmerprofilecardcolor">#0D47A1</color>
+    <color name="farmerprofilecardpanel1color">#191C3B</color>
 
 
 

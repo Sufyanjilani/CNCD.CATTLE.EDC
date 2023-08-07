@@ -16,6 +16,7 @@ public class SessionManager {
     public SessionManager(Context context){
         this.context = context;
         sharedPreferences = context.getSharedPreferences("SessionData",context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
     public void setthemstate(boolean b){
         editor.putBoolean("isthemedark",b);

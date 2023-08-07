@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        startActivity(new Intent(this,ActivityDashboard.class));
+        startActivity(new Intent(this,ActivityLogin.class));
 
 
 

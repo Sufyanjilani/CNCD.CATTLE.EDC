@@ -7,6 +7,7 @@
         <item name="android:colorPrimary">@color/primaryblue</item>
         <item name="colorSecondary">@color/secondaryblue</item>
         <item name="textFillColor">@color/textcolor</item>
+
     </style>
 
     <style name="Theme.CNCDCattleEDCAndroid" parent="Base.Theme.CNCDCattleEDCAndroid" />

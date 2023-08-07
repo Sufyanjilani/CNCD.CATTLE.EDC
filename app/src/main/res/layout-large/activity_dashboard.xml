@@ -61,15 +61,23 @@
 
                 </View>
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textdashboardMenu"
-                    android:layout_margin="5dp"
-                    android:text="Settings"/>
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:textColor="@color/textdashboardMenu"
+                        android:layout_margin="5dp"
+                        android:text="Settings"/>
+                </LinearLayout>
 
 
 
@@ -79,15 +87,21 @@
 
                 </View>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textdashboardMenu"
-                    android:layout_margin="5dp"
-                    android:text="Reposts"/>
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textdashboardMenu"
+                        android:layout_margin="5dp"
+                        android:text="Repost"/>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -95,15 +109,21 @@
 
                 </View>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textdashboardMenu"
-                    android:layout_margin="5dp"
-                    android:text="Profile"/>
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textdashboardMenu"
+                        android:layout_margin="5dp"
+                        android:text="Profile"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -149,21 +169,41 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="2dp"
+                    android:id="@+id/card1"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="235dp"
                         android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@color/backgroundColorpanel"
                         android:padding="15dp">
 
-                        <org.eazegraph.lib.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                        <LinearLayout
                             android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
-                            android:padding="6dp" />
+                            android:layout_height="180dp"
+                            android:gravity="center">
+
+                            <com.smb.animatedtextview.AnimatedTextView
+                                android:id="@+id/animtext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginBottom="15dp"
+                                android:padding="6dp"
+                                android:text="10000"
+                                android:textAlignment="center"
+                                android:textColor="@color/textcolor"
+                                android:textSize="30dp"
+                                android:textStyle="bold"
+                                app:atv_animationDuration="4000" />
+                        </LinearLayout>
+
+
+
+
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -183,22 +223,24 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="2dp"
+                    android:id="@+id/card2"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
+                        android:background="@color/backgroundColorpanel"
                         android:padding="15dp">
 
-                        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:id="@+id/piempchart"
                             android:layout_gravity="center"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
-                            android:padding="6dp"
-                            android:src="@drawable/chartimage" />
+                            android:padding="6dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -219,22 +261,24 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="2dp"
+                    android:id="@+id/card3"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
+                        android:background="@color/backgroundColorpanel"
                         android:padding="15dp">
 
-                        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:id="@+id/mpchart"
                             android:layout_gravity="center"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
-                            android:padding="6dp"
-                            android:src="@drawable/chartimage" />
+                            android:padding="6dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -253,6 +297,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/recycler"
+                android:layoutAnimation="@anim/slide_up_anim_layout"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/cattlelist">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -275,6 +322,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@color/backgroundColorpanel"
                 android:orientation="vertical">
 
 
@@ -285,7 +333,7 @@
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profileImage"
+                        android:id="@+id/profileImagedashboard"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:src="@drawable/photo" />
@@ -321,6 +369,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/btncolor"
+                            android:id="@+id/btnaddFarmer"
                             android:text="@string/addFarmer"
                             android:textColor="@color/textcolor"
                             app:cornerRadius="15dp" />

@@ -7,5 +7,12 @@
     <string name="addFarmer">Add Farmer</string>
     <string name="cowName">Cattle Name</string>
     <string name="addcattle">Add cattle</string>
+    <string name="transition_name">profileimage</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="welcome">WELCOME</string>
+    <string name="singIn">Signin</string>
+
 
 </resources>

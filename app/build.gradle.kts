@@ -57,4 +57,12 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.1.0")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
+
+    //chart
+    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("com.github.SMehranB:AnimatedTextView:1.1.0")
+    implementation ("com.daimajia.androidanimations:library:2.4@aar")
+
+
 }
