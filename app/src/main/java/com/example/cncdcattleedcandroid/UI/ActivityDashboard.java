@@ -252,6 +252,7 @@ public class ActivityDashboard extends AppCompatActivity {
         sessionManager.setthemstate(true);
 
 
+
     }
 
     private void setLightTheme() {
@@ -516,9 +517,11 @@ public class ActivityDashboard extends AppCompatActivity {
         chart.setDrawBarShadow(false);
         chart.setDrawValueAboveBar(true);
         chart.getDescription().setEnabled(false);
+
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
         chart.setMaxVisibleValueCount(60);
+
         // scaling can now only be done on x- and y-axis separately
         chart.setPinchZoom(false);
         chart.setDrawGridBackground(false);
@@ -531,6 +534,7 @@ public class ActivityDashboard extends AppCompatActivity {
         l.setFormSize(9f);
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
+        l.setTextColor(ContextCompat.getColor(this,R.color.textcolor));
     }
 
     private void setData(int count, float range) {
@@ -571,12 +575,18 @@ public class ActivityDashboard extends AppCompatActivity {
             gradientFills.add(new GradientColor(startColor4, endColor4));
             gradientFills.add(new GradientColor(startColor5, endColor5));
             set1.setGradientColors(gradientFills);
+
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
+            data.setValueTextColor(ContextCompat.getColor(this,R.color.textcolor));
             data.setValueTextSize(10f);
             data.setBarWidth(0.9f);
+            chart.getAxisLeft().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
+            chart.getAxisRight().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
+            chart.getXAxis().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
             chart.setData(data);
+
         }
 
 
@@ -591,19 +601,29 @@ public class ActivityDashboard extends AppCompatActivity {
 
         PieDataSet pieDataSet = new PieDataSet(visitors,"");
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieDataSet.setValueTextColor(R.color.textcolor);
+        pieDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.textcolor));
         pieDataSet.setValueTextSize(16f);
 
 
         PieData pieData = new PieData(pieDataSet);
         activityDashboardBinding.piempchart.setData(pieData);
+        activityDashboardBinding.piempchart.invalidate();
         activityDashboardBinding.piempchart.getDescription().setEnabled(false);
-        activityDashboardBinding.piempchart.setCenterText("Animals");
         activityDashboardBinding.piempchart.setCenterTextSize(5f);
+        activityDashboardBinding.piempchart.setCenterText("Cattles");
+        activityDashboardBinding.piempchart.setHoleRadius(0);
         activityDashboardBinding.piempchart.setCenterTextColor(R.color.textcolor);
         activityDashboardBinding.piempchart.setEntryLabelTextSize(8f);
         activityDashboardBinding.piempchart.setEntryLabelColor(R.color.textcolor);
+        activityDashboardBinding.piempchart.setHoleColor(R.color.wholecolor);
         activityDashboardBinding.piempchart.animate();
+        activityDashboardBinding.piempchart.setEntryLabelColor(ContextCompat.getColor(this, R.color.textcolor));
+        activityDashboardBinding.piempchart.getLegend().setTextColor(ContextCompat.getColor(this, R.color.textcolor));
+
+        //activityDashboardBinding.piempchart.graph.getPaint(activityDashboardBinding.piempchart.PAINT_VALUES).setColor(Color.BLUE);
+
+
+
     }
 
 
@@ -611,7 +631,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
 
-        activityDashboardBinding.animtext.setText("123,456");
+
 
         activityDashboardBinding.animtext.setText("1000");
         activityDashboardBinding.animtext.addOnAnimationListener(new AnimatedTextView.AnimationListener() {

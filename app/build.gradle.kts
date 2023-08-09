@@ -65,4 +65,19 @@ dependencies {
     implementation ("com.daimajia.androidanimations:library:2.4@aar")
 
 
+    //animation
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+    //loading Dialog
+    implementation("com.github.basusingh:BeautifulProgressDialog:1.001")
+
+
+    //table data grid
+
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
+
+
+    //image loading
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
 }

@@ -21,21 +21,40 @@
         android:theme="@style/Base.Theme.CNCDCattleEDCAndroid"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".UI.ActivitySplashScreen"
+            android:exported="true"
+            android:configChanges="uiMode"
+            android:screenOrientation="landscape">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".UI.UserProfileUpdate"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".UI.ActivityCattleProfile"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".UI.ActivityWebViewSurveyForm"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".UI.ActivityFarmerProfile"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".UI.ActivityLogin"
             android:exported="false"
+            android:configChanges="uiMode"
             android:screenOrientation="landscape" />
         <activity
             android:name=".UI.ActivityDashboard"
@@ -45,11 +64,6 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

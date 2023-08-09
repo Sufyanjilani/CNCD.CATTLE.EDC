@@ -6,6 +6,7 @@
         <item name="android:colorPrimary">@color/primaryblue</item>
         <item name="colorSecondary">@color/secondaryblue</item>
         <item name="textFillColor">@color/textcolor</item>
+        <item name="android:windowContentTransitions">true</item>
 
     </style>
 </resources>

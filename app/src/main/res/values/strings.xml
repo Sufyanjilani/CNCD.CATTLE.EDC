@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CNCD.CattleEDC.Android</string>
+    <string name="app_name">CNCD Cattle EDC</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="appversion">Version 1.0.0</string>

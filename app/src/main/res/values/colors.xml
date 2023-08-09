@@ -11,6 +11,8 @@
     <color name="btncolor">#FFFFFF</color>
     <color name="farmerprofilecardcolor">#FFFFFF</color>
     <color name="farmerprofilecardpanel1color">#FFFFFF</color>
-
+    <color name="loginpanelcolor">#71C9F1</color>
+    <color name="seperatorcolor">@android:color/darker_gray</color>
+    <color name="wholecolor">#FFFF</color>
     
 </resources>
