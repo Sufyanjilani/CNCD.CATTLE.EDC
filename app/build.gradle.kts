@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
+    id("realm-android")
 }
+
+
 
 android {
     namespace = "com.example.cncdcattleedcandroid"
@@ -79,5 +82,9 @@ dependencies {
 
     //image loading
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+
+    //realm database
+
 
 }

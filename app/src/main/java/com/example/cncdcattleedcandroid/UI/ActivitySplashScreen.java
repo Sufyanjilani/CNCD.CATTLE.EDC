@@ -30,11 +30,20 @@ public class ActivitySplashScreen extends AppCompatActivity {
         getWindow().setExitTransition(fade);
 
         ImageView sharedview = splashScreenBinding.appLogo;
-        Intent i = new Intent(ActivitySplashScreen.this,ActivityLogin.class);
+
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(ActivitySplashScreen.this,MainActivity.class);
 //        ActivityOptionsCompat options = ActivityOptionsCompat
 //                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
-        startActivity(i);
-        finish();
+                startActivity(i);
+                finish();
+
+            }
+        },2000);
 
     }
 
