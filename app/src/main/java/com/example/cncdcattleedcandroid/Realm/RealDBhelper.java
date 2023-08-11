@@ -2,6 +2,8 @@ package com.example.cncdcattleedcandroid.Realm;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -9,29 +11,18 @@ public class RealDBhelper {
 
     Realm realm;
 
+
     public RealDBhelper(){
 
         realm = Realm.getDefaultInstance();
     }
 
-    public void Insert(int id ,String farmerName, String cattlename, String cattlebase65){
-
-//        realm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                TestModel task = realm.createObject(TestModel.class);
-//                task.setFarmer_name(farmerName);
-//                task.setCattle_name(cattlename);
-//            }
-//        });
-
-        realm.beginTransaction();
-        TestModel testModel = realm.createObject(TestModel.class,id);
-        testModel.setFarmer_name(farmerName);
-        testModel.setCattle_name(cattlename);
-        testModel.setImage_base64("64");
-        realm.commitTransaction();
-        realm.close();
+    public void Insert(String farmerName, String cattlename, String cattlebase65){
+        TestModel Task = new TestModel(farmerName,cattlename,cattlebase65);
+        realm.executeTransaction (transactionRealm -> {
+            transactionRealm.insert(Task);
+            Log.d("TAg","insertion success");
+        });
     }
 
 
@@ -73,23 +64,29 @@ public class RealDBhelper {
     }
 
 
-    public void readTask(){
+    public ArrayList<TestModel> readTask(){
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<TestModel> tasks = realm.where(TestModel.class).findAll();
+        ArrayList<TestModel> datalist = new ArrayList<>();
         Log.d("TAG",tasks.toString());
         for (TestModel task : tasks) {
             String farmer_name = task.getFarmer_name();
             String cattle_name = task.getCattle_name();
+            String base65 = task.getImage_base64();
+
+            TestModel model = new TestModel(farmer_name,cattle_name,base65);
+
+            datalist.add(model);
 
 
-
-            Log.d("TAG",cattle_name);
             // Handle the task data
         }
         Log.d("TAG","readtask");
 
         realm.close();
+
+        return  datalist;
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.cncdcattleedcandroid.Realm;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class TestModel  extends RealmObject {
 
@@ -37,7 +38,7 @@ public class TestModel  extends RealmObject {
         this.image_base64 = image_base64;
     }
 
-    String farmer_name;
+    @PrimaryKey  String farmer_name;
     String cattle_name;
 
     String image_base64;

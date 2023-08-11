@@ -1,6 +1,16 @@
 plugins {
     id("com.android.application")
     id("realm-android")
+
+
+}
+
+
+
+apply{
+
+    plugin("realm-android")
+
 }
 
 
@@ -34,6 +44,7 @@ android {
 
         viewBinding = true;
     }
+
 }
 
 dependencies {

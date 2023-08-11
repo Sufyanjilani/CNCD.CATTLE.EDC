@@ -10,7 +10,10 @@ import android.view.View;
 
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Realm.RealDBhelper;
+import com.example.cncdcattleedcandroid.Realm.TestModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     RealDBhelper realDBhelper;
 
+    ArrayList<TestModel> arrayList;
+
 
 
     @Override
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+
+        arrayList = new ArrayList<>();
 
         realm.init(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder().name("default.realm")
@@ -46,7 +53,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                realDBhelper.Insert(1,activityMainBinding.farmerName.getText().toString(),activityMainBinding.cattleName.getText().toString(),"");
+
+                realDBhelper.Insert(
+                        activityMainBinding.farmerName.getText().toString(),
+                        activityMainBinding.cattleName.getText().toString(),
+                        "base64"
+                        );
             }
         });
 
@@ -73,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                realDBhelper.readTask();
-                Log.d("TAG","onclick");
+                arrayList = realDBhelper.readTask();
+
+                Log.d("TAG",arrayList.get(0).toString());
 
             }
         });

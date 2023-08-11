@@ -15,33 +15,36 @@
             android:layout_height="wrap_content"
             android:id="@+id/cattleName"
             android:padding="10dp"
-            android:hint="farmername"/>
+            android:hint="cattlename"
+            />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/farmerName"
             android:padding="10dp"
-            android:hint="cattlename"/>
+            android:hint="farmername"
+          />
 
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="insert"
-            android:id="@+id/btndelete"/>
+            android:id="@+id/btninsert" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:id="@+id/btnupdate"/>
+            android:id="@+id/btndelete"
+            />
 
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update"
-            android:id="@+id/btninsert"/>
+            android:id="@+id/btnupdate"
+            android:text="Update" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
