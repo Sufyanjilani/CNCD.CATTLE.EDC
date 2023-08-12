@@ -13,11 +13,14 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.cncdcattleedcandroid.R;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.databinding.ActivitySplashScreenBinding;
 
 public class ActivitySplashScreen extends AppCompatActivity {
 
     ActivitySplashScreenBinding splashScreenBinding;
+    SessionManager sessionManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +33,14 @@ public class ActivitySplashScreen extends AppCompatActivity {
         getWindow().setExitTransition(fade);
 
         ImageView sharedview = splashScreenBinding.appLogo;
-
+        sessionManager = new SessionManager(this);
+        sessionManager.ApplicationFirstTime();
 
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(ActivitySplashScreen.this,MainActivity.class);
+                Intent i = new Intent(ActivitySplashScreen.this,ActivityWebViewSurveyForm.class);
 //        ActivityOptionsCompat options = ActivityOptionsCompat
 //                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
                 startActivity(i);

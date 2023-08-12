@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.JsonReader;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
@@ -26,12 +27,18 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.example.cncdcattleedcandroid.Network.ApiEndPoints;
+import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
+import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
+import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
@@ -40,7 +47,13 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ActivityWebViewSurveyForm extends AppCompatActivity {
@@ -69,17 +82,33 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     WebViewSurveyViewModel surveyViewModel;
 
+    Constants constants;
+
+    RealmDatabaseHlper realmDatabaseHlper;
+
+    Realm realm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         webViewSurveyFormBinding = ActivityWebViewSurveyFormBinding.inflate(getLayoutInflater());
         setContentView(webViewSurveyFormBinding.getRoot());
+        realm.init(this);
+        realmDatabaseHlper = new RealmDatabaseHlper(this);
+        realm = realmDatabaseHlper.InitializeRealm(this);
+        realm = Realm.getDefaultInstance();
+
 
 
         surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
-        setUpWebView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setUpWebView();
+        }
+
+        constants = new Constants();
         setUpLocation();
+        getDataforInjection();
 
 
         surveyViewModel.getJsonFromAPi("1");
@@ -88,14 +117,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                if (s != null){
+                if (s != null) {
 
                     Loadgetjavascript(s);
 
-                }
-                else{
+                } else {
 
-                    Toast.makeText(ActivityWebViewSurveyForm.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityWebViewSurveyForm.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,7 +132,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-    public void setUpLocation(){
+    public void setUpLocation() {
 
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -112,17 +140,16 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-
-    public void Loadgetjavascript(String formjson){
+    public void Loadgetjavascript(String formjson) {
 
         String javascriptCode =
-                "const survey = new Survey.Model("+formjson+");\n" +
+                "const survey = new Survey.Model(" + formjson + ");\n" +
                         "survey.onComplete.add((sender, options) => {\n" +
                         "    console.log(JSON.stringify(sender.data, null, 3));\n" +
                         "    Android.showProgressDialog()\n" +
                         "    console.log(sender.data)\n" +
                         "       const results = JSON.stringify(sender.data);\n" +
-                        "Android.createJsonObject(results)\n"+
+                        "Android.createJsonObject(results)\n" +
                         "Android.onFormSubmission(results);\n" +
                         "});\n" +
                         "\n" +
@@ -169,14 +196,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         if (mCM != null) {
                             results = new Uri[]{Uri.parse(mCM)};
                         }
-                    }
-                    else if (intent !=null)
-                    {
+                    } else if (intent != null) {
                         if (mCM != null) {
                             results = new Uri[]{Uri.parse(mCM)};
                         }
-                    }
-                    else {
+                    } else {
                         String dataString = intent.getDataString();
                         if (dataString != null) {
                             results = new Uri[]{Uri.parse(dataString)};
@@ -185,7 +209,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     }
                 }
             }
-            Log.d("tag",results[0].getPath().toString());
+            Log.d("tag", results[0].getPath().toString());
 
             if (results != null) {
                 final File file = new File(results[0].getPath());
@@ -209,7 +233,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                                 Log.e("ImageCompression", errorMessage);
                             }
                         });
-                        Log.d("Tag","Image-Save");
+                        Log.d("Tag", "Image-Save");
                     }
                 }, 1000);
                 mUMA.onReceiveValue(results);
@@ -230,7 +254,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void setUpWebView(){
+    public void setUpWebView() {
 
         webViewSurveyFormBinding.surveyWebView.getSettings().setJavaScriptEnabled(true);
         webViewSurveyFormBinding.surveyWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -249,11 +273,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             public void onPermissionRequest(final PermissionRequest request) {
                 Logger.i("onPermissionRequest");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Logger.i("Grant",request.toString());
-                    Logger.i("getOrigin",request.getOrigin().toString());
+                    Logger.i("Grant", request.toString());
+                    Logger.i("getOrigin", request.getOrigin().toString());
                     request.grant(request.getResources());
                 }
-                if(request.getOrigin().toString().equals("file:///")) {
+                if (request.getOrigin().toString().equals("file:///")) {
                     Logger.i("GRANTED", "GRANTED");
                 } else {
                     Log.d("DENIED", "DENIED");
@@ -265,15 +289,16 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.i("WebView Log: " , consoleMessage.message() + " -- From line "
+                Log.i("WebView Log: ", consoleMessage.message() + " -- From line "
                         + consoleMessage.lineNumber() + " of "
                         + consoleMessage.sourceId());
-                Logger.i("WebView Log: " , consoleMessage.message());
+                Logger.i("WebView Log: ", consoleMessage.message());
                 Logger.i("WebView Log:", consoleMessage.message() + " -- From line "
                         + consoleMessage.lineNumber() + " of "
                         + consoleMessage.sourceId());
                 return true;
             }
+
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
 
@@ -331,7 +356,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         //photoFile = 'Utility.createImageFile()';
                         photoFile = createImageFile();
                         Logger.i("Image-File-Path", photoFile.getAbsolutePath());
-                        Logger.i("filechooserparams",String.valueOf(fileChooserParams));
+                        Logger.i("filechooserparams", String.valueOf(fileChooserParams));
                         takePictureIntent.putExtra("PhotoPath", mCM);
                     } catch (Exception ex) {
                         Log.e("TAG", "Image file creation failed", ex);
@@ -365,7 +390,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-
         });
 
         webViewSurveyFormBinding.surveyWebView.loadUrl("file:///android_asset/html/index.html");
@@ -376,7 +400,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
     }
 
-    class JavaScriptInterface{
+    class JavaScriptInterface {
 
 //        @JavascriptInterface
 //        public void showdialog(){
@@ -452,6 +476,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
             pd.dismiss();
         }
+
         @JavascriptInterface
         public void showProgressDialog() {
             pd = new ProgressDialog(ActivityWebViewSurveyForm.this);
@@ -468,5 +493,48 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
+    public void getDataforInjection() {
 
+        Call<JsonObject> apireader = new RetrofitClientSurvey().retrofitclient().getcities();
+        apireader.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.isSuccessful()) {
+
+                    JsonObject citiesObject = response.body();
+                    Log.d(constants.Tag, citiesObject.toString());
+
+                    JsonArray data = citiesObject.get("data").getAsJsonArray();
+
+                    JsonObject obj1 = data.get(0).getAsJsonObject();
+                    String country = obj1.get("country").getAsString();
+                    String countryInitials = obj1.get("countryInitials").getAsString();
+                    String countrycode = obj1.get("countryCode").toString();
+                    JsonArray statesAndCities = obj1.get("statesAndCities").getAsJsonArray();
+                    JsonObject  statesAndCitiesObject1 = statesAndCities.get(0).getAsJsonObject();
+                    String statename = statesAndCitiesObject1.get("stateName").getAsString();
+                    JsonArray cities= statesAndCitiesObject1.get("cities").getAsJsonArray().getAsJsonArray();
+
+
+
+                    realmDatabaseHlper.insertCities(country,countryInitials,countrycode,statename,cities.toString());
+
+
+
+
+                    Log.d(constants.Tag, country);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                Log.d(constants.Tag, t.getMessage().toString());
+            }
+        });
+
+
+    }
 }

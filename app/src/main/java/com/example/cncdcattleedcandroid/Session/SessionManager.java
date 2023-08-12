@@ -13,6 +13,9 @@ public class SessionManager {
     public SharedPreferences preferences;
     public SharedPreferences.Editor editor;
     int PRIVATE_MODE = 0;
+
+
+
     public SessionManager(Context context){
         this.context = context;
         sharedPreferences = context.getSharedPreferences("SessionData",context.MODE_PRIVATE);
@@ -56,6 +59,27 @@ public class SessionManager {
         Log.d("tag","dark");
     }
 
+
+    public void SavePrimarykey(int primarykey){
+
+        editor.putInt("primarykey",primarykey);
+        editor.commit();
+    }
+
+    public Integer getPrimaryKey(){
+
+        return sharedPreferences.getInt("primarykey",0);
+    }
+
+    public void ApplicationFirstTime(){
+
+        editor.putBoolean("installedFirstTime",true);
+        editor.commit();
+    }
+
+    public Boolean checkisApplicationFirstTime(){
+        return sharedPreferences.getBoolean("installedFirstTime",false);
+    }
 
 }
 

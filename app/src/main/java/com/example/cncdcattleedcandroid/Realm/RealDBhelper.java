@@ -9,7 +9,7 @@ import io.realm.RealmResults;
 
 public class RealDBhelper {
 
-    Realm realm;
+    static  Realm realm;
 
 
     public RealDBhelper(){
@@ -45,7 +45,7 @@ public class RealDBhelper {
     }
 
 
-    public void Update(String farmer_name){
+    public void Update(String farmer_name,String cattlename,String base64){
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -55,6 +55,9 @@ public class RealDBhelper {
                 TestModel testModel = realm.where(TestModel.class).equalTo("farmer_name", farmer_name).findFirst();
                 if (testModel != null) {
 
+
+                    testModel.setCattle_name(cattlename);
+                    testModel.setImage_base64(base64);
                 }
             }
         });
@@ -87,6 +90,94 @@ public class RealDBhelper {
         realm.close();
 
         return  datalist;
+
+    }
+
+
+    public static class  AppdatabaseAHelper{
+
+
+
+        public void InsertAppdata(int id , String number_of_cattles, String number_of_farmers){
+            AppdataModel Task = new AppdataModel(id,number_of_cattles,number_of_farmers);
+            realm.executeTransaction (transactionRealm -> {
+                transactionRealm.insert(Task);
+                Log.d("TAg","insertion success 2");
+            });
+        }
+
+
+
+        public void DeleteAppdata(String farmerName){
+
+
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    TestModel task = realm.where(TestModel.class).equalTo("farmer_name", farmerName).findFirst();
+                    if (task != null) {
+                        task.deleteFromRealm();
+                    }
+                }
+            });
+
+            realm.close();
+        }
+
+
+
+
+
+        public void UpdateAppdata(String farmer_name,String cattlename,String base64){
+
+            Realm realm = Realm.getDefaultInstance();
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    TestModel testModel = realm.where(TestModel.class).equalTo("farmer_name", farmer_name).findFirst();
+                    if (testModel != null) {
+
+
+                        testModel.setCattle_name(cattlename);
+                        testModel.setImage_base64(base64);
+                    }
+                }
+            });
+
+            realm.close();
+
+        }
+
+
+        public ArrayList<AppdataModel> readAppdata(){
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<AppdataModel> tasks = realm.where(AppdataModel.class).findAll();
+            ArrayList<AppdataModel> datalist = new ArrayList<>();
+            Log.d("TAG",tasks.toString());
+            for (AppdataModel d : tasks) {
+
+
+                String id = String.valueOf(d.getId());
+                String num_cattles = d.getNumber_of_cattles();
+                String num_farmers = d.getNumber_of_farmers();
+                AppdataModel model = new AppdataModel(Integer.parseInt(id),num_cattles,num_farmers);
+
+                datalist.add(model);
+
+
+                // Handle the task data
+            }
+            Log.d("TAG","readtask");
+
+            realm.close();
+
+            return  datalist;
+
+        }
+
 
     }
 
