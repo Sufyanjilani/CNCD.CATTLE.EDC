@@ -37,6 +37,7 @@ import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
@@ -99,6 +100,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         realm = realmDatabaseHlper.InitializeRealm(this);
         realm = Realm.getDefaultInstance();
 
+        Bundle extras = getIntent().getExtras();
+        int formID = extras.getInt("formID");
+
+        if (formID == 1){
+
+
+        }
+
+
 
 
         surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
@@ -108,7 +118,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         constants = new Constants();
         setUpLocation();
-        getDataforInjection();
+        injectCities();
 
 
         surveyViewModel.getJsonFromAPi("1");
@@ -389,7 +399,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 return true;
             }
 
-
         });
 
         webViewSurveyFormBinding.surveyWebView.loadUrl("file:///android_asset/html/index.html");
@@ -493,47 +502,25 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-    public void getDataforInjection() {
-
-        Call<JsonObject> apireader = new RetrofitClientSurvey().retrofitclient().getcities();
-        apireader.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                if (response.isSuccessful()) {
-
-                    JsonObject citiesObject = response.body();
-                    Log.d(constants.Tag, citiesObject.toString());
-
-                    JsonArray data = citiesObject.get("data").getAsJsonArray();
-
-                    JsonObject obj1 = data.get(0).getAsJsonObject();
-                    String country = obj1.get("country").getAsString();
-                    String countryInitials = obj1.get("countryInitials").getAsString();
-                    String countrycode = obj1.get("countryCode").toString();
-                    JsonArray statesAndCities = obj1.get("statesAndCities").getAsJsonArray();
-                    JsonObject  statesAndCitiesObject1 = statesAndCities.get(0).getAsJsonObject();
-                    String statename = statesAndCitiesObject1.get("stateName").getAsString();
-                    JsonArray cities= statesAndCitiesObject1.get("cities").getAsJsonArray().getAsJsonArray();
-
-
-
-                    realmDatabaseHlper.insertCities(country,countryInitials,countrycode,statename,cities.toString());
 
 
 
 
-                    Log.d(constants.Tag, country);
-                }
+    public void  injectCities(){
 
-            }
+       ArrayList<String> citiesarray =  realmDatabaseHlper.readData();
+       Log.d(constants.Tag,citiesarray.toString());
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+       if(citiesarray.size() != 0) {
+           String citiesJson = new Gson().toJson(citiesarray.toString());
 
-                Log.d(constants.Tag, t.getMessage().toString());
-            }
-        });
+           String javascript_injection = "var dropdown = survey.getQuestionByName(\"city\");\n" +
+                   "var optionsJson = " + citiesJson + ";\n" +
+                   "var options = JSON.parse(optionsJson);\n" +
+                   "dropdown.choices = options;" +
+                   "console.log(optionsJson)";
+           webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascript_injection, null);
+       }
 
 
     }

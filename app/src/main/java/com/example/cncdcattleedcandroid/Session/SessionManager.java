@@ -73,12 +73,13 @@ public class SessionManager {
 
     public void ApplicationFirstTime(){
 
-        editor.putBoolean("installedFirstTime",true);
+        editor.putBoolean("installedFirstTime",false);
+        editor.apply();
         editor.commit();
     }
 
     public Boolean checkisApplicationFirstTime(){
-        return sharedPreferences.getBoolean("installedFirstTime",false);
+        return sharedPreferences.getBoolean("installedFirstTime",true);
     }
 
 }

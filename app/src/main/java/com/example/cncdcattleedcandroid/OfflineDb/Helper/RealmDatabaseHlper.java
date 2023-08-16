@@ -5,11 +5,15 @@ import android.util.Log;
 
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.citiesModel;
+import com.example.cncdcattleedcandroid.Realm.TestModel;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmDatabaseHlper {
@@ -116,26 +120,76 @@ public class RealmDatabaseHlper {
 
 
 
-        int id=0;
+        int id=1;
 
-        if (sessionManager.checkisApplicationFirstTime()){
 
-            id = 1;
-            Log.d(constants.info,"Check first"+id);
-        }
-        else{
-            id = sessionManager.getPrimaryKey()+1;
-            Log.d(constants.info,"Check second"+id);
-        }
+// logic for incrementing Primary key
+//        if (sessionManager.checkisApplicationFirstTime()){
+//
+//            id = 1;
+//            Log.d(constants.info,"Check first"+id);
+//            sessionManager.SavePrimarykey(1);
+//        }
+//        else{
+//            id = sessionManager.getPrimaryKey()+1;
+//            sessionManager.SavePrimarykey(id);
+//            Log.d(constants.info,"Check second"+id);
+//        }
 
+
+
+        Log.d(constants.info,String.valueOf(id));
 
         citiesModel citiesModel = new citiesModel(id,country,countryInitials,countrycode,stateName,cities);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
-                realm.insert(citiesModel);
+                realm.insertOrUpdate(citiesModel);
             }
         });
     }
+    public ArrayList<String> readData(){
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<citiesModel> tasks = realm.where(citiesModel.class).findAll();
+        ArrayList<String> datalist = new ArrayList<>();
+        Log.d("TAG",tasks.toString());
+        for (citiesModel task : tasks) {
+            String cities = task.getCities();
+            datalist.add(cities);
+
+
+            // Handle the task data
+        }
+        Log.d("TAG","readtask");
+
+        realm.close();
+
+        return  datalist;
+
+    }
+
+
+//    public ArrayList<String> readDatafromFarmerModel(){
+//
+//        Realm realm = Realm.getDefaultInstance();
+//        RealmResults<citiesModel> tasks = realm.where(citiesModel.class).findAll();
+//        ArrayList<String> datalist = new ArrayList<>();
+//        Log.d("TAG",tasks.toString());
+//        for (citiesModel task : tasks) {
+//            String cities = task.getCities();
+//            datalist.add(cities);
+//
+//
+//            // Handle the task data
+//        }
+//        Log.d("TAG","readtask");
+//
+//        realm.close();
+//
+//        return  datalist;
+//
+//    }
+
 }

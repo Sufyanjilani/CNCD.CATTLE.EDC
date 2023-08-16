@@ -169,6 +169,15 @@ public class ActivityDashboard extends AppCompatActivity {
         setupDrawerContent(navigationView);
 
 
+        activityDashboardBinding.btnaddFarmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AddFarmer();
+            }
+        });
+
+
     }
 
 
@@ -721,6 +730,14 @@ public class ActivityDashboard extends AppCompatActivity {
 
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+    }
+
+    public void AddFarmer(){
+
+        Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
+        i.putExtra("formID",1);
+        startActivity(i);
+
     }
 }
 
