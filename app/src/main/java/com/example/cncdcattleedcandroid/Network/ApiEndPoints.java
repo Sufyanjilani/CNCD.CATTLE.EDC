@@ -16,5 +16,10 @@ public interface ApiEndPoints {
     @GET("cities.json")
     Call<JsonObject> getcities();
 
+    @GET("questionnaires/{id}")
+    Call<JsonObject> getSurvey(@Path("id") String id);
+
+
+
 
 }

@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,12 +27,14 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Network.ApiEndPoints;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
@@ -63,6 +67,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     ActivityWebViewSurveyFormBinding webViewSurveyFormBinding;
     private static final int REQUEST_PERMISSIONS_CODE = 123;
 
+    SessionManager sessionManager;
+
     private FusedLocationProviderClient locationProviderClient;
     private PermissionRequest myRequest;
     private String mCM;
@@ -89,6 +95,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     Realm realm;
 
+    String formId = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,25 +108,36 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         realm = realmDatabaseHlper.InitializeRealm(this);
         realm = Realm.getDefaultInstance();
 
+        constants = new Constants();
+        surveyViewModel =  new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
+
         Bundle extras = getIntent().getExtras();
-        int formID = extras.getInt("formID");
+        formId = extras.getString("formID");
 
-        if (formID == 1){
-
-
-        }
+        sessionManager = new SessionManager(this);
 
 
 
 
-        surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             setUpWebView();
+
+
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Loadgetjavascript(getSurveyFormData());
+//                    injectCities();
+//                }
+//            },2000);
+
         }
 
         constants = new Constants();
         setUpLocation();
-        injectCities();
+        //injectCities();
 
 
         surveyViewModel.getJsonFromAPi("1");
@@ -129,7 +148,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                 if (s != null) {
 
-                    Loadgetjavascript(s);
+                   // Loadgetjavascript(getSurveyFormData());
 
                 } else {
 
@@ -153,19 +172,67 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     public void Loadgetjavascript(String formjson) {
 
         String javascriptCode =
-                "const survey = new Survey.Model(" + formjson + ");\n" +
-                        "survey.onComplete.add((sender, options) => {\n" +
-                        "    console.log(JSON.stringify(sender.data, null, 3));\n" +
-                        "    Android.showProgressDialog()\n" +
-                        "    console.log(sender.data)\n" +
-                        "       const results = JSON.stringify(sender.data);\n" +
-                        "Android.createJsonObject(results)\n" +
-                        "Android.onFormSubmission(results);\n" +
-                        "});\n" +
+                "      window['surveyjs-widgets'].inputmask(Survey);\n" +
+                        "      window['surveyjs-widgets'].nouislider(Survey);\n" +
+                        "      const themeJson = {\n" +
+                        "  \"cssVariables\": {\n" +
+                        "    \"--sjs-general-backcolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dark\": \"rgba(248, 248, 248, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim\": \"rgba(243, 243, 243, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim-light\": \"rgba(249, 249, 249, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim-dark\": \"rgba(243, 243, 243, 1)\",\n" +
+                        "    \"--sjs-general-forecolor\": \"rgba(0, 0, 0, 0.91)\",\n" +
+                        "    \"--sjs-general-forecolor-light\": \"rgba(0, 0, 0, 0.45)\",\n" +
+                        "    \"--sjs-general-dim-forecolor\": \"rgba(0, 0, 0, 0.91)\",\n" +
+                        "    \"--sjs-general-dim-forecolor-light\": \"rgba(0, 0, 0, 0.45)\",\n" +
+                        "    \"--sjs-primary-backcolor\": \"rgba(25, 179, 148, 1)\",\n" +
+                        "    \"--sjs-primary-backcolor-light\": \"rgba(25, 179, 148, 0.1)\",\n" +
+                        "    \"--sjs-primary-backcolor-dark\": \"rgba(20, 164, 139, 1)\",\n" +
+                        "    \"--sjs-primary-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-primary-forecolor-light\": \"rgba(255, 255, 255, 0.25)\",\n" +
+                        "    \"--sjs-base-unit\": \"8px\",\n" +
+                        "    \"--sjs-corner-radius\": \"4px\",\n" +
+                        "    \"--sjs-secondary-backcolor\": \"rgba(255, 152, 20, 1)\",\n" +
+                        "    \"--sjs-secondary-backcolor-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                        "    \"--sjs-secondary-backcolor-semi-light\": \"rgba(255, 152, 20, 0.25)\",\n" +
+                        "    \"--sjs-secondary-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-secondary-forecolor-light\": \"rgba(255, 255, 255, 0.25)\",\n" +
+                        "    \"--sjs-shadow-small\": \"0px 1px 2px 0px rgba(0, 0, 0, 0.15)\",\n" +
+                        "    \"--sjs-shadow-medium\": \"0px 2px 6px 0px rgba(0, 0, 0, 0.1)\",\n" +
+                        "    \"--sjs-shadow-large\": \"0px 8px 16px 0px rgba(0, 0, 0, 0.1)\",\n" +
+                        "    \"--sjs-shadow-inner\": \"inset 0px 1px 2px 0px rgba(0, 0, 0, 0.15)\",\n" +
+                        "    \"--sjs-border-light\": \"rgba(0, 0, 0, 0.09)\",\n" +
+                        "    \"--sjs-border-default\": \"rgba(0, 0, 0, 0.16)\",\n" +
+                        "    \"--sjs-border-inside\": \"rgba(0, 0, 0, 0.16)\",\n" +
+                        "    \"--sjs-special-red\": \"rgba(229, 10, 62, 1)\",\n" +
+                        "    \"--sjs-special-red-light\": \"rgba(229, 10, 62, 0.1)\",\n" +
+                        "    \"--sjs-special-red-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-green\": \"rgba(25, 179, 148, 1)\",\n" +
+                        "    \"--sjs-special-green-light\": \"rgba(25, 179, 148, 0.1)\",\n" +
+                        "    \"--sjs-special-green-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-blue\": \"rgba(67, 127, 217, 1)\",\n" +
+                        "    \"--sjs-special-blue-light\": \"rgba(67, 127, 217, 0.1)\",\n" +
+                        "    \"--sjs-special-blue-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-yellow\": \"rgba(255, 152, 20, 1)\",\n" +
+                        "    \"--sjs-special-yellow-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                        "    \"--sjs-special-yellow-forecolor\": \"rgba(255, 255, 255, 1)\"\n" +
+                        "  }\n" +
+                        "  };\n" +
                         "\n" +
-                        "$(\"#surveyElement\").Survey({ model: survey });";
+                        "  const survey = new Survey.Model("+formjson+");\n" +
+                        "\n" +
+                        "  // You can delete the line below if you do not use a customized theme\n" +
+                        "  survey.applyTheme(themeJson);\n" +
+                        "  survey.onComplete.add((sender, options) => {\n" +
+                        "    console.log(JSON.stringify(sender.data, null, 3));\n" +
+                        "  });\n" +
+                        "\n" +
+                        "\n" +
+                        "  $(\"#surveyElement\").Survey({ model: survey });";
 
         webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
+
+
     }
 
     @Override
@@ -278,6 +345,22 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         webViewSurveyFormBinding.surveyWebView.addJavascriptInterface(new JavaScriptInterface(), "Android");
 
+        webViewSurveyFormBinding.surveyWebView.setWebViewClient(new WebViewClient(){
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                if (!sessionManager.getthemstate()){
+                Loadgetjavascript(getSurveyFormData());
+                injectCities();}
+                else{
+
+                    ForceWebViewToDarkMode(getSurveyFormData());
+                }
+            }
+        });
+
         webViewSurveyFormBinding.surveyWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
@@ -295,6 +378,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 }
                 myRequest = request;
             }
+
 
 
             @Override
@@ -508,7 +592,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     public void  injectCities(){
 
-       ArrayList<String> citiesarray =  realmDatabaseHlper.readData();
+       ArrayList<String> citiesarray =  realmDatabaseHlper.readDataCities();
        Log.d(constants.Tag,citiesarray.toString());
 
        if(citiesarray.size() != 0) {
@@ -524,4 +608,91 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     }
-}
+
+
+    public String getSurveyFormData() {
+        String formjson = realmDatabaseHlper.readDataSurvey(formId);
+
+        if (formjson.equals("")) {
+            Log.d(constants.info + "function", formjson);
+            return null;
+
+        } else {
+
+            return formjson;
+        }
+    }
+
+    public void ForceWebViewToDarkMode(String formjson){
+
+            String javascriptCode =
+                    "      window['surveyjs-widgets'].inputmask(Survey);\n" +
+                            "      window['surveyjs-widgets'].nouislider(Survey);\n" +
+                            "      const themeJson = {\n" +
+                            " \"cssVariables\": {\n" +
+                            "    \"--sjs-general-backcolor\": \"rgba(48, 48, 48, 1)\",\n" +
+                            "    \"--sjs-general-backcolor-dark\": \"rgba(52, 52, 52, 1)\",\n" +
+                            "    \"--sjs-general-backcolor-dim\": \"rgba(36, 36, 36, 1)\",\n" +
+                            "    \"--sjs-general-backcolor-dim-light\": \"rgba(43, 43, 43, 1)\",\n" +
+                            "    \"--sjs-general-backcolor-dim-dark\": \"rgba(46, 46, 46, 1)\",\n" +
+                            "    \"--sjs-general-forecolor\": \"rgba(255, 255, 255, 0.78)\",\n" +
+                            "    \"--sjs-general-forecolor-light\": \"rgba(255, 255, 255, 0.42)\",\n" +
+                            "    \"--sjs-general-dim-forecolor\": \"rgba(255, 255, 255, 0.79)\",\n" +
+                            "    \"--sjs-general-dim-forecolor-light\": \"rgba(255, 255, 255, 0.45)\",\n" +
+                            "    \"--sjs-primary-backcolor\": \"rgba(255, 152, 20, 1)\",\n" +
+                            "    \"--sjs-primary-backcolor-light\": \"rgba(255, 255, 255, 0.07)\",\n" +
+                            "    \"--sjs-primary-backcolor-dark\": \"rgba(255, 170, 24, 1)\",\n" +
+                            "    \"--sjs-primary-forecolor\": \"rgba(32, 32, 32, 1)\",\n" +
+                            "    \"--sjs-primary-forecolor-light\": \"rgba(32, 32, 32, 0.25)\",\n" +
+                            "    \"--sjs-base-unit\": \"8px\",\n" +
+                            "    \"--sjs-corner-radius\": \"4px\",\n" +
+                            "    \"--sjs-secondary-backcolor\": \"rgba(255, 152, 20, 1)\",\n" +
+                            "    \"--sjs-secondary-backcolor-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                            "    \"--sjs-secondary-backcolor-semi-light\": \"rgba(255, 152, 20, 0.25)\",\n" +
+                            "    \"--sjs-secondary-forecolor\": \"rgba(48, 48, 48, 1)\",\n" +
+                            "    \"--sjs-secondary-forecolor-light\": \"rgba(48, 48, 48, 0.25)\",\n" +
+                            "    \"--sjs-shadow-small\": \"0px 1px 2px 0px rgba(0, 0, 0, 0.35)\",\n" +
+                            "    \"--sjs-shadow-medium\": \"0px 2px 6px 0px rgba(0, 0, 0, 0.2)\",\n" +
+                            "    \"--sjs-shadow-large\": \"0px 8px 16px 0px rgba(0, 0, 0, 0.2)\",\n" +
+                            "    \"--sjs-shadow-inner\": \"inset 0px 1px 2px 0px rgba(0, 0, 0, 0.2)\",\n" +
+                            "    \"--sjs-border-light\": \"rgba(255, 255, 255, 0.08)\",\n" +
+                            "    \"--sjs-border-default\": \"rgba(255, 255, 255, 0.12)\",\n" +
+                            "    \"--sjs-border-inside\": \"rgba(255, 255, 255, 0.08)\",\n" +
+                            "    \"--sjs-special-red\": \"rgba(254, 76, 108, 1)\",\n" +
+                            "    \"--sjs-special-red-light\": \"rgba(254, 76, 108, 0.1)\",\n" +
+                            "    \"--sjs-special-red-forecolor\": \"rgba(48, 48, 48, 1)\",\n" +
+                            "    \"--sjs-special-green\": \"rgba(36, 197, 164, 1)\",\n" +
+                            "    \"--sjs-special-green-light\": \"rgba(36, 197, 164, 0.1)\",\n" +
+                            "    \"--sjs-special-green-forecolor\": \"rgba(48, 48, 48, 1)\",\n" +
+                            "    \"--sjs-special-blue\": \"rgba(91, 151, 242, 1)\",\n" +
+                            "    \"--sjs-special-blue-light\": \"rgba(91, 151, 242, 0.1)\",\n" +
+                            "    \"--sjs-special-blue-forecolor\": \"rgba(48, 48, 48, 1)\",\n" +
+                            "    \"--sjs-special-yellow\": \"rgba(255, 152, 20, 1)\",\n" +
+                            "    \"--sjs-special-yellow-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                            "    \"--sjs-special-yellow-forecolor\": \"rgba(48, 48, 48, 1)\"\n" +
+                            "  }" +
+                            ",\n" +
+                            "  \"themeName\": \"default\",\n" +
+                            "  \"colorPalette\": \"dark\"\n"+
+                            "  };\n" +
+                            "\n" +
+                            "  const survey = new Survey.Model("+formjson+");\n" +
+                            "\n" +
+                            "  // You can delete the line below if you do not use a customized theme\n" +
+                            "  survey.applyTheme(themeJson);\n" +
+                            "  survey.onComplete.add((sender, options) => {\n" +
+                            "    console.log(JSON.stringify(sender.data, null, 3));\n" +
+                            "  });\n" +
+                            "\n" +
+                            "\n" +
+                            "  $(\"#surveyElement\").Survey({ model: survey });";
+
+            Log.d(constants.Tag,"darkfunction");
+
+            webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
+        }
+
+
+
+
+    }

@@ -94,6 +94,8 @@ dependencies {
     //image loading
     implementation("com.github.bumptech.glide:glide:4.15.1")
 
+    implementation("androidx.webkit:webkit:1.5.0")
+
 
     //realm database
 

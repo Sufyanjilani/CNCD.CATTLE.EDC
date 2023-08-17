@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
+import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -22,6 +23,15 @@ public class WebViewSurveyViewModel extends ViewModel {
     public MutableLiveData<String> formdata = _formdata;
 
     public MutableLiveData<Boolean> isResponseSuccess = new MutableLiveData<>();
+
+
+    public RealmDatabaseHlper realmDatabaseHlper;
+
+    public WebViewSurveyViewModel(){
+
+        realmDatabaseHlper = new RealmDatabaseHlper();
+    }
+
 
     public void getJsonFromAPi(String id){
 
@@ -62,4 +72,6 @@ public class WebViewSurveyViewModel extends ViewModel {
             }
         });
     }
+
+
 }

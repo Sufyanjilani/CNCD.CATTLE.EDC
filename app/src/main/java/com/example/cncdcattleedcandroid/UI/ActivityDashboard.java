@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -55,8 +57,10 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.cncdcattleedcandroid.Adapters.CattleAdapter;
 import com.example.cncdcattleedcandroid.Models.Cattles;
+import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityDashboardBinding;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -99,6 +103,14 @@ public class ActivityDashboard extends AppCompatActivity {
     SessionManager sessionManager;
 
 
+    RealmDatabaseHlper databaseHlper;
+
+    DashboardViewModel viewModel;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +122,9 @@ public class ActivityDashboard extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sessionManager = new SessionManager(this);
+        databaseHlper = new RealmDatabaseHlper(this);
+        viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        databaseHlper.InitializeRealm(this);
         checkThemesState();
         checkAndRequestPermissions();
         LoadPieChart1();
@@ -119,6 +134,8 @@ public class ActivityDashboard extends AppCompatActivity {
         setData(5, 100);
         CreateMPPicChart();
         AnimateTextView();
+        CheckisDataSavedOffline();
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -137,6 +154,7 @@ public class ActivityDashboard extends AppCompatActivity {
                 setAnimation3();
 
 
+                viewModel  = new ViewModelProvider(this).get(DashboardViewModel.class);
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -735,9 +753,47 @@ public class ActivityDashboard extends AppCompatActivity {
     public void AddFarmer(){
 
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
-        i.putExtra("formID",1);
+        i.putExtra("formID","6");
         startActivity(i);
 
+    }
+
+
+
+    public void CheckisDataSavedOffline(){
+
+
+        viewModel.callSavedFormsMethod();
+        viewModel.getDataforInjection();
+        viewModel.surveyformsResponse.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals("success")){
+
+                    Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        viewModel.citiesResponse.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.equals("success")){
+
+                    Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
 

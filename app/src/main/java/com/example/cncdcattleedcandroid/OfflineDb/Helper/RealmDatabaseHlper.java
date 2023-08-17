@@ -3,7 +3,9 @@ package com.example.cncdcattleedcandroid.OfflineDb.Helper;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.cncdcattleedcandroid.OfflineDb.Models.CattleSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.citiesModel;
 import com.example.cncdcattleedcandroid.Realm.TestModel;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
@@ -34,6 +36,12 @@ public class RealmDatabaseHlper {
 
         constants = new Constants();
         sessionManager = new SessionManager(ctx);
+    }
+
+
+    public RealmDatabaseHlper(){
+        constants = new Constants();
+
     }
 
 
@@ -149,7 +157,7 @@ public class RealmDatabaseHlper {
             }
         });
     }
-    public ArrayList<String> readData(){
+    public ArrayList<String> readDataCities(){
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<citiesModel> tasks = realm.where(citiesModel.class).findAll();
@@ -191,5 +199,62 @@ public class RealmDatabaseHlper {
 //        return  datalist;
 //
 //    }
+
+    public void insertFarmerForm(
+            String id,
+            String name,
+            String type,
+            String formPages
+    ){
+        realm = Realm.getDefaultInstance();
+
+
+        FarmerSurveyModel farmerSurveyModel = new FarmerSurveyModel(id, name, type, formPages);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(farmerSurveyModel);
+            }
+        });
+
+    }
+
+    public void insertCattleForm(
+            String id,
+            String name,
+            String type,
+            String formPages
+    ){
+        realm = Realm.getDefaultInstance();
+
+
+        CattleSurveyModel cattleSurveyModel = new CattleSurveyModel(id, name, type, formPages);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(cattleSurveyModel);
+            }
+        });
+
+    }
+
+    public String readDataSurvey(String id){
+
+        Realm realm = Realm.getDefaultInstance();
+        FarmerSurveyModel tasks = realm.where(FarmerSurveyModel.class)
+                .equalTo("id", id)
+                .findFirst();
+
+        Log.d("TAG",tasks.toString());
+
+        String survey_pages = tasks.getFormPages();
+
+        Log.d("TAG","readtask");
+
+        realm.close();
+
+        return  survey_pages;
+
+    }
 
 }

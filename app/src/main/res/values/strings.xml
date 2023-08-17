@@ -13,6 +13,8 @@
     <string name="password">Password</string>
     <string name="welcome">WELCOME</string>
     <string name="singIn">Signin</string>
+    <string name="farmername">Farmer Name</string>
+    <string name="Farm">Farm</string>
 
 
 </resources>

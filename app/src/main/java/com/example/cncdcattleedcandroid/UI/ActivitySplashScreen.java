@@ -35,6 +35,8 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
     Constants constants;
 
+    RealmDatabaseHlper realmDatabaseHlper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         ImageView sharedview = splashScreenBinding.appLogo;
         sessionManager = new SessionManager(this);
         constants = new Constants();
+        realmDatabaseHlper = new RealmDatabaseHlper(this);
 
         if (sessionManager.checkisApplicationFirstTime()) {
             sessionManager.ApplicationFirstTime();
@@ -58,7 +61,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(ActivitySplashScreen.this,ActivityWebViewSurveyForm.class);
+                Intent i = new Intent(ActivitySplashScreen.this,ActivityDashboard.class);
 //        ActivityOptionsCompat options = ActivityOptionsCompat
 //                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
                 startActivity(i);
@@ -69,50 +72,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
     }
 
-    public void getDataforInjection() {
 
-        Call<JsonObject> apireader = new RetrofitClientSurvey().retrofitclient().getcities();
-        apireader.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                if (response.isSuccessful()) {
-
-                    JsonObject citiesObject = response.body();
-                    Log.d(constants.Tag, citiesObject.toString());
-
-                    JsonArray data = citiesObject.get("data").getAsJsonArray();
-
-                    JsonObject obj1 = data.get(0).getAsJsonObject();
-                    String country = obj1.get("country").getAsString();
-                    String countryInitials = obj1.get("countryInitials").getAsString();
-                    String countrycode = obj1.get("countryCode").toString();
-                    JsonArray statesAndCities = obj1.get("statesAndCities").getAsJsonArray();
-                    JsonObject  statesAndCitiesObject1 = statesAndCities.get(0).getAsJsonObject();
-                    String statename = statesAndCitiesObject1.get("stateName").getAsString();
-                    JsonArray cities= statesAndCitiesObject1.get("cities").getAsJsonArray().getAsJsonArray();
-
-
-
-                    databaseHlper.insertCities(country,countryInitials,countrycode,statename,cities.toString());
-
-
-
-
-                    Log.d(constants.Tag, country);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                Log.d(constants.Tag, t.getMessage().toString());
-            }
-        });
-
-
-    }
 
 
 
