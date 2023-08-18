@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.cncdcattleedcandroid.OfflineDb.Models.CattleSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerFormCompleted;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.citiesModel;
 import com.example.cncdcattleedcandroid.Realm.TestModel;
@@ -255,6 +256,41 @@ public class RealmDatabaseHlper {
 
         return  survey_pages;
 
+    }
+
+
+    public void InsertCompletedForm(
+            int formid,
+            String formstartime,
+            String formEndtime,
+            String coordinate_start_lat,
+            String coordinate_start_lon,
+            String coordinate_end_lat,
+            String coordinate_end_lon,
+            String appversion,
+            String completedform){
+
+        Realm realm = Realm.getDefaultInstance();
+
+
+        FarmerFormCompleted formCompleted = new
+                FarmerFormCompleted(
+                        formid,
+                        formstartime,
+                        formEndtime,
+                        coordinate_start_lat,
+                        coordinate_start_lon,
+                        coordinate_end_lat,
+                        coordinate_end_lon,
+                        completedform,
+                        appversion
+        );
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(formCompleted);
+            }
+        });
     }
 
 }

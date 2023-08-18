@@ -78,6 +78,32 @@ public class SessionManager {
         editor.commit();
     }
 
+//    public void saveStartedFormData(
+//            String formname,
+//            String formid,
+//            String formstartime,
+//            String coordinate_start_lat,
+//            String coordinate_start_lon
+//    ){
+//
+//        editor.putString("formName",formname);
+//        editor.putString("formid",formid);
+//        editor.putString("survey_start_time",formstartime);
+//        editor.putString("coordinate_start_lat",coordinate_start_lat);
+//        editor.putString("coordinate_start_lon",coordinate_start_lon);
+//        editor.apply();
+//        editor.commit();
+//
+//    }
+
+
+    public void saveStartCoordinates(double startcoordinates_lat, double endcoordinates_lon){
+
+        editor.putString("start_coordinates_lat",String.valueOf(startcoordinates_lat));
+        editor.putString("end_coordinates_lon",String.valueOf(endcoordinates_lon));
+        editor.apply();
+        editor.commit();
+    }
     public Boolean checkisApplicationFirstTime(){
         return sharedPreferences.getBoolean("installedFirstTime",true);
     }

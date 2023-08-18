@@ -2,22 +2,32 @@ package com.example.cncdcattleedcandroid.UI;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.JsonReader;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
@@ -41,6 +51,9 @@ import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -97,6 +110,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     String formId = "";
 
+    String formdata = "";
+
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,27 +136,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
+        CheckLocationTurnedOn();
 
 
-
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView();
-
-
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Loadgetjavascript(getSurveyFormData());
-//                    injectCities();
-//                }
-//            },2000);
-
-        }
 
         constants = new Constants();
         setUpLocation();
+        getcurrentlocationstart();
         //injectCities();
 
 
@@ -169,6 +175,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
+    @SuppressLint("RequiresFeature")
     public void Loadgetjavascript(String formjson) {
 
         String javascriptCode =
@@ -225,12 +232,14 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "  survey.applyTheme(themeJson);\n" +
                         "  survey.onComplete.add((sender, options) => {\n" +
                         "    console.log(JSON.stringify(sender.data, null, 3));\n" +
+                        "Android.getSubmittedData(sender.data)"+
                         "  });\n" +
                         "\n" +
                         "\n" +
                         "  $(\"#surveyElement\").Survey({ model: survey });";
 
         webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
+        WebSettingsCompat.setForceDark(webViewSurveyFormBinding.surveyWebView.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
 
 
     }
@@ -353,7 +362,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                 if (!sessionManager.getthemstate()){
                 Loadgetjavascript(getSurveyFormData());
-                injectCities();}
+                injectCities();
+
+                }
                 else{
 
                     ForceWebViewToDarkMode(getSurveyFormData());
@@ -578,6 +589,35 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             pd.show();
         }
 
+        @JavascriptInterface
+        public void getSubmittedData(String data){
+
+            formdata = data;
+            String form_start_time = "";
+            String form_end_time = "";
+            String start_latitude = "";
+            String start_longitude = "";
+            String end_latitude = "";
+            String end_longitude  = "";
+            String appversion = "";
+
+            realmDatabaseHlper.InsertCompletedForm(
+                    Integer.parseInt(formId),
+                    form_start_time,
+                    form_end_time,
+                    start_latitude,
+                    start_longitude,
+                    end_latitude,
+                    end_longitude,
+                    appversion,
+                    data
+
+            );
+            Log.d(constants.info,formdata);
+
+
+        }
+
 //        @JavascriptInterface
 //        public String getSurveyJson(){
 //            return json.toString();
@@ -599,7 +639,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
            String citiesJson = new Gson().toJson(citiesarray.toString());
 
            String javascript_injection = "var dropdown = survey.getQuestionByName(\"city\");\n" +
-                   "var optionsJson = " + citiesJson + ";\n" +
+                   "var optionsJson = "+citiesJson+";\n" +
                    "var options = JSON.parse(optionsJson);\n" +
                    "dropdown.choices = options;" +
                    "console.log(optionsJson)";
@@ -690,9 +730,99 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             Log.d(constants.Tag,"darkfunction");
 
             webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
+
+            WebSettingsCompat.setForceDark(webViewSurveyFormBinding.surveyWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
         }
 
 
 
 
+    public void getcurrentlocationstart() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationProviderClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+
+
+        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if (location != null) {
+
+
+                    sessionManager.saveStartCoordinates(location.getLatitude(),location.getLongitude());
+                    Log.d(constants.Tag,String.valueOf(location.getLatitude()));
+                    Log.d(constants.Tag,String.valueOf(location.getLongitude()));
+
+
+                }
+            }
+        });
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sessionManager.saveStartCoordinates(0.0,0.0);
+    }
+
+
+
+    public void CheckLocationTurnedOn(){
+
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {
+
+            Log.d("error",ex.getMessage());
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {
+
+            Log.d("error",ex.getMessage());
+
+        }
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            new AlertDialog.Builder(ActivityWebViewSurveyForm.this)
+                    .setMessage("Location not turned on please turn on location to connect bluetooth printer")
+                    .setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                        }
+                    }).setCancelable(false)
+
+
+                    .show();
+        }
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        CheckLocationTurnedOn();
+    }
+}

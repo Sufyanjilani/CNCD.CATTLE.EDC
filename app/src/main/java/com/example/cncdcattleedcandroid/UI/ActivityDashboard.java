@@ -85,6 +85,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.realm.annotations.PrimaryKey;
+
 
 public class ActivityDashboard extends AppCompatActivity {
 
@@ -107,6 +109,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
     DashboardViewModel viewModel;
 
+    RealmDatabaseHlper realmDatabaseHlper;
 
 
 
@@ -135,7 +138,8 @@ public class ActivityDashboard extends AppCompatActivity {
         CreateMPPicChart();
         AnimateTextView();
         CheckisDataSavedOffline();
-
+        realmDatabaseHlper = new RealmDatabaseHlper();
+        realmDatabaseHlper.InitializeRealm(this);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -752,9 +756,27 @@ public class ActivityDashboard extends AppCompatActivity {
 
     public void AddFarmer(){
 
+
+//        @PrimaryKey int id;
+//        String  name;
+//        String type;
+//        String survey_start_time;
+//        String survey_end_time;
+//        String coordinates_start_latitude;
+//        String coordinates_start_longitude;
+//        String coordinates_end_latitude;
+//        String coordinates_end_longitude;
+//        String formPagesCompleted;
+
+
+
+
+
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
         i.putExtra("formID","6");
         startActivity(i);
+
+
 
     }
 
