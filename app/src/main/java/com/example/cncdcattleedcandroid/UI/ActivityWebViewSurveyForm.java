@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -66,6 +67,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -592,28 +594,48 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         @JavascriptInterface
         public void getSubmittedData(String data){
 
-            formdata = data;
-            String form_start_time = "";
-            String form_end_time = "";
-            String start_latitude = "";
-            String start_longitude = "";
-            String end_latitude = "";
-            String end_longitude  = "";
-            String appversion = "";
+            ArrayList<String> locationarray = getcurrentlocationEnd();
 
-            realmDatabaseHlper.InsertCompletedForm(
-                    Integer.parseInt(formId),
-                    form_start_time,
-                    form_end_time,
-                    start_latitude,
-                    start_longitude,
-                    end_latitude,
-                    end_longitude,
-                    appversion,
-                    data
 
-            );
-            Log.d(constants.info,formdata);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    formdata = data;
+                    String form_start_time = sessionManager.getStartTimestamp();
+                    String form_end_time = getTimeStamp("end-");
+                    String start_latitude = sessionManager.getLatitudeStart();
+                    String start_longitude = sessionManager.getLongitudeStart();
+                    String end_latitude = locationarray.get(0);
+                    String end_longitude  = locationarray.get(1);
+                    String appversion = "";
+
+                    try {
+                        appversion= getPackageManager()
+                                .getPackageInfo(getPackageName(), 0).versionName;
+                        ;
+                    }
+                    catch (PackageManager.NameNotFoundException nameNotFoundException){
+
+                        Log.d("package",nameNotFoundException.getMessage().toString());
+                    }
+
+                    realmDatabaseHlper.InsertCompletedForm(
+                            Integer.parseInt(formId),
+                            form_start_time,
+                            form_end_time,
+                            start_latitude,
+                            start_longitude,
+                            end_latitude,
+                            end_longitude,
+                            appversion,
+                            data
+
+
+                    );
+                    Log.d(constants.info,formdata);
+                }
+            },1000);
 
 
         }
@@ -762,7 +784,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 if (location != null) {
 
 
-                    sessionManager.saveStartCoordinates(location.getLatitude(),location.getLongitude());
+                    sessionManager.saveStartCoordinatesAndTime(location.getLatitude(),location.getLongitude(),getTimeStamp("start-"));
                     Log.d(constants.Tag,String.valueOf(location.getLatitude()));
                     Log.d(constants.Tag,String.valueOf(location.getLongitude()));
 
@@ -773,10 +795,60 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
+    public ArrayList<String> getcurrentlocationEnd() {
+
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this,permission,4);
+        }
+        locationProviderClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+
+
+        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if (location != null) {
+
+
+                    arrayList.add(String.valueOf(location.getLatitude()));
+                    arrayList.add(String.valueOf(location.getLongitude()));
+
+                    Log.d(constants.Tag,String.valueOf(location.getLatitude()));
+                    Log.d(constants.Tag,String.valueOf(location.getLongitude()));
+
+
+                }
+            }
+        });
+
+        return arrayList;
+    }
+
+
+
+
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sessionManager.saveStartCoordinates(0.0,0.0);
+        sessionManager.saveStartCoordinatesAndTime(0.0,0.0,"00/00/0000 00:00");
     }
 
 
@@ -819,10 +891,20 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
     }
 
+    String getTimeStamp(String msg) {
+
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssa");
+        String stamp = sdf.format(date);
+        Log.d(tag, msg + stamp);
+        return stamp;
+    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         CheckLocationTurnedOn();
     }
+
+
 }

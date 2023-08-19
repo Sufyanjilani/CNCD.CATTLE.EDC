@@ -6,6 +6,9 @@ import io.realm.annotations.PrimaryKey;
 public class FarmerFormCompleted extends RealmObject {
 
 
+    public FarmerFormCompleted(){
+
+    }
     public FarmerFormCompleted(int id,String survey_start_time, String survey_end_time, String coordinates_start_latitude, String coordinates_start_longitude, String coordinates_end_latitude, String coordinates_end_longitude, String formPagesCompleted, String appversion) {
         this.id = id;
         this.survey_start_time = survey_start_time;

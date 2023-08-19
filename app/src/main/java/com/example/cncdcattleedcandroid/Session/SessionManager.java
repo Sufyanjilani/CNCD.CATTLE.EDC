@@ -97,12 +97,28 @@ public class SessionManager {
 //    }
 
 
-    public void saveStartCoordinates(double startcoordinates_lat, double endcoordinates_lon){
+    public void saveStartCoordinatesAndTime(double startcoordinates_lat, double endcoordinates_lon,String startTime){
 
         editor.putString("start_coordinates_lat",String.valueOf(startcoordinates_lat));
-        editor.putString("end_coordinates_lon",String.valueOf(endcoordinates_lon));
+        editor.putString("start_coordinates_lon",String.valueOf(endcoordinates_lon));
+        editor.putString("start_time",startTime);
         editor.apply();
         editor.commit();
+    }
+
+
+    public String getStartTimestamp(){
+        return sharedPreferences.getString("start_time","00/00/0000 00:00:00");
+    }
+
+    public String getLatitudeStart(){
+
+        return sharedPreferences.getString("start_coordinates_lat","0.0");
+    }
+
+    public String getLongitudeStart(){
+
+        return sharedPreferences.getString("start_coordinates_lon","0.0");
     }
     public Boolean checkisApplicationFirstTime(){
         return sharedPreferences.getBoolean("installedFirstTime",true);

@@ -26,7 +26,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/cow" />
+            android:src="@drawable/photo" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,20 +62,23 @@
                 android:background="?android:attr/selectableItemBackground">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addcattle"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
+                    app:cornerRadius="10dp"
+                    android:padding="5dp"
+                    android:textSize="10dp"
+                    android:id="@+id/addcattle"
                     android:backgroundTint="@color/primaryblue"
                     android:text="@string/addcattle"
-                    android:textColor="@color/textcolor"
-                    app:cornerRadius="15dp" />
+                    android:textColor="@color/textcolor" />
+
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="20dp">
 
             </View>
 
@@ -84,16 +87,19 @@
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground">
 
-
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddFarmer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
+                    app:cornerRadius="10dp"
+                    android:padding="5dp"
+                    android:textSize="10dp"
+                    android:id="@+id/btnAddFarmer"
                     android:backgroundTint="@color/primaryblue"
-                    android:text="Update Farmer"
-                    android:textColor="@color/textcolor"
-                    app:cornerRadius="15dp" />
+                    android:text="Updated Farmer"
+                    android:textColor="@color/textcolor" />
+
+
 
             </LinearLayout>
 

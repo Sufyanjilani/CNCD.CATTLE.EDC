@@ -1,6 +1,7 @@
 package com.example.cncdcattleedcandroid.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 
@@ -46,6 +47,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         Fade fade = new Fade();
         View decor = getWindow().getDecorView();
         getWindow().setExitTransition(fade);
+        checkThemesState();
 
         databaseHlper = new RealmDatabaseHlper(this);
         ImageView sharedview = splashScreenBinding.appLogo;
@@ -73,7 +75,17 @@ public class ActivitySplashScreen extends AppCompatActivity {
     }
 
 
+    public void checkThemesState(){
 
+        if(sessionManager.getthemstate()){
+
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
 
 
 }
