@@ -53,22 +53,24 @@ public class DashboardViewModel extends ViewModel {
                     JsonArray data = citiesObject.get("data").getAsJsonArray();
 
                     JsonObject obj1 = data.get(0).getAsJsonObject();
-                    String country = obj1.get("country").getAsString();
+                    String countryName_en = obj1.get("countryName_en").getAsString();
+                    String countryName_ur = obj1.get("countryName_ur").getAsString();
                     String countryInitials = obj1.get("countryInitials").getAsString();
                     String countrycode = obj1.get("countryCode").toString();
-                    JsonArray statesAndCities = obj1.get("statesAndCities").getAsJsonArray();
-                    JsonObject  statesAndCitiesObject1 = statesAndCities.get(0).getAsJsonObject();
-                    String statename = statesAndCitiesObject1.get("stateName").getAsString();
+                    JsonArray provincesAndCities = obj1.get("provincesAndCities").getAsJsonArray();
+                    JsonObject  statesAndCitiesObject1 = provincesAndCities.get(0).getAsJsonObject();
+                    String provinceName_en = statesAndCitiesObject1.get("provinceName_en").getAsString();
+                    String provinceeName_ur = statesAndCitiesObject1.get("provinceeName_ur").getAsString();
                     JsonArray cities= statesAndCitiesObject1.get("cities").getAsJsonArray().getAsJsonArray();
 
 
 
-                    realDBhelper.insertCities(country,countryInitials,countrycode,statename,cities.toString());
+                    realDBhelper.insertCities(countryName_en,countryName_ur,countryInitials,countrycode,provinceName_en,provinceeName_ur,cities.toString());
 
 
                     surveyformsResponse.setValue("success");
 
-                    Log.d(constants.Tag, country);
+                    Log.d(constants.Tag, countryName_en);
                 }
 
             }
@@ -90,7 +92,7 @@ public class DashboardViewModel extends ViewModel {
 
 
 
-        Call<JsonObject> formReader = new RetrofitClientSurvey().retrofitclient().getSurvey("1");
+        Call<JsonObject> formReader = new RetrofitClientSurvey().retrofitclient().getSurvey("6");
         formReader.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

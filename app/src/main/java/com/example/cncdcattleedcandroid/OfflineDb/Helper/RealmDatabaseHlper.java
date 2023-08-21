@@ -118,10 +118,12 @@ public class RealmDatabaseHlper {
 
 
     public void insertCities(
-            String country,
+            String countryName_en,
+            String countryName_ur,
             String countryInitials,
             String countrycode,
-            String stateName,
+            String provinceName_en,
+            String provinceeName_ur,
             String cities
     ){
 
@@ -149,7 +151,7 @@ public class RealmDatabaseHlper {
 
         Log.d(constants.info,String.valueOf(id));
 
-        citiesModel citiesModel = new citiesModel(id,country,countryInitials,countrycode,stateName,cities);
+        citiesModel citiesModel = new citiesModel(id,countryName_en,countryName_ur,countryInitials,countrycode,provinceName_en,provinceeName_ur,cities);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -289,8 +291,51 @@ public class RealmDatabaseHlper {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(formCompleted);
+                Log.d(constants.info,"Form");
             }
+
         });
+    }
+
+
+    public ArrayList<String> readCompletedForm(){
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<FarmerFormCompleted> tasks = realm.where(FarmerFormCompleted.class).findAll();
+        Log.d("TAG",tasks.toString());
+        ArrayList<String> generatedResponse = new ArrayList<>();
+
+
+        for(FarmerFormCompleted  completed : tasks){
+
+            int formid = completed.getId();
+            String startTime = completed.getSurvey_start_time();
+            String endTime = completed.getSurvey_end_time();
+            String appversion = completed.getAppversion();
+            String start_coordinate_latitude = completed.getCoordinates_start_latitude();
+            String start_coordinate_longitude = completed.getCoordinates_start_longitude();
+            String end_coordinate_latitude = completed.getCoordinates_end_latitude();
+            String end_coordinate_longitude = completed.getCoordinates_end_longitude();
+            String pages= completed.getFormPagesCompleted();
+
+            generatedResponse.add(0,startTime );
+            generatedResponse.add(1,endTime);
+            generatedResponse.add(2,appversion);
+            generatedResponse.add(3,start_coordinate_latitude);
+            generatedResponse.add(4,start_coordinate_longitude);
+            generatedResponse.add(5,end_coordinate_latitude);
+            generatedResponse.add(6,end_coordinate_longitude);
+            generatedResponse.add(7,pages);
+            generatedResponse.add(8,String.valueOf(formid));
+
+        }
+
+        Log.d("CompletedForm",generatedResponse.toString());
+
+        realm.close();
+
+        return generatedResponse;
+
     }
 
 }

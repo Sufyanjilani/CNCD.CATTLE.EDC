@@ -8,25 +8,31 @@ import io.realm.annotations.PrimaryKey;
 public class citiesModel extends RealmObject {
 
 
-   public citiesModel(){
+    public citiesModel(){
 
     }
 
 
     @PrimaryKey int id;
     String country;
+    String countryName_en;
+    String countryName_ur;
     String countryInitials;
     String countrycode;
 
     String stateName;
+    String provinceName_en;
+    String provinceName_ur;
     String cities;
 
-    public citiesModel(int id, String country, String countryInitials, String countrycode, String stateName, String cities) {
+    public citiesModel(int id, String countryName_en, String countryName_ur, String countryInitials, String countrycode, String provinceName_en, String provinceName_ur, String cities) {
         this.id = id;
-        this.country = country;
+        this.countryName_en = countryName_en;
+        this.countryName_ur = countryName_ur;
         this.countryInitials = countryInitials;
         this.countrycode = countrycode;
-        this.stateName = stateName;
+        this.provinceName_en = provinceName_en;
+        this.provinceName_ur = provinceName_ur;
         this.cities = cities;
     }
 
@@ -80,6 +86,35 @@ public class citiesModel extends RealmObject {
         this.cities = cities;
     }
 
+    public String getCountryName_en() {
+        return countryName_en;
+    }
 
+    public void setCountryName_en(String countryName_en) {
+        this.countryName_en = countryName_en;
+    }
 
+    public String getCountryName_ur() {
+        return countryName_ur;
+    }
+
+    public void setCountryName_ur(String countryName_ur) {
+        this.countryName_ur = countryName_ur;
+    }
+
+    public String getProvinceName_en() {
+        return provinceName_en;
+    }
+
+    public void setProvinceName_en(String provinceName_en) {
+        this.provinceName_en = provinceName_en;
+    }
+
+    public String getProvinceName_ur() {
+        return provinceName_ur;
+    }
+
+    public void setProvinceName_ur(String provinceName_ur) {
+        this.provinceName_ur = provinceName_ur;
+    }
 }

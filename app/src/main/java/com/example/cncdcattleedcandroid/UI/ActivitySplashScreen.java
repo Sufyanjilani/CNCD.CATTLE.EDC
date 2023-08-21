@@ -47,7 +47,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         Fade fade = new Fade();
         View decor = getWindow().getDecorView();
         getWindow().setExitTransition(fade);
-        checkThemesState();
+       ;
 
         databaseHlper = new RealmDatabaseHlper(this);
         ImageView sharedview = splashScreenBinding.appLogo;
@@ -58,7 +58,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         if (sessionManager.checkisApplicationFirstTime()) {
             sessionManager.ApplicationFirstTime();
         }
-
+        checkThemesState();
 
         new Handler().postDelayed(new Runnable() {
             @Override

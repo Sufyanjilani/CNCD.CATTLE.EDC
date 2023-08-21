@@ -48,6 +48,7 @@ import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
+import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -115,11 +116,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     String formdata = "";
 
 
+    LoadingDialog loadingDialog;
 
 
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,11 +143,14 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         CheckLocationTurnedOn();
 
+        loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this,this);
 
 
         constants = new Constants();
         setUpLocation();
         getcurrentlocationstart();
+
+
         //injectCities();
 
 
@@ -164,6 +170,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 }
             }
         });
+        setUpWebView();
+        createCompletedJson();
 
 
     }
@@ -233,8 +241,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "  // You can delete the line below if you do not use a customized theme\n" +
                         "  survey.applyTheme(themeJson);\n" +
                         "  survey.onComplete.add((sender, options) => {\n" +
-                        "    console.log(JSON.stringify(sender.data, null, 3));\n" +
-                        "Android.getSubmittedData(sender.data)"+
+                        "Android.ShowProgressDialog()\n"+
+                        "setTimeout(function(){\n" +
+                        " const results = JSON.stringify(sender.data);\n" +
+                        "  console.log(JSON.stringify(sender.data, null, 3));\n" +
+                        "Android.getSubmittedData(results)"+
+                        "},2000)"+
                         "  });\n" +
                         "\n" +
                         "\n" +
@@ -594,50 +606,53 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         @JavascriptInterface
         public void getSubmittedData(String data){
 
-            ArrayList<String> locationarray = getcurrentlocationEnd();
+            //ArrayList<String> locationarray = getcurrentlocationEnd();
 
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            Log.d(constants.info,"Submit function called");
+                        loadingDialog.dissmissDialog();
+                        formdata = data;
+                        String form_start_time = sessionManager.getStartTimestamp();
+                        String form_end_time = getTimeStamp("end-");
+                        String start_latitude = sessionManager.getLatitudeStart();
+                        String start_longitude = sessionManager.getLongitudeStart();
+                        String end_latitude ="0.0";
+                        String end_longitude = "0.0";
+                        String appversion = "";
 
-                    formdata = data;
-                    String form_start_time = sessionManager.getStartTimestamp();
-                    String form_end_time = getTimeStamp("end-");
-                    String start_latitude = sessionManager.getLatitudeStart();
-                    String start_longitude = sessionManager.getLongitudeStart();
-                    String end_latitude = locationarray.get(0);
-                    String end_longitude  = locationarray.get(1);
-                    String appversion = "";
+                        try {
+                            appversion = getPackageManager()
+                                    .getPackageInfo(getPackageName(), 0).versionName;
+                            ;
+                        } catch (PackageManager.NameNotFoundException nameNotFoundException) {
 
-                    try {
-                        appversion= getPackageManager()
-                                .getPackageInfo(getPackageName(), 0).versionName;
-                        ;
-                    }
-                    catch (PackageManager.NameNotFoundException nameNotFoundException){
+                            Log.d("package", nameNotFoundException.getMessage().toString());
+                        }
 
-                        Log.d("package",nameNotFoundException.getMessage().toString());
-                    }
-
-                    realmDatabaseHlper.InsertCompletedForm(
-                            Integer.parseInt(formId),
-                            form_start_time,
-                            form_end_time,
-                            start_latitude,
-                            start_longitude,
-                            end_latitude,
-                            end_longitude,
-                            appversion,
-                            data
-
-
-                    );
-                    Log.d(constants.info,formdata);
-                }
-            },1000);
+                        realmDatabaseHlper.InsertCompletedForm(
+                                Integer.parseInt(formId),
+                                form_start_time,
+                                form_end_time,
+                                start_latitude,
+                                start_longitude,
+                                end_latitude,
+                                end_longitude,
+                                appversion,
+                                data
+                        );
+                        Log.d(constants.info, formdata);
+            Log.d(constants.info,appversion);
+            Log.d(constants.info,formId.toString());
 
 
+
+
+        }
+
+        @JavascriptInterface
+        public void ShowProgressDialog(){
+
+            loadingDialog.ShowCustomLoadingDialog();
         }
 
 //        @JavascriptInterface
@@ -906,5 +921,30 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         CheckLocationTurnedOn();
     }
 
+    @Override
+    public void onBackPressed() {
 
+    }
+
+
+    public void createCompletedJson(){
+
+        ArrayList<String> arrayList = realmDatabaseHlper.readCompletedForm();
+
+        Gson gson = new Gson();
+        String jsonArrayString = gson.toJson(arrayList);
+        JsonObject response = new JsonObject();
+        response.addProperty("id",arrayList.get(8).toString());
+        response.addProperty("start_time",arrayList.get(0));
+        response.addProperty("end_time",arrayList.get(1));
+        response.addProperty("appversion",arrayList.get(2));
+        response.addProperty("start_coordinates_latitude",arrayList.get(3));
+        response.addProperty("start_coordinates_longitude",arrayList.get(4));
+        response.addProperty("end_coordinates_latitude",arrayList.get(5));
+        response.addProperty("end_coordinates_longitude",arrayList.get(6));
+        response.addProperty("form_data",arrayList.get(7));
+
+        Log.d(constants.info,response.toString());
+
+    }
 }

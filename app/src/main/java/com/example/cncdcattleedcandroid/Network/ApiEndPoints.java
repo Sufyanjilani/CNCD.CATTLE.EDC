@@ -13,7 +13,7 @@ public interface ApiEndPoints {
     @POST("form_json/{id}")
     Call<JsonObject> getjsonApi(@Path("id") String id);
 
-    @GET("cities.json")
+    @GET("cities")
     Call<JsonObject> getcities();
 
     @GET("questionnaires/{id}")

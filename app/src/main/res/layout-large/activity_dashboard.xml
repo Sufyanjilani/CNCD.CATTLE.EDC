@@ -136,8 +136,9 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/textcolor"
+                                    android:textSize="10dp"
                                     android:layout_gravity="center_vertical"
-                                    android:text="Settings"/>
+                                    android:text="Sync with Cloud"/>
 
 
                             </LinearLayout>

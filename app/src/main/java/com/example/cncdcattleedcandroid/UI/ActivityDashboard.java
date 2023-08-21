@@ -169,14 +169,7 @@ public class ActivityDashboard extends AppCompatActivity {
         // Find our drawer view
 
 
-        activityDashboardBinding.btnaddFarmer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                startActivity(new Intent(ActivityDashboard.this, ActivityFarmerProfile.class));
-
-            }
-        });
 
 
         drawerToggle = setupDrawerToggle();
