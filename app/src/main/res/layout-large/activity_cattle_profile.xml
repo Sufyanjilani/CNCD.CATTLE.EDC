@@ -62,16 +62,16 @@
                 android:background="?android:attr/selectableItemBackground">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnaddcattle"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
-                    app:cornerRadius="10dp"
-                    android:padding="5dp"
-                    android:textSize="10dp"
-                    android:id="@+id/addcattle"
                     android:backgroundTint="@color/primaryblue"
+                    android:padding="5dp"
                     android:text="@string/addcattle"
-                    android:textColor="@color/textcolor" />
+                    android:textColor="@color/textcolor"
+                    android:textSize="10dp"
+                    app:cornerRadius="10dp" />
 
 
             </LinearLayout>

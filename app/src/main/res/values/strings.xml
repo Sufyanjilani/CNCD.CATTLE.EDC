@@ -15,6 +15,15 @@
     <string name="singIn">Signin</string>
     <string name="farmername">Farmer Name</string>
     <string name="Farm">Farm</string>
+    
+
+    <array name="filter_list">
+
+        <item>Sort By Date</item>
+        <item>Sort By Name</item>
+        <item>Sort By Newest</item>
+        <item>Sort By Oldest</item>
+    </array>
 
 
 </resources>

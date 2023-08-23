@@ -19,6 +19,7 @@ import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.ViewModels.SettingDataViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivitySplashScreenBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -53,24 +54,13 @@ public class ActivitySplashScreen extends AppCompatActivity {
         ImageView sharedview = splashScreenBinding.appLogo;
         sessionManager = new SessionManager(this);
         constants = new Constants();
+        CheckUser();
+
         realmDatabaseHlper = new RealmDatabaseHlper(this);
 
-        if (sessionManager.checkisApplicationFirstTime()) {
-            sessionManager.ApplicationFirstTime();
-        }
         checkThemesState();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(ActivitySplashScreen.this,ActivityDashboard.class);
-//        ActivityOptionsCompat options = ActivityOptionsCompat
-//                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
-                startActivity(i);
-                finish();
 
-            }
-        },2000);
 
     }
 
@@ -84,6 +74,50 @@ public class ActivitySplashScreen extends AppCompatActivity {
         else{
 
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+
+    public void CheckUser(){
+
+        if (!sessionManager.getbearer().equals("null")){
+
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (sessionManager.checkisApplicationFirstTime()){
+                        Intent i = new Intent(ActivitySplashScreen.this, ActivitySettingData.class);
+                        startActivity(i);
+
+                    }
+                    else {
+
+                        Intent i = new Intent(ActivitySplashScreen.this, ActivityDashboard.class);
+                        Log.d(constants.Tag, sessionManager.getbearer());
+                        startActivity(i);
+                    }
+
+                }
+            },2000);
+
+
+        }
+        else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent i = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
+//        ActivityOptionsCompat options = ActivityOptionsCompat
+//                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
+                    startActivity(i);
+                    finish();
+
+                }
+            },2000);
+
         }
     }
 

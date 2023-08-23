@@ -26,6 +26,14 @@ public class LoadingDialog {
         progressDialog.show();
     }
 
+    public void ShowCustomLoadingDialogWithCustomMessage(String message){
+
+        progressDialog = new BeautifulProgressDialog(activity, BeautifulProgressDialog.withImage, message);
+        progressDialog.setImageLocation(ctx.getResources().getDrawable(R.drawable.cowimage));
+        progressDialog.setLayoutColor(ctx.getResources().getColor(android.R.color.white));
+        progressDialog.show();
+    }
+
     public void dissmissDialog(){
 
         progressDialog.dismiss();

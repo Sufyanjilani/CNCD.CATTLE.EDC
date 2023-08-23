@@ -3,7 +3,9 @@ package com.example.cncdcattleedcandroid.UI;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.databinding.ActivityCattleProfileBinding;
@@ -34,6 +36,16 @@ public class ActivityCattleProfile extends AppCompatActivity {
         setUpMPChart();
         CreateMPPicChart();
         setData(5,100);
+
+        cattleProfileBinding.btnaddcattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","1");
+                startActivity(i);
+            }
+        });
 
 
     }

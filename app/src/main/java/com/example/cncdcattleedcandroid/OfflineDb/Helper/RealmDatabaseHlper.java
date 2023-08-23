@@ -206,13 +206,12 @@ public class RealmDatabaseHlper {
     public void insertFarmerForm(
             String id,
             String name,
-            String type,
             String formPages
     ){
         realm = Realm.getDefaultInstance();
 
 
-        FarmerSurveyModel farmerSurveyModel = new FarmerSurveyModel(id, name, type, formPages);
+        FarmerSurveyModel farmerSurveyModel = new FarmerSurveyModel(id, name, "type", formPages);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -248,15 +247,22 @@ public class RealmDatabaseHlper {
                 .equalTo("id", id)
                 .findFirst();
 
-        Log.d("TAG",tasks.toString());
 
-        String survey_pages = tasks.getFormPages();
 
-        Log.d("TAG","readtask");
+        if (tasks != null) {
 
-        realm.close();
+            String survey_pages = tasks.getFormPages();
 
-        return  survey_pages;
+            Log.d("TAG", "readtask");
+
+            realm.close();
+
+            return survey_pages;
+        }
+        else{
+
+            return "";
+        }
 
     }
 
@@ -335,6 +341,52 @@ public class RealmDatabaseHlper {
         realm.close();
 
         return generatedResponse;
+
+    }
+
+
+    public String getFormName(String id){
+
+
+        Realm realm = Realm.getDefaultInstance();
+        FarmerSurveyModel tasks = realm.where(FarmerSurveyModel.class)
+                .equalTo("id", id)
+                .findFirst();
+
+
+
+        if (tasks != null) {
+
+            String forName = tasks.getName();
+
+            Log.d("TAG", "readtask");
+
+            realm.close();
+
+            return forName;
+        }
+        else{
+
+            return "";
+        }
+    }
+
+
+    public int getFormsCount(){
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults tasks = realm.where(FarmerSurveyModel.class).findAll();
+        Log.d(constants.info,String.valueOf(tasks.size()));
+        if (tasks.size() == 8){
+
+            return 8;
+        }
+        else{
+
+            return 0;
+        }
+
+
 
     }
 

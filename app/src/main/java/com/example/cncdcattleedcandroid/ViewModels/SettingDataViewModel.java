@@ -1,7 +1,6 @@
 package com.example.cncdcattleedcandroid.ViewModels;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,38 +11,32 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
-import com.example.cncdcattleedcandroid.Realm.RealDBhelper;
-import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardViewModel extends AndroidViewModel {
+public class SettingDataViewModel extends AndroidViewModel {
+
+
+
+    public SettingDataViewModel(@NonNull Application application) {
+        super(application);
+        constants = new Constants();
+        realDBhelper  = new RealmDatabaseHlper();
+    }
 
 
     Constants constants;
     RealmDatabaseHlper realDBhelper;
 
-
-    MutableLiveData<String> _isLogoutSuccess = new MutableLiveData<>();
-    public  MutableLiveData<String> islogoutsucces = _isLogoutSuccess;
-    SessionManager sessionManager;
     public MutableLiveData<String> citiesResponse = new MutableLiveData<>();
     public MutableLiveData<String> surveyformsResponse = new MutableLiveData<>();
 
-    public DashboardViewModel(@NonNull Application application) {
-        super(application);
-        constants = new Constants();
-        realDBhelper  = new RealmDatabaseHlper();
-        sessionManager = new SessionManager(getApplication().getApplicationContext());
-    }
+
 
 
     public void getDataforInjection() {
@@ -76,7 +69,7 @@ public class DashboardViewModel extends AndroidViewModel {
                     realDBhelper.insertCities(countryName_en,countryName_ur,countryInitials,countrycode,provinceName_en,provinceeName_ur,cities.toString());
 
 
-                    surveyformsResponse.setValue("success");
+                    //surveyformsResponse.setValue("success");
 
                     Log.d(constants.Tag, countryName_en);
                 }
@@ -102,6 +95,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
 
             Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey(String.valueOf(i));
+            int finalI = i;
             formReader.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -150,21 +144,29 @@ public class DashboardViewModel extends AndroidViewModel {
 //
 //                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
 
-                        surveyformsResponse.setValue("success");
 
 
                     }
+
                 }
+
+
 
                 @Override
                 public void onFailure(Call<JsonObject> call, Throwable t) {
                     Log.d(constants.Tag, t.getMessage().toString());
-                    surveyformsResponse.setValue(t.getMessage().toString());
+
                 }
             });
         }
 
 
+        if (realDBhelper.getFormsCount()==8){
+            surveyformsResponse.postValue("success");
+        }
+        else{
+            surveyformsResponse.postValue("failed");
+        }
 
         Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey("1");
         formReader.enqueue(new Callback<JsonObject>() {
@@ -233,12 +235,12 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public void callSavedFormsMethod(){
 
-        LoadDataAsyncTask task = new LoadDataAsyncTask();
+        SettingDataViewModel.LoadDataAsyncTask task = new SettingDataViewModel.LoadDataAsyncTask();
         task.execute();
     }
 
 
-    class LoadDataAsyncTask extends AsyncTask<Void,Void,Void>{
+    class LoadDataAsyncTask extends AsyncTask<Void,Void,Void> {
 
         @Override
         protected void onPreExecute() {
@@ -260,27 +262,4 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void Logout(){
-        JsonObject logoutObject = new JsonObject();
-        logoutObject.addProperty("accessToken",sessionManager.getbearer());
-        new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().logout(logoutObject).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                if (response.isSuccessful()){
-
-                    _isLogoutSuccess.setValue("loggedOut");
-                    sessionManager.savebarearToken("null");
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d("error",t.getMessage().toString());
-
-                _isLogoutSuccess.setValue("failed");
-            }
-        });
-    }
 }

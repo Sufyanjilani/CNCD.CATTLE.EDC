@@ -57,9 +57,11 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.cncdcattleedcandroid.Adapters.CattleAdapter;
 import com.example.cncdcattleedcandroid.Models.Cattles;
+import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityDashboardBinding;
 import com.github.mikephil.charting.charts.BarChart;
@@ -75,6 +77,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
 import com.smb.animatedtextview.AnimatedTextView;
 
@@ -111,6 +114,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
     RealmDatabaseHlper realmDatabaseHlper;
 
+    LoadingDialog loadingDialog;
 
 
 
@@ -137,9 +141,10 @@ public class ActivityDashboard extends AppCompatActivity {
         setData(5, 100);
         CreateMPPicChart();
         AnimateTextView();
-        CheckisDataSavedOffline();
+        //CheckisDataSavedOffline();
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
+        loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -248,7 +253,19 @@ public class ActivityDashboard extends AppCompatActivity {
 
         if (menuItem.getItemId() == R.id.drawersignout) {
 
-            Toast.makeText(this, "Signing out", Toast.LENGTH_SHORT).show();
+            loadingDialog.ShowCustomLoadingDialogWithCustomMessage("Logging out...");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    Logout();
+                    loadingDialog.dissmissDialog();
+                    startActivity(new Intent(ActivityDashboard.this,ActivityLogin.class));
+                    finish();
+                }
+            },1000);
+
+
 
         }
 
@@ -681,7 +698,7 @@ public class ActivityDashboard extends AppCompatActivity {
         cattleslist.add(new Cattles("Cow","2"));
         cattleslist.add(new Cattles("Goat","3"));
         cattleslist.add(new Cattles("Buffalo","4"));
-        CattleAdapter cattleAdapter = new CattleAdapter(cattleslist);
+        CattleAdapter cattleAdapter = new CattleAdapter(cattleslist,this);
         activityDashboardBinding.recycler.setAdapter(cattleAdapter);
 
         int resId = R.anim.slide_up_anim_layout;
@@ -761,12 +778,8 @@ public class ActivityDashboard extends AppCompatActivity {
 //        String coordinates_end_longitude;
 //        String formPagesCompleted;
 
-
-
-
-
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
-        i.putExtra("formID","6");
+        i.putExtra("formID","1");
         startActivity(i);
 
 
@@ -809,6 +822,14 @@ public class ActivityDashboard extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    public void Logout(){
+
+
+        viewModel.Logout();
+
     }
 }
 

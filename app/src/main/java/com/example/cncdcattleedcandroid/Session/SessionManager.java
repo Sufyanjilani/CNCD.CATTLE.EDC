@@ -49,8 +49,8 @@ public class SessionManager {
     public boolean getlongitude(){
         return  sharedPreferences.getBoolean("longitude",false);
     }
-    public boolean getbearer(){
-        return sharedPreferences.getBoolean("barriertoken",false);
+    public String getbearer(){
+        return sharedPreferences.getString("bearer_token","null");
     }
     public void isdarkThemeEnabled(Boolean enabled){
 
@@ -123,6 +123,8 @@ public class SessionManager {
     public Boolean checkisApplicationFirstTime(){
         return sharedPreferences.getBoolean("installedFirstTime",true);
     }
+
+
 
 }
 

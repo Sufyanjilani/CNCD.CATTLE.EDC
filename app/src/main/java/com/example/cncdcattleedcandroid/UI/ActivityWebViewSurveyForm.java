@@ -111,9 +111,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     Realm realm;
 
-    String formId = "";
+    private String formId = "";
 
-    String formdata = "";
+    private String formdata = "";
+
+
+    private String formName;
 
 
     LoadingDialog loadingDialog;
@@ -172,6 +175,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         });
         setUpWebView();
         createCompletedJson();
+        formName = realmDatabaseHlper.getFormName(formId);
 
 
     }
@@ -382,6 +386,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 else{
 
                     ForceWebViewToDarkMode(getSurveyFormData());
+                    InjectDarkMode();
                 }
             }
         });
@@ -690,14 +695,10 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     public String getSurveyFormData() {
         String formjson = realmDatabaseHlper.readDataSurvey(formId);
 
-        if (formjson.equals("")) {
             Log.d(constants.info + "function", formjson);
-            return null;
-
-        } else {
 
             return formjson;
-        }
+
     }
 
     public void ForceWebViewToDarkMode(String formjson){
@@ -758,11 +759,16 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                             "  // You can delete the line below if you do not use a customized theme\n" +
                             "  survey.applyTheme(themeJson);\n" +
                             "  survey.onComplete.add((sender, options) => {\n" +
-                            "    console.log(JSON.stringify(sender.data, null, 3));\n" +
+                            "Android.ShowProgressDialog()\n"+
+                            "setTimeout(function(){\n" +
+                            " const results = JSON.stringify(sender.data);\n" +
+                            "  console.log(JSON.stringify(sender.data, null, 3));\n" +
+                            "Android.getSubmittedData(results)"+
+                            "},2000)"+
                             "  });\n" +
                             "\n" +
                             "\n" +
-                            "  $(\"#surveyElement\").Survey({ model: survey });";
+                            "  $(\"#surveyElement\").Survey({ model: survey });";;
 
             Log.d(constants.Tag,"darkfunction");
 
@@ -923,6 +929,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        goback();
 
     }
 
@@ -931,20 +938,82 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         ArrayList<String> arrayList = realmDatabaseHlper.readCompletedForm();
 
-        Gson gson = new Gson();
-        String jsonArrayString = gson.toJson(arrayList);
-        JsonObject response = new JsonObject();
-        response.addProperty("id",arrayList.get(8).toString());
-        response.addProperty("start_time",arrayList.get(0));
-        response.addProperty("end_time",arrayList.get(1));
-        response.addProperty("appversion",arrayList.get(2));
-        response.addProperty("start_coordinates_latitude",arrayList.get(3));
-        response.addProperty("start_coordinates_longitude",arrayList.get(4));
-        response.addProperty("end_coordinates_latitude",arrayList.get(5));
-        response.addProperty("end_coordinates_longitude",arrayList.get(6));
-        response.addProperty("form_data",arrayList.get(7));
+        if(arrayList.size() != 0) {
+            Gson gson = new Gson();
+            String jsonArrayString = gson.toJson(arrayList);
+            JsonObject response = new JsonObject();
+            response.addProperty("id", arrayList.get(8).toString());
+            response.addProperty("start_time", arrayList.get(0));
+            response.addProperty("end_time", arrayList.get(1));
+            response.addProperty("appversion", arrayList.get(2));
+            response.addProperty("FormName",formName);
+            response.addProperty("start_coordinates_latitude", arrayList.get(3));
+            response.addProperty("start_coordinates_longitude", arrayList.get(4));
+            response.addProperty("end_coordinates_latitude", arrayList.get(5));
+            response.addProperty("end_coordinates_longitude", arrayList.get(6));
+            response.addProperty("form_data", arrayList.get(7));
 
-        Log.d(constants.info,response.toString());
+
+            Log.d(constants.info, response.toString());
+        }
 
     }
+
+
+
+
+    public void goback(){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//        alert.setMessage(R.string.formcancelmessage);
+        alert.setMessage("Do you want to close the form?");
+        alert.setTitle("Form Cancellation");
+
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        finish();
+
+                    }
+                });
+
+                alert.show();
+
+
+
+            }
+
+
+            public void InjectDarkMode(){
+
+          String js = "function myFunction() {\n" +
+                  "  var element = document.body;\n" +
+                  "  element.classList.toggle(\"dark-mode\");\n" +
+                  "}\n" +
+                  "myFunction();";
+
+
+
+
+          webViewSurveyFormBinding.surveyWebView.evaluateJavascript(js,null);
+
+            }
+
+
+
+
+
+
+
+
+
 }

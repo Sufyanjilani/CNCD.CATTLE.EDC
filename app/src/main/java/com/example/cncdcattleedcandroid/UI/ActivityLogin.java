@@ -3,19 +3,31 @@ package com.example.cncdcattleedcandroid.UI;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.ViewCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
+import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
+import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
+import com.example.cncdcattleedcandroid.ViewModels.LoginViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityLoginBinding;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityLogin extends AppCompatActivity {
 
@@ -25,6 +37,8 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     LoadingDialog loadingDialog;
+
+    LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +53,52 @@ public class ActivityLogin extends AppCompatActivity {
         View decor = getWindow().getDecorView();
 
         getWindow().setEnterTransition(fade);
+        loginViewModel= new ViewModelProvider(this).get(LoginViewModel.class);
+
+
+        loginViewModel.isloginsucces.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (s.equals("Login Successs")){
+                    loadingDialog.ShowCustomLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (sessionManager.checkisApplicationFirstTime()) {
+
+                                startActivity(new Intent(ActivityLogin.this, ActivitySettingData.class));
+                                loadingDialog.dissmissDialog();
+                            }
+                            else{
+
+                                startActivity(new Intent(ActivityLogin.this, ActivityDashboard.class));
+                                loadingDialog.dissmissDialog();
+                            }
+                        }
+                    },2000);
+                }
+                else{
+
+                    loadingDialog.ShowCustomLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ActivityLogin.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                            loadingDialog.dissmissDialog();
+                        }
+                    },2000);
+
+                }
+            }
+        });
+
         activityLoginBinding.loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                loadingDialog.ShowCustomLoadingDialog();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(ActivityLogin.this,ActivityDashboard.class));
-                        loadingDialog.dissmissDialog();
-                    }
-                },2000);
-
+                Login();
             }
         });
 
@@ -82,6 +129,13 @@ public class ActivityLogin extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+
+    public void Login(){
+
+        loginViewModel.Login("ro1@cncdpk.com","secret","1.0","24.2");
+
     }
 
 

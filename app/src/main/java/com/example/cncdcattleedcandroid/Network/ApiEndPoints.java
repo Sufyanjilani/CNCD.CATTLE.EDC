@@ -19,6 +19,13 @@ public interface ApiEndPoints {
     @GET("questionnaires/{id}")
     Call<JsonObject> getSurvey(@Path("id") String id);
 
+    @POST("auth/login")
+    Call<JsonObject> login(@Body JsonObject loginobject);
+
+    @POST("auth/logout")
+    Call<JsonObject> logout(@Body JsonObject logout);
+
+
 
 
 

@@ -1,9 +1,12 @@
 package com.example.cncdcattleedcandroid.ViewModels;
 
+import android.app.Application;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebViewSurveyViewModel extends ViewModel {
+public class WebViewSurveyViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> _formdata = new MutableLiveData<>();
     public MutableLiveData<String> formdata = _formdata;
@@ -27,15 +30,15 @@ public class WebViewSurveyViewModel extends ViewModel {
 
     public RealmDatabaseHlper realmDatabaseHlper;
 
-    public WebViewSurveyViewModel(){
-
+    public WebViewSurveyViewModel(@NonNull Application application) {
+        super(application);
         realmDatabaseHlper = new RealmDatabaseHlper();
     }
 
 
     public void getJsonFromAPi(String id){
 
-        Call<JsonObject> getfromdataFromApi = new RetrofitClientSurvey().retrofitclient().getjsonApi(id);
+        Call<JsonObject> getfromdataFromApi = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getjsonApi(id);
         getfromdataFromApi.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

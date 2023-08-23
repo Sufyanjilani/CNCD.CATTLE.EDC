@@ -9,10 +9,12 @@ public class BaseUrl {
 
     String baseurl4= "http://192.168.20.136:8888/demo/";
 
+    String baseurl5 = "http://192.168.20.136:8888/api/v1/";
+
 
 
     public String getbaseUlr(){
-        return baseurl4;
+        return baseurl5;
 
     }
 }

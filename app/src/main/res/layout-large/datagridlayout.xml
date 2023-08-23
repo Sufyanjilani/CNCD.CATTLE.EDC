@@ -121,13 +121,13 @@
           <com.google.android.material.button.MaterialButton
               android:layout_width="500dp"
               android:layout_height="wrap_content"
+              android:id="@+id/btneditcattle"
               android:text="Edit"
               android:layout_weight="1"
               android:drawableEnd="@drawable/baseline_edit_24_white"
               android:drawableTint="@color/textcolor"
-              android:textColor="@color/textcolor"
-              android:backgroundTint="@color/primaryblue"
-              app:cornerRadius="14dp"/>
+              android:textColor="@color/btncolortext"
+              android:backgroundTint="@color/lightblue" />
 
 
       </LinearLayout>
@@ -147,12 +147,12 @@
           <com.google.android.material.button.MaterialButton
               android:layout_width="500dp"
               android:layout_height="wrap_content"
+              android:id="@+id/btneditmilkcycle"
               android:text="Milk Cycle"
               android:layout_weight="1"
               android:drawableTint="@color/textcolor"
-              android:textColor="@color/textcolor"
-              android:backgroundTint="@color/primaryblue"
-              app:cornerRadius="14dp"/>
+              android:textColor="@color/btncolortext"
+              android:backgroundTint="@color/lightblue" />
 
 
       </LinearLayout>
