@@ -327,12 +327,16 @@
                     android:layout_marginBottom="15dp"
                     app:cardElevation="5dp">
 
-                    <SearchView
-                        android:id="@+id/searchView"
+                    <EditText
+                        android:id="@+id/SearchEdit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:iconifiedByDefault="false"
+                        android:hint="Search"
+                        android:imeOptions="actionSearch"
+                        android:padding="10dp"
+                        android:drawableEnd="@drawable/baseline_search_24"
                         android:queryHint="Search By Name Or Study Id"
                         app:cardPreventCornerOverlap="true" />
                 </androidx.cardview.widget.CardView>

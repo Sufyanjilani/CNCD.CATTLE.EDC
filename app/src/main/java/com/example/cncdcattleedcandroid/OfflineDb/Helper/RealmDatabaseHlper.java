@@ -5,12 +5,15 @@ import android.util.Log;
 
 import com.example.cncdcattleedcandroid.OfflineDb.Models.CattleSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.EntitiesModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerFormCompleted;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerSurveyModel;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.citiesModel;
 import com.example.cncdcattleedcandroid.Realm.TestModel;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -253,7 +256,7 @@ public class RealmDatabaseHlper {
 
             String survey_pages = tasks.getFormPages();
 
-            Log.d("TAG", "readtask");
+            Log.d("TAG", survey_pages.toString());
 
             realm.close();
 
@@ -345,6 +348,53 @@ public class RealmDatabaseHlper {
     }
 
 
+    public ArrayList<String> readCompletedFormJSON(){
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<FarmerFormCompleted> tasks = realm.where(FarmerFormCompleted.class).findAll();
+        Log.d("TAG",tasks.toString());
+        ArrayList<String> generatedResponse = new ArrayList<>();
+        JsonArray object = new JsonArray();
+        JsonObject formsObject = new JsonObject();
+
+
+        for(FarmerFormCompleted  completed : tasks){
+
+            int formid = completed.getId();
+            String startTime = completed.getSurvey_start_time();
+            String endTime = completed.getSurvey_end_time();
+            String appversion = completed.getAppversion();
+            String start_coordinate_latitude = completed.getCoordinates_start_latitude();
+            String start_coordinate_longitude = completed.getCoordinates_start_longitude();
+            String end_coordinate_latitude = completed.getCoordinates_end_latitude();
+            String end_coordinate_longitude = completed.getCoordinates_end_longitude();
+            String pages= completed.getFormPagesCompleted();
+
+
+            formsObject.addProperty("formid",String.valueOf(formid));
+            formsObject.addProperty("interview_start_time",startTime );
+            formsObject.addProperty("interview_end_time",endTime);
+            formsObject.addProperty("app_version",appversion);
+            formsObject.addProperty("start_coordinates_latitude",start_coordinate_latitude);
+            formsObject.addProperty("start_coordinates_longitude",start_coordinate_longitude);
+            formsObject.addProperty("start_coordinates_latitude",end_coordinate_latitude);
+            formsObject.addProperty("start_coordinates_longitude",end_coordinate_longitude);
+            formsObject.addProperty("pages",pages);
+
+            formsObject.add("",formsObject);
+
+        }
+
+        Log.d("CompletedForm",generatedResponse.toString());
+
+        realm.close();
+
+        return generatedResponse;
+
+    }
+
+
+
     public String getFormName(String id){
 
 
@@ -377,17 +427,85 @@ public class RealmDatabaseHlper {
         Realm realm = Realm.getDefaultInstance();
         RealmResults tasks = realm.where(FarmerSurveyModel.class).findAll();
         Log.d(constants.info,String.valueOf(tasks.size()));
-        if (tasks.size() == 8){
-
-            return 8;
-        }
-        else{
-
-            return 0;
-        }
+        return tasks.size();
 
 
 
     }
+
+
+
+
+    public void InsertEntities(
+            String general_basic,
+
+    String general_diet,
+
+    String generaL_medical,
+
+    String personal_basic,
+
+    String personal_milk,
+
+    String personal_medical,
+
+    String personal_traits,
+
+    String personal_mik_weight
+
+            ){
+
+        Realm realm = Realm.getDefaultInstance();
+        EntitiesModel entitiesModel =new EntitiesModel(
+
+                general_basic,
+                general_diet,
+                generaL_medical,
+                personal_basic,
+                personal_milk,
+                personal_medical,
+                personal_traits,
+                personal_mik_weight
+        );
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(entitiesModel);
+                Log.d(constants.info,general_basic);
+            }
+
+        });
+    }
+
+
+    public JsonObject getEntityObject(){
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<EntitiesModel> tasks = realm.where(EntitiesModel.class).findAll();
+        JsonObject databasereadObject = new JsonObject();
+
+        for(EntitiesModel model:tasks){
+
+            databasereadObject.addProperty("general_basic",model.getGeneral_basic());
+            databasereadObject.addProperty("general_diet",model.getGeneral_diet());
+            databasereadObject.addProperty("general_medical",model.getGeneral_medical());
+            databasereadObject.addProperty("personal_basic",model.getPersonal_basic());
+            databasereadObject.addProperty("personal_milk",model.getPersonal_milk());
+            databasereadObject.addProperty("personal_medical",model.getPersonal_medical());
+            databasereadObject.addProperty("personal_traits",model.getPersonal_traits());
+            databasereadObject.addProperty("personal_mik_weight",model.getPersonal_mik_weight());
+
+
+        }
+
+        return databasereadObject;
+
+
+    }
+
+
+
+
 
 }

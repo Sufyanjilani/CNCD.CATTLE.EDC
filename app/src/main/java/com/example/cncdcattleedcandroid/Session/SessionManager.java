@@ -125,6 +125,30 @@ public class SessionManager {
     }
 
 
+    public void Save_Farm_and_Farmer_ID(
+
+            String farmer_ID,
+            String farm_ID
+    ) {
+
+        editor.putString("farmer_ID",farmer_ID);
+        editor.putString("farm_ID",farm_ID);
+        editor.apply();
+        editor.commit();
+    }
+
+    public String get_Farmer_ID(){
+
+        return sharedPreferences.getString("farmer_ID","0").toString();
+
+    }
+
+    public String get_Farm_ID(){
+
+        return sharedPreferences.getString("farm_ID","0").toString();
+    }
+
+
 
 }
 

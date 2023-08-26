@@ -1,12 +1,18 @@
 package com.example.cncdcattleedcandroid.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -17,13 +23,22 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
+import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.ViewModels.LoginViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityLoginBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +55,13 @@ public class ActivityLogin extends AppCompatActivity {
 
     LoginViewModel loginViewModel;
 
+    FusedLocationProviderClient locationProviderClient;
+    Constants constants;
+
+    ArrayList<String> coordinates= new ArrayList<>();
+
+    RealmDatabaseHlper realmDatabaseHlper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +76,12 @@ public class ActivityLogin extends AppCompatActivity {
 
         getWindow().setEnterTransition(fade);
         loginViewModel= new ViewModelProvider(this).get(LoginViewModel.class);
+        constants= new Constants();
+        setUpLocation();
+        getcurrentlocationEnd();
+        realmDatabaseHlper = new RealmDatabaseHlper();
+        realmDatabaseHlper.InitializeRealm(this);
+
 
 
         loginViewModel.isloginsucces.observe(this, new Observer<String>() {
@@ -134,7 +162,68 @@ public class ActivityLogin extends AppCompatActivity {
 
     public void Login(){
 
-        loginViewModel.Login("ro1@cncdpk.com","secret","1.0","24.2");
+        String appversion = "";
+        try {
+            appversion = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+            ;
+        } catch (PackageManager.NameNotFoundException nameNotFoundException) {
+
+            Log.d("package", nameNotFoundException.getMessage().toString());
+        }
+
+        loginViewModel.Login("ro1@cncdpk.com","secret",appversion,"24.2");
+
+    }
+
+    public ArrayList<String> getcurrentlocationEnd() {
+
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this,permission,4);
+        }
+        locationProviderClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+
+
+        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if (location != null) {
+
+
+                    arrayList.add(String.valueOf(location.getLatitude()));
+                    arrayList.add(String.valueOf(location.getLongitude()));
+
+                    Log.d(constants.Tag,String.valueOf(location.getLatitude()));
+                    Log.d(constants.Tag,String.valueOf(location.getLongitude()));
+
+
+                }
+            }
+        });
+
+        return arrayList;
+    }
+
+    public void setUpLocation() {
+
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
     }
 

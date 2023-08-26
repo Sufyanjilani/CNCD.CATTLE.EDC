@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,15 +18,18 @@ import com.example.cncdcattleedcandroid.databinding.DatagridlayoutBinding;
 
 import java.util.ArrayList;
 
-public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewholer> {
+public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewholer> implements Filterable {
 
     ArrayList<DataGridModel> dataGridModels = new ArrayList<>();
     private Context ctx;
+
+    private ArrayList<DataGridModel> filteredData;
 
     public DataGridAdapter(ArrayList<DataGridModel> gridModels, Context context){
 
         this.dataGridModels = gridModels;
         this.ctx = context;
+        filteredData = new ArrayList<>(gridModels);
     }
 
     @NonNull
@@ -73,7 +78,28 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
 
     @Override
     public int getItemCount() {
-        return dataGridModels.size();
+        return filteredData.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return null;
+    }
+
+
+    public void filter(String query) {
+        filteredData.clear();
+        if (query.isEmpty()) {
+            filteredData.addAll(dataGridModels);
+        } else {
+            query = query.toLowerCase();
+            for (DataGridModel item : dataGridModels) {
+                if (item.getId().toLowerCase().contains(query)) {
+                    filteredData.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     class Viewholer extends RecyclerView.ViewHolder{

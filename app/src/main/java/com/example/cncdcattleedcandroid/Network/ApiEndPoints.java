@@ -25,6 +25,17 @@ public interface ApiEndPoints {
     @POST("auth/logout")
     Call<JsonObject> logout(@Body JsonObject logout);
 
+    @POST("farmers")
+    Call<JsonObject> Addfarmer(@Body JsonObject object);
+
+    @POST("farmers/{farm_id}/{farmer_id}/{entities}")
+    Call<JsonObject> addEntity(@Path("farm_id") String farm_id,
+                               @Path("farmer_id") String farmer_id,
+                               @Path("entities") String entities, @Body JsonObject jsonObject);
+
+
+
+
 
 
 

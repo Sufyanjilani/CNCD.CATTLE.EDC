@@ -21,6 +21,8 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +36,12 @@ public class DashboardViewModel extends AndroidViewModel {
 
     MutableLiveData<String> _isLogoutSuccess = new MutableLiveData<>();
     public  MutableLiveData<String> islogoutsucces = _isLogoutSuccess;
+
+
+    MutableLiveData<String> _isallDataRetrieved = new MutableLiveData<>();
+    public  MutableLiveData<String> isallDataRetrieved = _isallDataRetrieved;
+
+
     SessionManager sessionManager;
     public MutableLiveData<String> citiesResponse = new MutableLiveData<>();
     public MutableLiveData<String> surveyformsResponse = new MutableLiveData<>();
@@ -282,5 +290,64 @@ public class DashboardViewModel extends AndroidViewModel {
                 _isLogoutSuccess.setValue("failed");
             }
         });
+    }
+
+
+    public void PostAllDataToServer(){
+
+
+
+        JsonObject finalobject = new JsonObject();
+        QueryFormsAsync queryFormsAsync = new QueryFormsAsync();
+        queryFormsAsync.execute();
+        ArrayList<String> forms = queryFormsAsync.returnAllforms();
+        Log.d(constants.Tag,forms.toString());
+
+
+    }
+
+
+
+    class QueryFormsAsync extends AsyncTask<Void,Void, ArrayList<String>>{
+
+
+        ArrayList<String> allforms = new ArrayList<>();
+
+
+        @Override
+        protected ArrayList<String> doInBackground(Void... voids) {
+
+            ArrayList<String> forms = realDBhelper.readCompletedForm();
+            if (forms.size() == 0){
+
+                _isallDataRetrieved.postValue("No forms found");
+                return new ArrayList<>();
+            }
+            else{
+
+                return forms;
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(constants.Tag,"getting forms started");
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> strings) {
+            super.onPostExecute(strings);
+            Log.d(constants.Tag,"got all forms");
+            isallDataRetrieved.postValue("forms retreived");
+            allforms = strings;
+            Log.d(constants.Tag,allforms.toString());
+        }
+
+        public ArrayList<String>  returnAllforms(){
+
+            return allforms;
+        }
     }
 }

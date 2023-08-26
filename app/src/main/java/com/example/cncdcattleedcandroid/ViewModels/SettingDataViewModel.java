@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -90,145 +92,58 @@ public class SettingDataViewModel extends AndroidViewModel {
     public void getSurveyForm(){
 
 
+        JsonObject object = realDBhelper.getEntityObject();
+        Log.d(constants.Tag,"loop object"+object.toString());
 
-        for(int i =1; i<9;i++){
+        for(int i =0; i<=20;i++){
 
+            if (Integer.parseInt(object.get("general_basic").getAsString()) == i ){
 
-            Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey(String.valueOf(i));
-            int finalI = i;
-            formReader.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    if (response.isSuccessful()){
-                        JsonObject surveyObject = response.body();
-                        JsonArray dataObject = surveyObject.get("data").getAsJsonArray();
-                        JsonObject formObject = dataObject.get(0).getAsJsonObject();
+                FetchForm(i);
+            }
+            else if (Integer.parseInt(object.get("general_diet").getAsString()) == i){
+                FetchForm(i);
 
-                        Log.d(constants.Tag, surveyObject.toString());
+            }
+            else if (Integer.parseInt(object.get("general_medical").getAsString()) == i){
 
-//                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
-//                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
-//                    Log.d(constants.Tag, farmerObject.toString());
-//
-                        String questionairId = formObject.get("questionnaireID").getAsString();
-                        String questionnaireName = formObject.get("questionnaireName").getAsString();
-                        String form = formObject.get("questionnaireJSON").getAsString();;
+                FetchForm(i);
+            }
+            else if (Integer.parseInt(object.get("personal_basic").getAsString()) == i){
 
-                        //String farmerType = formObject.get("type").getAsString();
+                FetchForm(i);
+            }
+            else if (Integer.parseInt(object.get("personal_milk").getAsString()) == i){
+                FetchForm(i);
 
-//                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
-//                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1object = farmerFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarray = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
+            }
+            else if (Integer.parseInt(object.get("personal_medical").getAsString()) == i){
 
+                FetchForm(i);
+            }
+            else if (Integer.parseInt(object.get("personal_traits").getAsString()) == i){
 
+                FetchForm(i);
 
+            }
 
-                        Log.d(constants.info,form);
+            else if (Integer.parseInt(object.get("personal_mik_weight").getAsString()) == i){
 
-                        realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
+                FetchForm(i);
+            }
 
-//                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
-//                    Log.d(constants.Tag, cattleObject.toString());
-//                    String cattleId = cattleObject.get("id").getAsString();
-//                    String cattleName = cattleObject.get("name").getAsString();
-//                    String cattleType = cattleObject.get("type").getAsString();
-//                    JsonObject cattleFormJson = cattleObject.get("json").getAsJsonObject();
-//                    JsonArray cattleFormPages = cattleFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1objectcattle = cattleFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarraycattle = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1cattle = elementsarray.get(0).getAsJsonObject();
-//
-//                    Log.d("retrieved",form1.toString());
-//
-//                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
-
-
-
-                    }
-
-                }
-
-
-
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Log.d(constants.Tag, t.getMessage().toString());
-
-                }
-            });
         }
 
 
-        if (realDBhelper.getFormsCount()==8){
+        if (realDBhelper.getFormsCount()>0){
             surveyformsResponse.postValue("success");
+            Log.d(constants.Tag,"got forms "+realDBhelper.getFormsCount());
         }
         else{
             surveyformsResponse.postValue("failed");
         }
 
-        Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey("1");
-        formReader.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()){
-                    JsonObject surveyObject = response.body();
-                    JsonArray dataObject = surveyObject.get("data").getAsJsonArray();
-                    JsonObject formObject = dataObject.get(0).getAsJsonObject();
 
-                    Log.d(constants.Tag, surveyObject.toString());
-
-//                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
-//                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
-//                    Log.d(constants.Tag, farmerObject.toString());
-//
-                    String questionairId = formObject.get("questionnaireID").getAsString();
-                    String questionnaireName = formObject.get("questionnaireName").getAsString();
-                    String form = formObject.get("questionnaireJSON").getAsString();;
-
-                    //String farmerType = formObject.get("type").getAsString();
-
-//                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
-//                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1object = farmerFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarray = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
-
-
-
-
-                    Log.d(constants.info,form);
-
-                    realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
-
-//                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
-//                    Log.d(constants.Tag, cattleObject.toString());
-//                    String cattleId = cattleObject.get("id").getAsString();
-//                    String cattleName = cattleObject.get("name").getAsString();
-//                    String cattleType = cattleObject.get("type").getAsString();
-//                    JsonObject cattleFormJson = cattleObject.get("json").getAsJsonObject();
-//                    JsonArray cattleFormPages = cattleFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1objectcattle = cattleFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarraycattle = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1cattle = elementsarray.get(0).getAsJsonObject();
-//
-//                    Log.d("retrieved",form1.toString());
-//
-//                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
-
-                    surveyformsResponse.setValue("success");
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(constants.Tag, t.getMessage().toString());
-                surveyformsResponse.setValue(t.getMessage().toString());
-            }
-        });
     }
 
 
@@ -260,6 +175,72 @@ public class SettingDataViewModel extends AndroidViewModel {
             super.onPostExecute(unused);
             Log.d(constants.Tag,"Background Operation Ends=======");
         }
+    }
+
+
+    public void FetchForm(int i){
+
+        Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey(String.valueOf(i));
+        int finalI = i;
+        formReader.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    JsonObject surveyObject = response.body();
+                    JsonArray dataObject = surveyObject.get("data").getAsJsonArray();
+                    JsonObject formObject = dataObject.get(0).getAsJsonObject();
+
+                    Log.d(constants.Tag, surveyObject.toString());
+
+//                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
+//                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
+//                    Log.d(constants.Tag, farmerObject.toString());
+//
+                    String questionairId = formObject.get("questionnaireID").getAsString();
+                    String questionnaireName = formObject.get("questionnaireName").getAsString();
+                    String form = formObject.get("questionnaireJSON").getAsString();
+                    ;
+
+                    //String farmerType = formObject.get("type").getAsString();
+
+//                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
+//                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
+//                    JsonObject page1object = farmerFormPages.get(0).getAsJsonObject();
+//                    JsonArray elementsarray = page1object.get("elements").getAsJsonArray();
+//                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
+
+
+                    Log.d(constants.info, form);
+
+                    realDBhelper.insertFarmerForm(questionairId, questionnaireName, form);
+
+//                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
+//                    Log.d(constants.Tag, cattleObject.toString());
+//                    String cattleId = cattleObject.get("id").getAsString();
+//                    String cattleName = cattleObject.get("name").getAsString();
+//                    String cattleType = cattleObject.get("type").getAsString();
+//                    JsonObject cattleFormJson = cattleObject.get("json").getAsJsonObject();
+//                    JsonArray cattleFormPages = cattleFormJson.get("pages").getAsJsonArray();
+//                    JsonObject page1objectcattle = cattleFormPages.get(0).getAsJsonObject();
+//                    JsonArray elementsarraycattle = page1object.get("elements").getAsJsonArray();
+//                    JsonObject form1cattle = elementsarray.get(0).getAsJsonObject();
+//
+//                    Log.d("retrieved",form1.toString());
+//
+//                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
+
+
+                }
+
+            }
+
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(constants.Tag, t.getMessage().toString());
+
+            }
+        });
     }
 
 }

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
@@ -15,6 +17,7 @@ import com.example.cncdcattleedcandroid.Models.Cattles;
 import com.example.cncdcattleedcandroid.Models.DataGridModel;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.UI.FarmerAdapter;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
 import com.smb.animatedtextview.AnimatedTextView;
@@ -27,6 +30,8 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     ActivityFarmerProfileBinding farmerProfileBinding;
     SessionManager sessionManager;
 
+    DataGridAdapter gridAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,9 @@ public class ActivityFarmerProfile extends AppCompatActivity {
         AnimateTextView2();
         sessionManager = new SessionManager(this);
         changeIcons();
+        LoadDataTOGrid();
+        AddFilterFunctionalityToDataGrid();
+
         farmerProfileBinding.btnAddFarmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,8 +190,65 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     }
 
 
+    public void LoadDataTOGrid(){
+
+        ArrayList<DataGridModel> dataGridModels = new ArrayList<>();
+        dataGridModels.add(new DataGridModel(
+                "1",
+                "1",
+                "Farmer",
+                "cow",
+                "imagepath",
+                "imagepath"
+                ,"1"));
+
+        dataGridModels.add(new DataGridModel(
+                "2",
+                "2",
+                "Farmer khan",
+                "cow",
+                "imagepath",
+                "imagepath"
+                ,"2"));
+        dataGridModels.add(new DataGridModel(
+                "3",
+                "3",
+                "Farmer Rana",
+                "cow",
+                "imagepath",
+                "imagepath"
+                ,"3"));
+        dataGridModels.add(new DataGridModel(
+                "4",
+                "4",
+                "Farmer Man",
+                "cow",
+                "imagepath",
+                "imagepath"
+                ,"4"));
+
+        gridAdapter = new DataGridAdapter(dataGridModels,this);
+        farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
+    }
 
 
+    public void AddFilterFunctionalityToDataGrid(){
+        farmerProfileBinding.SearchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                gridAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
 
 
 

@@ -1,5 +1,7 @@
 package com.example.cncdcattleedcandroid.OfflineDb.Models;
 
+import java.util.ArrayList;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -8,6 +10,7 @@ public class FarmerSurveyModel extends RealmObject {
     @PrimaryKey String id;
 
     String name, type, formPages;
+
     public FarmerSurveyModel(){
 
     }

@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -194,6 +195,45 @@ public class ActivityDashboard extends AppCompatActivity {
             public void onClick(View view) {
 
                 AddFarmer();
+            }
+        });
+
+        activityDashboardBinding.syncData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                loadingDialog.ShowCustomLoadingDialog();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewModel.PostAllDataToServer();
+                    }
+                },1000);
+
+            }
+        });
+
+
+        viewModel.isallDataRetrieved.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+
+                if (s.equals("forms retreived")){
+
+                    loadingDialog.dissmissDialog();
+
+                }
+
+                else if (s.equals("No forms found")){
+
+                    loadingDialog.dissmissDialog();
+
+                }
+                else{
+
+                    loadingDialog.dissmissDialog();
+                }
             }
         });
 
@@ -780,6 +820,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
         i.putExtra("formID","1");
+
         startActivity(i);
 
 
@@ -831,6 +872,10 @@ public class ActivityDashboard extends AppCompatActivity {
         viewModel.Logout();
 
     }
-}
+
+
+
+    }
+
 
 
