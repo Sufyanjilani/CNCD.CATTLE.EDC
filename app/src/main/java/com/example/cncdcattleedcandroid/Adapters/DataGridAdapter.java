@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.cncdcattleedcandroid.Models.DataGridModel;
 import com.example.cncdcattleedcandroid.UI.ActivityWebViewSurveyForm;
 import com.example.cncdcattleedcandroid.databinding.DatagridlayoutBinding;
+import com.example.cncdcattleedcandroid.databinding.RowBinding;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     @NonNull
     @Override
     public Viewholer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        DatagridlayoutBinding binding = DatagridlayoutBinding.inflate(LayoutInflater.from(parent.getContext()));
+       RowBinding binding = RowBinding.inflate(LayoutInflater.from(parent.getContext()));
         return new Viewholer(binding);
 
     }
@@ -44,7 +45,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     public void onBindViewHolder(@NonNull Viewholer holder, int position) {
 
         DataGridModel model = dataGridModels.get(position);
-        holder.datagridlayoutBinding.cattlename.setText(model.farmname);
+        holder.datagridlayoutBinding.cattlenames.setText(model.farmname);
         holder.datagridlayoutBinding.cattleId.setText(model.cattleid);
         holder.datagridlayoutBinding.farmid.setText(model.farmid);
         holder.datagridlayoutBinding.farmerId.setText(model.farmerid);
@@ -105,9 +106,9 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     class Viewholer extends RecyclerView.ViewHolder{
 
 
-        DatagridlayoutBinding datagridlayoutBinding;
+        RowBinding datagridlayoutBinding;
 
-        public Viewholer(@NonNull DatagridlayoutBinding itemView) {
+        public Viewholer(@NonNull RowBinding itemView) {
             super(itemView.getRoot());
             this.datagridlayoutBinding = itemView;
         }

@@ -45,6 +45,7 @@ import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
+import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -130,6 +131,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         realmDatabaseHlper = new RealmDatabaseHlper(this);
         realm = realmDatabaseHlper.InitializeRealm(this);
         realm = Realm.getDefaultInstance();
+        sessionManager = new SessionManager(this);
 
         constants = new Constants();
         setUpLocation();
@@ -151,7 +153,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-    public void Loadgetjavascript2(String formjson) {
+    public void Loadgetjavascript2(String formjson, String function) {
 
         String javascriptCode =
                 "      window['surveyjs-widgets'].inputmask(Survey);\n" +
@@ -211,7 +213,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "Android.ShowProgressDialog()\n" +
                         "setTimeout(function(){\n" +
                         " const results = JSON.stringify(sender.data);\n" +
-                        "Android.PostFirstFormData(results)\n" +
+                        function+"\n" +
                         "},2000)" +
                         "  });\n" +
                         "\n" +
@@ -638,6 +640,125 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
 
 
+        @JavascriptInterface
+        public void SubmitSecondForm(String formjson){
+            String questionnaireID = entityId;
+            String appVersion = "";
+
+
+            Log.d(constants.info,"post called");
+            loadingDialog.dissmissDialog();
+
+
+            try {
+                appVersion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            String locationCoordinate = "";
+            String formJSON = formjson;
+
+
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
+
+
+            String locationCoordinatesStart = "Latitude_start " + sessionManager.getLatitudeStart() + "," +
+                    "Longitude_start " +
+                    sessionManager.getLongitudeStart();
+
+
+            String locationCoordinatesEnd = "Latitude_End " + 0 + "," +
+                    "Longitude_End " +
+                    0;
+
+
+            surveyViewModel.SubmitSecondForm(context,
+                    questionnaireID,
+                    sessionManager.get_Farm_ID(),
+                    sessionManager.get_Farmer_ID(),
+                    appVersion,
+                    locationCoordinate,
+                    formJSON,
+                    accessToken,
+                    interviewtakenAt,
+                    interviewTimeStart,
+                    interviewTimeEnd,
+                    locationCoordinatesStart,
+                    locationCoordinate
+            );
+
+
+
+
+
+        }
+
+        @JavascriptInterface
+        public void SubmitThirdForm(String formjson){
+            String questionnaireID = entityId;
+            String appVersion = "";
+
+
+            Log.d(constants.info,"post called");
+            loadingDialog.dissmissDialog();
+
+
+            try {
+                appVersion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            String locationCoordinate = "";
+            String formJSON = formjson;
+
+
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
+
+
+            String locationCoordinatesStart = "Latitude_start " + sessionManager.getLatitudeStart() + "," +
+                    "Longitude_start " +
+                    sessionManager.getLongitudeStart();
+
+
+            String locationCoordinatesEnd = "Latitude_End " + 0 + "," +
+                    "Longitude_End " +
+                    0;
+
+
+            surveyViewModel.SubmitThirdForm(context,
+                    questionnaireID,
+                    sessionManager.get_Farm_ID(),
+                    sessionManager.get_Farmer_ID(),
+                    appVersion,
+                    locationCoordinate,
+                    formJSON,
+                    accessToken,
+                    interviewtakenAt,
+                    interviewTimeStart,
+                    interviewTimeEnd,
+                    locationCoordinatesStart,
+                    locationCoordinate
+            );
+
+
+
+
+
+        }
+
+
     }
 
 
@@ -978,7 +1099,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         return "{" +
                 "\"title\":\"" + title + "\"," +
-                json +
+                json +",\n"+
+                "\"showCompletedPage\":false"+
                 "}\n";
 
     }
@@ -1036,68 +1158,93 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         formId = extras.getString("formID");
 
-        sessionManager = new SessionManager(this);
 
-        CheckLocationTurnedOn();
+        if (formId.equals("1")) {
 
+            sessionManager = new SessionManager(this);
 
-        loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
-        //PostFirstFormData("POST");
-
-        constants = new Constants();
-        setUpLocation();
-        getcurrentlocationstart();
+            CheckLocationTurnedOn();
 
 
-        //injectCities();
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+            //PostFirstFormData("POST");
+
+            constants = new Constants();
+            setUpLocation();
+            getcurrentlocationstart();
 
 
-        //.getJsonFromAPi("1");
+            //injectCities();
 
-        surveyViewModel.formdata.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
 
-                if (s != null) {
+            //.getJsonFromAPi("1");
 
-                    // Loadgetjavascript(getSurveyFormData());
+            surveyViewModel.formdata.observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
 
-                } else {
+                    if (s != null) {
 
-                    Toast.makeText(ActivityWebViewSurveyForm.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        // Loadgetjavascript(getSurveyFormData());
+
+                    } else {
+
+                        Toast.makeText(ActivityWebViewSurveyForm.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
                 }
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("general_basic", "Android.PostFirstFormData(results)");
             }
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2("general_basic");
+            createCompletedJson();
+            formName = realmDatabaseHlper.getFormName(formId);
+
+
+            surveyViewModel.isfirstformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        LoadSecondForm();
+                    }
+                }
+            });
+
+
+            surveyViewModel.is_secondformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        LoadThirdForm();
+                    }
+                }
+            });
+
+
+            surveyViewModel.isthirdformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityFarmerProfileBinding.class);
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
         }
-        createCompletedJson();
-        formName = realmDatabaseHlper.getFormName(formId);
+        else{
 
 
-        surveyViewModel.isfirstformSent.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-
-                if (aBoolean){
-
-                    LoadSecondForm();
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView();
             }
-        });
 
-
-
-        surveyViewModel.is_secondformSent.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-
-                if (aBoolean){
-
-                    LoadThirdForm();
-                }
-            }
-        });
+        }
     }
 
 
@@ -1120,7 +1267,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-    public void ForceWebViewToDarkMode2(String formjson) {
+    public void ForceWebViewToDarkMode2(String formjson,String function) {
 
         String javascriptCode =
                 "      window['surveyjs-widgets'].inputmask(Survey);\n" +
@@ -1180,7 +1327,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "Android.ShowProgressDialog()\n" +
                         "setTimeout(function(){\n" +
                         " const results = JSON.stringify(sender.data);\n" +
-                        "Android.PostFirstFormData(results)" +
+                        function+"\n" +
                         "},2000)" +
                         "  });\n" +
                         "\n" +
@@ -1278,7 +1425,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void setUpWebView2(String key) {
+    public void setUpWebView2(String key,String function) {
 
         webViewSurveyFormBinding.surveyWebView.getSettings().setJavaScriptEnabled(true);
         webViewSurveyFormBinding.surveyWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -1300,12 +1447,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 if (!sessionManager.getthemstate()) {
-                    Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))));
+                    Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))),function);
                     injectCities();
 
                 } else {
 
-                    ForceWebViewToDarkMode2(JsonToInject((JsonToInject(getSurveyFormData(getFormEntity(key))))));
+                    ForceWebViewToDarkMode2(JsonToInject((JsonToInject(getSurveyFormData(getFormEntity(key))))),function);
                     InjectDarkMode();
                 }
             }
@@ -1443,7 +1590,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
+
     public void PostFirstFormData(String formjson) {
+
 
 
         String questionnaireID = entityId;
@@ -1461,7 +1610,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        ;
 
 
 
@@ -1531,7 +1679,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2("general_diet");
+            setUpWebView2("general_diet","Android.SubmitSecondForm(results)");
         }
 
     }
@@ -1539,7 +1687,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     public void LoadThirdForm(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2("general_medical");
+            setUpWebView2("general_medical","Android.SubmitThirdForm(results)");
         }
     }
 

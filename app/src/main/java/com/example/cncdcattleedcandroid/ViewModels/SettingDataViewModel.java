@@ -135,16 +135,13 @@ public class SettingDataViewModel extends AndroidViewModel {
         }
 
 
-        if (realDBhelper.getFormsCount()>0){
-            surveyformsResponse.postValue("success");
-            Log.d(constants.Tag,"got forms "+realDBhelper.getFormsCount());
-        }
-        else{
-            surveyformsResponse.postValue("failed");
-        }
+
 
 
     }
+
+
+
 
 
 
@@ -174,6 +171,13 @@ public class SettingDataViewModel extends AndroidViewModel {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             Log.d(constants.Tag,"Background Operation Ends=======");
+            if (realDBhelper.getFormsCount()>0){
+                surveyformsResponse.postValue("success");
+                Log.d(constants.Tag,"got forms "+realDBhelper.getFormsCount());
+            }
+            else{
+                surveyformsResponse.postValue("failed");
+            }
         }
     }
 
