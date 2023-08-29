@@ -16,7 +16,7 @@ public interface ApiEndPoints {
     @GET("cities")
     Call<JsonObject> getcities();
 
-    @GET("questionnaires/{id}")
+    @GET("config/questionnaires/{id}")
     Call<JsonObject> getSurvey(@Path("id") String id);
 
     @POST("auth/login")
@@ -33,6 +33,9 @@ public interface ApiEndPoints {
                                @Path("farmer_id") String farmer_id,
                                @Path("entities") String entities, @Body JsonObject jsonObject);
 
+
+    @GET("dashboard")
+    Call<JsonObject> getDashboardData();
 
 
 

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    app:cardElevation="10dp"
+    app:cardElevation="5dp"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="15dp"
     android:orientation="vertical">
@@ -22,18 +22,45 @@
             android:id="@+id/profileImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="25dp"
             android:src="@drawable/cow" />
+
+
+
         <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:gravity="center"
             android:orientation="horizontal">
 
 
+            <!--            <TextView-->
+            <!--                android:id="@+id/farmerId"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Farmer Id"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="16sp" />-->
+
+
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="1dp"-->
+            <!--                android:layout_height="match_parent" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/farmID"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Farm Id"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="16sp" />-->
 
 
 
@@ -42,12 +69,11 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/cattleName"
-                android:layout_width="match_parent"
+                android:id="@+id/farmName"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:padding="10dp"
-                android:text="@string/cowName"
+                android:text="Farm Name"
                 android:textColor="@color/textcolor"
                 android:textSize="16sp" />
 
@@ -58,27 +84,11 @@
 
 
             <TextView
-                android:id="@+id/specifyConditionText"
-                android:layout_width="match_parent"
+                android:id="@+id/farmAddress"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:padding="10dp"
-                android:text="specifyCondition"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-
-            <LinearLayout
-                android:layout_width="1dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/milkCycle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="Milk cycle"
+                android:text="Farm Address"
                 android:textColor="@color/textcolor"
                 android:textSize="16sp" />
 
@@ -88,40 +98,87 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/manage"
-                android:gravity="center"
-                android:layout_width="match_parent"
+                android:id="@+id/farmerName"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.1"
                 android:padding="10dp"
-                android:text="Manage"
+                android:text="Farmer Name"
                 android:textColor="@color/textcolor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
+
 
             <LinearLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent" />
 
-            <ImageView
-                android:id="@+id/actionDelete"
+            <TextView
+                android:id="@+id/createdAt"
                 android:gravity="center"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.3"
                 android:padding="10dp"
-                android:src="@android:drawable/ic_delete"
+                android:text="Created At"
+                android:textColor="@color/textcolor"
                 android:textSize="18sp" />
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/manage"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Manage"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="18sp" />-->
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="1dp"-->
+            <!--                android:layout_height="match_parent" />-->
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/manage"
+                    android:text="Manage"
+                    android:layout_weight="1"
+                    android:drawableTint="@color/textcolor"
+                    android:textColor="@color/btncolortext"
+                    android:backgroundTint="@color/lightblue" />
+
+
+            </LinearLayout>
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/actionDelete"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:src="@android:drawable/ic_delete"-->
+            <!--                android:textSize="18sp" />-->
 
 
 
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp" />
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="1dp"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:layout_marginEnd="10dp" />-->
 
     </LinearLayout>
 

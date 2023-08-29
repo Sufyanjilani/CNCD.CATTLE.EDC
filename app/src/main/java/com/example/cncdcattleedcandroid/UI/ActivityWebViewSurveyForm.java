@@ -54,6 +54,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -604,7 +605,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "";
+            String locationCoordinate = "23.324,5.6767,45.324324,23.2343";
                 String formJSON = formjson;
 
 
@@ -634,7 +635,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         interviewTimeStart,
                         interviewTimeEnd,
                         locationCoordinatesStart,
-                        locationCoordinate
+                        locationCoordinatesEnd
                 );
 
         }
@@ -1093,15 +1094,14 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
         String title = formName = realmDatabaseHlper.getFormName(formId);
-        json = json.substring(1, json.length() - 1);
         Log.d(constants.Tag, json);
+        JsonObject parsedjson = (JsonObject) new JsonParser().parse(json);
+
+        Log.d(constants.Tag,parsedjson.toString());
 
 
-        return "{" +
-                "\"title\":\"" + title + "\"," +
-                json +",\n"+
-                "\"showCompletedPage\":false"+
-                "}\n";
+        return
+                parsedjson.toString() ;
 
     }
 
@@ -1159,7 +1159,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         formId = extras.getString("formID");
 
 
-        if (formId.equals("1")) {
+        if (formId.equals("general_basic")) {
 
             sessionManager = new SessionManager(this);
 
@@ -1206,7 +1206,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadSecondForm();
+                        LoadSecondForm("general_diet");
                     }
                 }
             });
@@ -1218,7 +1218,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadThirdForm();
+                        LoadThirdForm("general_medical");
                     }
                 }
             });
@@ -1230,12 +1230,93 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityFarmerProfileBinding.class);
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this,ActivityDashboard.class);
                         startActivity(i);
                         finish();
                     }
                 }
             });
+        }
+        else if(formId.equals("personal_basic")){
+
+
+            sessionManager = new SessionManager(this);
+
+            CheckLocationTurnedOn();
+
+
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+            //PostFirstFormData("POST");
+
+            constants = new Constants();
+            setUpLocation();
+            getcurrentlocationstart();
+
+
+            //injectCities();
+
+
+            //.getJsonFromAPi("1");
+
+            surveyViewModel.formdata.observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+
+                    if (s != null) {
+
+                        // Loadgetjavascript(getSurveyFormData());
+
+                    } else {
+
+                        Toast.makeText(ActivityWebViewSurveyForm.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_basic", "Android.PostFirstFormData(results)");
+            }
+            createCompletedJson();
+            formName = realmDatabaseHlper.getFormName(formId);
+
+
+            surveyViewModel.isfirstformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        LoadSecondForm("personal_milk");
+                    }
+                }
+            });
+
+
+            surveyViewModel.is_secondformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        LoadThirdForm("personal_medical");
+                    }
+                }
+            });
+
+
+            surveyViewModel.isthirdformSent.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+
+                    if (aBoolean) {
+
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this,ActivityDashboard.class);
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+
+
         }
         else{
 
@@ -1641,7 +1722,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             JsonObject firstformObject = new JsonObject();
             firstformObject.addProperty("questionnaireID",questionnaireID);
             firstformObject.addProperty("appVersion",appVersion);
-            firstformObject.addProperty("locationCoordinate",locationCoordinate);
+            firstformObject.addProperty("locationCoordinates",locationCoordinate);
             firstformObject.addProperty("formJSON","formJSON");
             firstformObject.addProperty("accessToken",accessToken);
             firstformObject.addProperty("interviewTakenAt",interviewtakenAt);
@@ -1675,19 +1756,19 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     }
 
-    public void LoadSecondForm(){
+    public void LoadSecondForm(String formname){
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2("general_diet","Android.SubmitSecondForm(results)");
+            setUpWebView2(formname,"Android.SubmitSecondForm(results)");
         }
 
     }
 
-    public void LoadThirdForm(){
+    public void LoadThirdForm(String formname){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2("general_medical","Android.SubmitThirdForm(results)");
+            setUpWebView2(formname,"Android.SubmitThirdForm(results)");
         }
     }
 

@@ -10,8 +10,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.cncdcattleedcandroid.Models.Cattles;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
 import com.example.cncdcattleedcandroid.Realm.RealDBhelper;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
@@ -45,6 +47,13 @@ public class DashboardViewModel extends AndroidViewModel {
     SessionManager sessionManager;
     public MutableLiveData<String> citiesResponse = new MutableLiveData<>();
     public MutableLiveData<String> surveyformsResponse = new MutableLiveData<>();
+
+    public MutableLiveData<JsonObject>  dashboardDataJson = new MutableLiveData<>();
+
+    public MutableLiveData<String> dashboardDataResponse = new MutableLiveData<>();
+
+    public MutableLiveData<JsonObject> dashboardFarmerData = new MutableLiveData<>();
+
 
     public DashboardViewModel(@NonNull Application application) {
         super(application);
@@ -306,7 +315,66 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
+    public ArrayList<Cattles> dashboardData(){
+        JsonObject tokenObject = new JsonObject();
+//       tokenObject.addProperty("accessToken","8e4b79db8cf17f541812ef022974aae6043ef87efd7841a50d9514d6f2cd1088");
+//        tokenObject.addProperty("accessToken", sessionManager.getbearer());
+//        tokenObject.addProperty("sessionID", sessionManager.getSessionID());
+//        sessionManager.getbearer();
+//        Log.d("token1", tokenObject.toString());
+//        Log.d("token2", sessionManager.getbearer());
+        ArrayList<DashboardDataModel> dashboardDataModelArrayList = new ArrayList<>();
+        ArrayList<Cattles> cattlesArrayList = new ArrayList<>();
 
+        Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getDashboardData();
+        getData.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    JsonObject dashboardData = response.body();
+                    JsonObject dataObject = dashboardData.get("data").getAsJsonObject();
+                    JsonObject cardObject = dataObject.get("cardsData").getAsJsonObject();
+                    Log.d(constants.Tag, cardObject.toString());;
+                    String totalFarms = cardObject.get("totalFarms").getAsString();
+                    String totalFarmers = cardObject.get("totalFarmers").getAsString();
+                    String totalCattles = cardObject.get("totalCattles").getAsString();
+
+                    JsonObject gridObject = dataObject.get("gridsData").getAsJsonObject();
+                    JsonArray farmerData = gridObject.get("farmers").getAsJsonArray();
+                    Log.d(constants.Tag, gridObject.toString());
+                    for (int i = 0; i < farmerData.size(); i++){
+                        JsonObject obj = farmerData.get(i).getAsJsonObject();
+                        String farmerID = obj.get("farmerID").getAsString();
+                        String farmID = obj.get("farmID").getAsString();
+                        String farmName = obj.get("farmName").getAsString();
+                        String farmAddress = obj.get("farmAddress").getAsString();
+                        String farmerName = obj.get("farmerName").getAsString();
+                        String created_at = obj.get("created_at").getAsString();
+
+                     //   DashboardDataModel dashboardDataModel = new DashboardDataModel(totalFarms, totalFarmers, totalCattles);
+//
+                        Cattles cattles = new Cattles(farmerID, farmID,
+                                farmName, farmAddress, farmerName, created_at);
+                        cattlesArrayList.add(cattles);
+                        Log.d("listdata",cattlesArrayList.toString());
+
+
+                    }
+                    dashboardDataResponse.setValue("success");
+                    dashboardDataJson.setValue(dataObject);
+                    dashboardFarmerData.setValue(gridObject);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                Log.d(constants.Tag, t.getMessage().toString());
+                dashboardDataResponse.setValue(t.getMessage().toString());
+            }
+        });
+        return cattlesArrayList;
+    }
 
     class QueryFormsAsync extends AsyncTask<Void,Void, ArrayList<String>>{
 

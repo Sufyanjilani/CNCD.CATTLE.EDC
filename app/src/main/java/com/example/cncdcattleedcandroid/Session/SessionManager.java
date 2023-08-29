@@ -148,6 +148,44 @@ public class SessionManager {
         return sharedPreferences.getString("farm_ID","0").toString();
     }
 
+    public void SaveUserData(
+
+            String name,
+            String email,
+            String type,
+            String userid
+
+    ){
+
+        editor.putString("name",name);
+        editor.putString("email",email);
+        editor.putString("type",type);
+        editor.putString("userId",userid);
+        editor.commit();
+
+    }
+
+
+    public String getName(){
+
+        return sharedPreferences.getString("name","null");
+    }
+
+    public String getEmail(){
+
+        return  sharedPreferences.getString("email","null");
+    }
+
+    public String gettype(){
+
+        return  sharedPreferences.getString("type","null");
+    }
+
+    public String getuserId(){
+
+        return sharedPreferences.getString("userId",null);
+    }
+
 
 
 }

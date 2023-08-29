@@ -93,7 +93,24 @@ public class LoginViewModel extends AndroidViewModel {
                             personal_mik_weight
                     );
 
-                    Log.d("Log",personal_basic);
+                    Log.d("Log form",general_diet);
+
+
+
+                    String userId = data.get("userID").getAsString();
+                    JsonObject userProfile = data.get("userProfile").getAsJsonObject();
+                    String name = userProfile.get("name").getAsString();
+                    String email = userProfile.get("email").getAsString();
+                    String type = userProfile.get("type").getAsString();
+
+                    sessionManager.SaveUserData(
+                            name,
+                            email,
+                            type,
+                            userId
+                    );
+
+
 //
 
                 }

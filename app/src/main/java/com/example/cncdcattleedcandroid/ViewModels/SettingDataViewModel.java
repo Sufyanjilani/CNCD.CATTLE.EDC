@@ -38,6 +38,8 @@ public class SettingDataViewModel extends AndroidViewModel {
     public MutableLiveData<String> citiesResponse = new MutableLiveData<>();
     public MutableLiveData<String> surveyformsResponse = new MutableLiveData<>();
 
+    private MutableLiveData<String> isbackgroundprocessEnded = new MutableLiveData();
+
 
 
 
@@ -91,47 +93,55 @@ public class SettingDataViewModel extends AndroidViewModel {
 
     public void getSurveyForm(){
 
+        try {
 
-        JsonObject object = realDBhelper.getEntityObject();
-        Log.d(constants.Tag,"loop object"+object.toString());
+            JsonObject object = realDBhelper.getEntityObject();
+            Log.d(constants.Tag, "loop object" + object.toString());
 
-        for(int i =0; i<=20;i++){
 
-            if (Integer.parseInt(object.get("general_basic").getAsString()) == i ){
+            for(int i = 0; i <= 20; i++) {
 
-                FetchForm(i);
+
+                if (Integer.parseInt(object.get("general_basic").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+                } else if (Integer.parseInt(object.get("general_diet").getAsString()) == i) {
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+
+                } else if (Integer.parseInt(object.get("general_medical").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+                } else if (Integer.parseInt(object.get("personal_basic").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+                } else if (Integer.parseInt(object.get("personal_milk").getAsString()) == i) {
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+
+                } else if (Integer.parseInt(object.get("personal_medical").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+                } else if (Integer.parseInt(object.get("personal_traits").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+
+                } else if (Integer.parseInt(object.get("personal_mik_weight").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
+                }
+
             }
-            else if (Integer.parseInt(object.get("general_diet").getAsString()) == i){
-                FetchForm(i);
+        }
+        catch (Exception e){
 
-            }
-            else if (Integer.parseInt(object.get("general_medical").getAsString()) == i){
-
-                FetchForm(i);
-            }
-            else if (Integer.parseInt(object.get("personal_basic").getAsString()) == i){
-
-                FetchForm(i);
-            }
-            else if (Integer.parseInt(object.get("personal_milk").getAsString()) == i){
-                FetchForm(i);
-
-            }
-            else if (Integer.parseInt(object.get("personal_medical").getAsString()) == i){
-
-                FetchForm(i);
-            }
-            else if (Integer.parseInt(object.get("personal_traits").getAsString()) == i){
-
-                FetchForm(i);
-
-            }
-
-            else if (Integer.parseInt(object.get("personal_mik_weight").getAsString()) == i){
-
-                FetchForm(i);
-            }
-
+            Log.d(constants.Tag,e.getMessage().toString());
         }
 
 
@@ -171,18 +181,21 @@ public class SettingDataViewModel extends AndroidViewModel {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             Log.d(constants.Tag,"Background Operation Ends=======");
-            if (realDBhelper.getFormsCount()>0){
+            isbackgroundprocessEnded.postValue("background process ended");
+//            if (realDBhelper.getFormsCount()>0){
                 surveyformsResponse.postValue("success");
-                Log.d(constants.Tag,"got forms "+realDBhelper.getFormsCount());
-            }
-            else{
-                surveyformsResponse.postValue("failed");
-            }
+//                Log.d(constants.Tag,"got forms "+realDBhelper.getFormsCount());
+//            }
+//            else{
+//                surveyformsResponse.postValue("failed");
+//                isbackgroundprocessEnded.postValue("background process ended");
+//            }
         }
     }
 
 
     public void FetchForm(int i){
+
 
         Call<JsonObject> formReader = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getSurvey(String.valueOf(i));
         int finalI = i;
@@ -192,20 +205,23 @@ public class SettingDataViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     JsonObject surveyObject = response.body();
                     JsonArray dataObject = surveyObject.get("data").getAsJsonArray();
-                    JsonObject formObject = dataObject.get(0).getAsJsonObject();
+                    JsonObject formObject= new JsonObject();
+                    if (dataObject.size() != 0) {
+                        formObject = dataObject.get(0).getAsJsonObject();
 
-                    Log.d(constants.Tag, surveyObject.toString());
+
+                        Log.d(constants.Tag, surveyObject.toString());
 
 //                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
 //                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
 //                    Log.d(constants.Tag, farmerObject.toString());
 //
-                    String questionairId = formObject.get("questionnaireID").getAsString();
-                    String questionnaireName = formObject.get("questionnaireName").getAsString();
-                    String form = formObject.get("questionnaireJSON").getAsString();
-                    ;
+                        String questionairId = formObject.get("questionnaireID").getAsString();
+                        String questionnaireName = formObject.get("questionnaireName").getAsString();
+                        String form = formObject.get("questionnaireJSON").getAsString();
+                        ;
 
-                    //String farmerType = formObject.get("type").getAsString();
+                        //String farmerType = formObject.get("type").getAsString();
 
 //                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
 //                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
@@ -214,9 +230,9 @@ public class SettingDataViewModel extends AndroidViewModel {
 //                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
 
 
-                    Log.d(constants.info, form);
+                        Log.d(constants.info, form);
 
-                    realDBhelper.insertFarmerForm(questionairId, questionnaireName, form);
+                        realDBhelper.insertFarmerForm(questionairId, questionnaireName, form);
 
 //                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
 //                    Log.d(constants.Tag, cattleObject.toString());
@@ -233,6 +249,10 @@ public class SettingDataViewModel extends AndroidViewModel {
 //
 //                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
 
+                    }
+                    else{
+                        Log.d(constants.Tag,"error");
+                    }
 
                 }
 

@@ -211,8 +211,8 @@ public class RealmDatabaseHlper {
             String name,
             String formPages
     ){
-        realm = Realm.getDefaultInstance();
 
+        realm = Realm.getDefaultInstance();
 
         FarmerSurveyModel farmerSurveyModel = new FarmerSurveyModel(id, name, "type", formPages);
         realm.executeTransaction(new Realm.Transaction() {
@@ -327,7 +327,7 @@ public class RealmDatabaseHlper {
             String end_coordinate_longitude = completed.getCoordinates_end_longitude();
             String pages= completed.getFormPagesCompleted();
 
-            generatedResponse.add(0,startTime );
+            generatedResponse.add(0,startTime);
             generatedResponse.add(1,endTime);
             generatedResponse.add(2,appversion);
             generatedResponse.add(3,start_coordinate_latitude);

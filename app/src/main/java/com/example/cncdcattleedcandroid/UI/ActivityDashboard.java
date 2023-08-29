@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -60,6 +61,7 @@ import com.example.cncdcattleedcandroid.Adapters.CattleAdapter;
 import com.example.cncdcattleedcandroid.Models.Cattles;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
@@ -78,6 +80,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
 import com.smb.animatedtextview.AnimatedTextView;
@@ -101,6 +104,8 @@ public class ActivityDashboard extends AppCompatActivity {
 
     NavigationView navigationView;
 
+    CattleAdapter cattleAdapter;
+
     Toolbar toolbar;
     private static final int REQUEST_PERMISSIONS_CODE = 123;
 
@@ -117,7 +122,9 @@ public class ActivityDashboard extends AppCompatActivity {
 
     LoadingDialog loadingDialog;
 
+    ArrayList<Cattles> arrayList = new ArrayList<>() ;
 
+    String totalFarms, totalFarmers, totalCattles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,14 +145,38 @@ public class ActivityDashboard extends AppCompatActivity {
         LoadPieChart1();
         LoadPieChart2();
         LoadPieChart3();
-        setUpMPChart();
-        setData(5, 100);
+//        setUpMPChart();
+//        setData(5, 100);
         CreateMPPicChart();
         AnimateTextView();
         //CheckisDataSavedOffline();
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
+        viewModel.dashboardData();
+        viewModel.dashboardDataJson.observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+                if (jsonObject != null){
+                    JsonObject cardObject = jsonObject.get("cardsData").getAsJsonObject();
+                    Log.d("obj", cardObject.toString());;
+                    totalFarms = cardObject.get("totalFarms").getAsString();
+                    totalFarmers = cardObject.get("totalFarmers").getAsString();
+                    totalCattles = cardObject.get("totalCattles").getAsString();
+
+                    activityDashboardBinding.farmtext.setText(totalFarms);
+                    activityDashboardBinding.farmertext.setText(totalFarmers);
+                    activityDashboardBinding.catteltext.setText(totalCattles);
+                }
+            }
+        });
+//        arrayList = viewModel.dashboardData();
+//        Log.d("TAGlist",viewModel.dashboardData().toString());
+//        cattleAdapter = new CattleAdapter(arrayList, ActivityDashboard.this);
+//        activityDashboardBinding.recycler.setLayoutManager(new LinearLayoutManager(ActivityDashboard.this));
+//        activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+
+//        arrayList = viewModel.dashboardData();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -158,13 +189,13 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
 
-                setAnimation2();
+        setAnimation2();
 
 
-                setAnimation3();
+        setAnimation3();
 
 
-                viewModel  = new ViewModelProvider(this).get(DashboardViewModel.class);
+        viewModel  = new ViewModelProvider(this).get(DashboardViewModel.class);
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -676,8 +707,8 @@ public class ActivityDashboard extends AppCompatActivity {
     public void CreateMPPicChart(){
 
         ArrayList<PieEntry> visitors = new ArrayList<>();
-        visitors.add(new PieEntry(200,"Buffalo"));
-        visitors.add(new PieEntry(600,"Cow"));
+        visitors.add(new PieEntry(2,"Farmers"));
+        visitors.add(new PieEntry(3,"Farms"));
 
 
         PieDataSet pieDataSet = new PieDataSet(visitors,"");
@@ -714,8 +745,10 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
 
-        activityDashboardBinding.animtext.setText("1000");
-        activityDashboardBinding.animtext.addOnAnimationListener(new AnimatedTextView.AnimationListener() {
+//        activityDashboardBinding.farmertext.setText("1000");
+//        activityDashboardBinding.farmtext.setText("1000");
+//        activityDashboardBinding.catteltext.setText("1000");
+        activityDashboardBinding.farmertext.addOnAnimationListener(new AnimatedTextView.AnimationListener() {
             @Override
             public void onAnimationStart(@NonNull String s, @NonNull String s1) {
 
@@ -727,24 +760,84 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
-        activityDashboardBinding.animtext.animateTo("1");
-        activityDashboardBinding.animtext.getBareText();
+        activityDashboardBinding.farmtext.addOnAnimationListener(new AnimatedTextView.AnimationListener() {
+            @Override
+            public void onAnimationStart(@NonNull String s, @NonNull String s1) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(@NonNull String s, @NonNull String s1) {
+
+            }
+        });
+
+        activityDashboardBinding.catteltext.addOnAnimationListener(new AnimatedTextView.AnimationListener() {
+            @Override
+            public void onAnimationStart(@NonNull String s, @NonNull String s1) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(@NonNull String s, @NonNull String s1) {
+
+            }
+        });
+
+//        activityDashboardBinding.farmertext.animateTo(totalFarmers);
+        activityDashboardBinding.farmertext.getBareText();
+//        activityDashboardBinding.farmtext.animateTo(totalFarms);
+        activityDashboardBinding.farmtext.getBareText();
+//        activityDashboardBinding.catteltext.animateTo(totalCattles);
+        activityDashboardBinding.catteltext.getBareText();
     }
 
 
     public void setrecyclerAdapter(){
+        ArrayList<Cattles> cattlesArrayList = new ArrayList<>();
+//        ArrayList<Cattles> cattleslist = new ArrayList<>();
+//        cattleslist.add(new Cattles("Cow","2"));
+//        cattleslist.add(new Cattles("Goat","3"));
+//        cattleslist.add(new Cattles("Buffalo","4"));
+//        CattleAdapter cattleAdapter = new CattleAdapter(cattleslist,this);
+//        activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+//
+        viewModel.dashboardFarmerData.observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+                if (jsonObject != null){
+                    JsonArray farmerData = jsonObject.get("farmers").getAsJsonArray();
+//                    Log.d(constants.Tag, gridObject.toString());
+                    for (int i = 0; i < farmerData.size(); i++){
+                        JsonObject obj = farmerData.get(i).getAsJsonObject();
+                        String farmerID = obj.get("farmerID").getAsString();
+                        String farmID = obj.get("farmID").getAsString();
+                        String farmName = obj.get("farmName").getAsString();
+                        String farmAddress = obj.get("farmAddress").getAsString();
+                        String farmerName = obj.get("farmerName").getAsString();
+                        String created_at = obj.get("created_at").getAsString();
 
-        ArrayList<Cattles> cattleslist = new ArrayList<>();
-        cattleslist.add(new Cattles("Cow","2"));
-        cattleslist.add(new Cattles("Goat","3"));
-        cattleslist.add(new Cattles("Buffalo","4"));
-        CattleAdapter cattleAdapter = new CattleAdapter(cattleslist,this);
-        activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+                        Cattles cattles = new Cattles(farmerID, farmID,
+                                farmName, farmAddress, farmerName, created_at);
+                        cattlesArrayList.add(cattles);
+                        Log.d("listdata",cattlesArrayList.toString());
 
-        int resId = R.anim.slide_up_anim_layout;
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, resId);
-        activityDashboardBinding.recycler.setLayoutAnimation(animation);
-        cattleAdapter.notifyDataSetChanged();
+
+                    }
+                    cattleAdapter = new CattleAdapter(cattlesArrayList, ActivityDashboard.this);
+                    activityDashboardBinding.recycler.setLayoutManager(new LinearLayoutManager(ActivityDashboard.this));
+                    activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+
+                    int resId = R.anim.slide_up_anim_layout;
+                    LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ActivityDashboard.this, resId);
+                    activityDashboardBinding.recycler.setLayoutAnimation(animation);
+                    cattleAdapter.notifyDataSetChanged();
+
+                }
+            }
+        });
+
+
     }
 
     public void setAnimation1(){
@@ -819,7 +912,7 @@ public class ActivityDashboard extends AppCompatActivity {
 //        String formPagesCompleted;
 
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
-        i.putExtra("formID","1");
+        i.putExtra("formID","general_basic");
 
         startActivity(i);
 
@@ -875,7 +968,7 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
 
-    }
+}
 
 
 

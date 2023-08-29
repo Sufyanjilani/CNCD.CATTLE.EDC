@@ -153,4 +153,7 @@ public class ActivityCattleProfile extends AppCompatActivity {
          cattleProfileBinding.piempchart1.setEntryLabelColor(R.color.textcolor);
          cattleProfileBinding.piempchart1.animate();
     }
+
+
+
 }

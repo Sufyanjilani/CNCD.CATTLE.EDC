@@ -20,6 +20,7 @@ import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -130,12 +131,12 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
         Log.d("TAG","called");
 
 
-
+        JsonObject parsedjson = (JsonObject) new JsonParser().parse(formJSON);
         JsonObject firstformObject = new JsonObject();
         payloadObject.addProperty("questionnaireID",questionnaireID);
         payloadObject.addProperty("appVersion",appVersion);
-        payloadObject.addProperty("locationCoordinate",locationCoordinate);
-        payloadObject.addProperty("formJSON",formJSON);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",parsedjson.toString());
         payloadObject.addProperty("accessToken",accessToken);
         payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
         payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
@@ -143,9 +144,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
         payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
         payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
 
-        firstformObject.add("payload",payloadObject);
 
-        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().Addfarmer(firstformObject);
+        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().Addfarmer(payloadObject);
         apicall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
