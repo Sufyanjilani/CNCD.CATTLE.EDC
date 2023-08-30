@@ -28,15 +28,27 @@ public interface ApiEndPoints {
     @POST("farmers")
     Call<JsonObject> Addfarmer(@Body JsonObject object);
 
-    @POST("farmers/{farm_id}/{farmer_id}/{entities}")
+    @POST("farmers/{farm_id}/{farmer_id}/entities")
     Call<JsonObject> addEntity(@Path("farm_id") String farm_id,
                                @Path("farmer_id") String farmer_id,
-                               @Path("entities") String entities, @Body JsonObject jsonObject);
+                               @Body JsonObject jsonObject);
+
+
+    @POST("cattles")
+    Call<JsonObject> insertCattleGeneral(@Body JsonObject object);
+
+    @POST("cattles/{cattle_id}/entities")
+    Call<JsonObject> insertCattleEntities(@Path("cattle_id") String cattleId,@Body JsonObject object);
+
+
 
 
     @GET("dashboard")
     Call<JsonObject> getDashboardData();
 
+    @GET("farmers/{farmID}/{farmerID}/profile")
+    Call<JsonObject> getFarmerData(@Path("farmID") String farmId,
+                                   @Path("farmerID") String farmerId);
 
 
 

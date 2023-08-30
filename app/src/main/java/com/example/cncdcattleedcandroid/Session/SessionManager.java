@@ -186,6 +186,19 @@ public class SessionManager {
         return sharedPreferences.getString("userId",null);
     }
 
+    public void SaveCattleID(String cattleId){
+
+       editor.putString("cattleId",cattleId);
+       editor.commit();
+       editor.apply();
+
+    }
+
+    public String getCattleId(){
+
+        return sharedPreferences.getString("cattleId","null");
+    }
+
 
 
 }

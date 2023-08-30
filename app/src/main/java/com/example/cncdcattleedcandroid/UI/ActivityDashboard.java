@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -966,8 +968,37 @@ public class ActivityDashboard extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setrecyclerAdapter();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder a = new AlertDialog.Builder(this);
+        a.setTitle("Exit");
+        a.setMessage("Do you wish to exit the App");
+        a.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                finishAffinity();
+            }
+
+        });
+
+        a.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
 
+            }
+        });
+
+        a.show();
+    }
 }
 
 

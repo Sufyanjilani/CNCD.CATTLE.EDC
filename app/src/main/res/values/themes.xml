@@ -3,7 +3,7 @@
     <style name="Base.Theme.CNCDCattleEDCAndroid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
+        <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:colorPrimary">@color/primaryblue</item>
         <item name="colorSecondary">@color/secondaryblue</item>
@@ -13,4 +13,5 @@
     </style>
 
     <style name="Theme.CNCDCattleEDCAndroid" parent="Base.Theme.CNCDCattleEDCAndroid" />
+
 </resources>

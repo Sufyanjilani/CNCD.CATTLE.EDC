@@ -32,6 +32,8 @@ public class LoginViewModel extends AndroidViewModel {
     RealmDatabaseHlper realmDatabaseHlper;
 
 
+
+
     public LoginViewModel(@NonNull Application application) {
         super(application);
         sessionManager = new SessionManager(getApplication().getApplicationContext());
@@ -53,73 +55,82 @@ public class LoginViewModel extends AndroidViewModel {
 
                 if (response.isSuccessful()){
 
-                    Log.d("TAG",response.body().toString());
-                    _isLoginSuccess.setValue("Login Successs");
-                    JsonObject loginObject = response.body();
 
-                    JsonObject data = loginObject.get("data").getAsJsonObject();
-                    String accessToken  = data.get("accessToken").getAsString();
-                    sessionManager.savebarearToken(accessToken);
+                        if (!response.body().get("error").getAsString().equals("true")) {
 
+                            _isLoginSuccess.setValue("Login Successs");
+                            JsonObject loginObject = response.body();
 
-                    JsonObject config = data.get("config").getAsJsonObject();
-                    JsonObject formconfig = config.get("formConfig").getAsJsonObject();
-
-                    String general_basic = formconfig.get("general_basic").getAsString();
-
-                    String general_diet = formconfig.get("general_diet").getAsString();
-
-                    String general_medical = formconfig.get("general_medical").getAsString();
-
-                    String personal_basic = formconfig.get("personal_basic").getAsString();
-
-                    String personal_milk = formconfig.get("personal_milk").getAsString();
-
-                    String personal_medical = formconfig.get("personal_medical").getAsString();
-
-                    String personal_traits = formconfig.get("personal_traits").getAsString();
-
-                    String personal_mik_weight = formconfig.get("personal_mik_weight").getAsString();
+                            JsonObject data = loginObject.get("data").getAsJsonObject();
+                            String accessToken = data.get("accessToken").getAsString();
+                            sessionManager.savebarearToken(accessToken);
 
 
-                    realmDatabaseHlper.InsertEntities(
-                            general_basic,
-                            general_diet,
-                            general_medical,
-                            personal_basic,
-                            personal_milk,
-                            personal_medical,
-                            personal_traits,
-                            personal_mik_weight
-                    );
+                            JsonObject config = data.get("config").getAsJsonObject();
+                            JsonObject formconfig = config.get("formConfig").getAsJsonObject();
 
-                    Log.d("Log form",general_diet);
+                            String general_basic = formconfig.get("general_basic").getAsString();
+
+                            String general_diet = formconfig.get("general_diet").getAsString();
+
+                            String general_medical = formconfig.get("general_medical").getAsString();
+
+                            String personal_basic = formconfig.get("personal_basic").getAsString();
+
+                            String personal_milk = formconfig.get("personal_milk").getAsString();
+
+                            String personal_medical = formconfig.get("personal_medical").getAsString();
+
+                            String personal_traits = formconfig.get("personal_traits").getAsString();
+
+                            String personal_mik_weight = formconfig.get("personal_mik_weight").getAsString();
 
 
+                            realmDatabaseHlper.InsertEntities(
+                                    general_basic,
+                                    general_diet,
+                                    general_medical,
+                                    personal_basic,
+                                    personal_milk,
+                                    personal_medical,
+                                    personal_traits,
+                                    personal_mik_weight
+                            );
 
-                    String userId = data.get("userID").getAsString();
-                    JsonObject userProfile = data.get("userProfile").getAsJsonObject();
-                    String name = userProfile.get("name").getAsString();
-                    String email = userProfile.get("email").getAsString();
-                    String type = userProfile.get("type").getAsString();
+                            Log.d("Log form", general_diet);
 
-                    sessionManager.SaveUserData(
-                            name,
-                            email,
-                            type,
-                            userId
-                    );
 
+                            String userId = data.get("userID").getAsString();
+                            JsonObject userProfile = data.get("userProfile").getAsJsonObject();
+                            String name = userProfile.get("name").getAsString();
+                            String email = userProfile.get("email").getAsString();
+                            String type = userProfile.get("type").getAsString();
+
+                            sessionManager.SaveUserData(
+                                    name,
+                                    email,
+                                    type,
+                                    userId
+                            );
+
+                        }
+                        else{
+
+                            isloginsucces.setValue(response.body().get("msg").getAsString());
+                        }
+                    }
 
 //
 
-                }
+
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
 
-                isloginsucces.setValue("Login Failure");
+                isloginsucces.setValue(t.getMessage());
+                Log.d("TAG",t.getMessage().toString());
+
             }
         });
 

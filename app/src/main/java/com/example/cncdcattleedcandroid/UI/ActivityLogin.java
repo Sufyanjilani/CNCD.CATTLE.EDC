@@ -113,7 +113,8 @@ public class ActivityLogin extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ActivityLogin.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityLogin.this,s,Toast.LENGTH_SHORT).show();
+                            loadingDialog.dissmissDialog();
                             loadingDialog.dissmissDialog();
                         }
                     },2000);
@@ -126,7 +127,19 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Login();
+                if(activityLoginBinding.name.getText().toString().equals("")) {
+
+                    Toast.makeText(ActivityLogin.this,"Email is empty",Toast.LENGTH_SHORT).show();
+                }
+                else if (activityLoginBinding.password.getText().toString().equals("")){
+
+                    Toast.makeText(ActivityLogin.this,"Passowrd is empty",Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+
+                    Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
+                }
             }
         });
 
@@ -160,7 +173,9 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
 
-    public void Login(){
+    public void Login(String email,String password){
+
+
 
         String appversion = "";
         try {
@@ -172,7 +187,7 @@ public class ActivityLogin extends AppCompatActivity {
             Log.d("package", nameNotFoundException.getMessage().toString());
         }
 
-        loginViewModel.Login("ro1@cncdpk.com","secret",appversion,"24.2");
+        loginViewModel.Login(email,password,appversion,"24.2");
 
     }
 

@@ -78,35 +78,69 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.314" />
-        <EditText
-            android:id="@+id/name"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_log1_emailET_TIL"
             android:layout_width="456dp"
             android:layout_height="66dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="@string/name"
-            android:layout_margin="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:hint="Email"
+            android:clipToPadding="false"
+            android:gravity="center_vertical"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/baseline_email_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.314" />
+            app:layout_constraintVertical_bias="0.314">
 
-        <EditText
-            android:id="@+id/password"
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:background="@android:color/transparent"
+                android:inputType="textEmailAddress"
+                android:maxLength="50"
+                android:singleLine="true"
+                android:textStyle="normal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_log2_passET_TIL"
             android:layout_width="456dp"
             android:layout_height="66dp"
             android:ems="10"
-            android:inputType="text"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:clipToPadding="false"
             android:hint="@string/password"
-            android:layout_margin="10dp"
+            app:startIconDrawable="@drawable/baseline_lock_24"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.314" />
+            app:layout_constraintVertical_bias="0.314">
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:maxLength="15"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:backgroundTint="@color/primaryblue"
