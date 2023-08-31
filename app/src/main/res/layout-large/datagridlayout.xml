@@ -286,12 +286,27 @@
                     android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/cattleId"
+                    android:id="@+id/cattleSample"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginStart="15dp"
+                    android:text="Sample Id"
+                    android:textColor="@color/textcolor"
+                    android:textSize="16sp" />
+
+
+                <LinearLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/cattleBreed"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:layout_marginStart="35dp"
-                    android:text="Farm Name"
+                    android:layout_marginStart="15dp"
+                    android:text="Breed"
                     android:textColor="@color/textcolor"
                     android:textSize="16sp" />
 
@@ -302,11 +317,11 @@
 
 
                 <TextView
-                    android:id="@+id/farmerId"
-                    android:layout_width="100dp"
+                    android:id="@+id/cattleType"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Farm Address"
+                    android:text="Cattel Type"
                     android:textColor="@color/textcolor"
                     android:textSize="16sp" />
 
@@ -316,11 +331,11 @@
                     android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/cattlenames"
-                    android:layout_width="100dp"
+                    android:id="@+id/cattleGender"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Farmer Name"
+                    android:text="Cattle Gender"
                     android:textColor="@color/textcolor"
                     android:textSize="16sp" />
 
@@ -330,12 +345,12 @@
                     android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/farmName"
+                    android:id="@+id/createdAt"
                     android:gravity="center"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Created At"
+                    android:text="Added At"
                     android:textColor="@color/textcolor"
                     android:textSize="18sp" />
 

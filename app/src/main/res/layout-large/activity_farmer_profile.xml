@@ -189,24 +189,24 @@
             <!--                    android:autoSizeTextType="uniform" />-->
             <!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?android:attr/selectableItemBackground">-->
 
-                <TextView
-                    android:id="@+id/locationMap"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:drawableStart="@drawable/baseline_location_on_24"
-                    android:text="Google Location"
-                    android:textColor="@color/textcolor"
-                    android:autoSizeTextType="uniform" />
-            </LinearLayout>
+<!--                <TextView-->
+
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:drawableStart="@drawable/baseline_location_on_24"-->
+<!--                    android:text="Google Location"-->
+<!--                    android:textColor="@color/textcolor"-->
+<!--                    android:autoSizeTextType="uniform" />-->
+<!--            </LinearLayout>-->
 
 
             <View
@@ -219,19 +219,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="?android:attr/selectableItemBackground">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/locationMap"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     app:cornerRadius="10dp"
                     android:padding="5dp"
-                    android:textSize="10dp"
-                    android:id="@+id/addcattle"
-                    android:backgroundTint="@color/primaryblue"
-                    android:text="@string/addcattle"
+                    android:textSize="12dp"
+                    android:drawableEnd="@drawable/baseline_location_on_24"
+                    android:backgroundTint="@color/green"
+                    android:text="Google Location"
                     android:textColor="@color/textcolor" />
 
             </LinearLayout>
@@ -255,7 +255,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     app:cornerRadius="10dp"
-                    android:textSize="10dp"
+                    android:textSize="12dp"
                     android:backgroundTint="@color/primaryblue"
                     android:drawableEnd="@drawable/baseline_visibility_24"
                     android:text="View Data"
@@ -338,545 +338,562 @@
 
 
 
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintVertical_bias="0.056">
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CATTLES"
-
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/textcolor"
-                    android:textSize="25dp" />
-
-                <View
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent">
-                </View>
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:id="@+id/btnaddcattle"
-                        android:layout_gravity="center_vertical"
-                        app:cornerRadius="10dp"
-                        android:padding="5dp"
-                        android:textSize="10dp"
-                        android:backgroundTint="@color/primaryblue"
-                        android:drawableEnd="@drawable/baseline_add_24"
-                        android:text="@string/addcattle"
-                        android:textColor="@color/textcolor" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent">
-
-                </View>
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_vertical"
-                        app:cornerRadius="10dp"
-                        android:padding="5dp"
-                        android:textSize="10dp"
-                        android:backgroundTint="@color/primaryblue"
-                        android:text="Entity"
-
-                        android:textColor="@color/textcolor" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_vertical"
-                        app:cornerRadius="10dp"
-                        android:padding="5dp"
-                        android:textSize="10dp"
-                        android:backgroundTint="@color/primaryblue"
-                        android:drawableEnd="@drawable/baseline_add_24"
-                        android:text="@string/addcattle"
-                        android:textColor="@color/textcolor" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent">
-
-                </View>
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_vertical"
-                        app:cornerRadius="10dp"
-                        android:padding="5dp"
-                        android:textSize="10dp"
-                        android:drawableEnd="@drawable/baseline_add_24"
-                        android:backgroundTint="@color/primaryblue"
-                        android:text="Add Entity"
-
-                        android:textColor="@color/textcolor" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:orientation="horizontal">-->
-            <!--                <androidx.cardview.widget.CardView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    app:cardElevation="4dp"-->
-            <!--                    app:cardCornerRadius="10dp"-->
-            <!--                    app:cardUseCompatPadding="true">-->
-            <!--                    <LinearLayout-->
-            <!--                        android:layout_width="match_parent"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:background="@color/farmerprofilecardcolor"-->
-            <!--                        android:orientation="vertical">-->
-
-
-            <!--                        <ImageView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="70dp"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:src="@drawable/cowicon"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-
-            <!--                        <TextView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:text="Cow"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-            <!--                        <com.smb.animatedtextview.AnimatedTextView-->
-            <!--                            -->
-            <!--                            android:layout_width="wrap_content"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:layout_gravity="center"-->
-            <!--                            android:layout_marginTop="15dp"-->
-            <!--                            android:layout_marginBottom="15dp"-->
-            <!--                            android:padding="6dp"-->
-            <!--                            android:text="10000"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:textSize="30dp"-->
-            <!--                            android:textStyle="bold"-->
-            <!--                            app:atv_animationDuration="4000" />-->
-
-            <!--                    </LinearLayout>-->
-
-            <!--                </androidx.cardview.widget.CardView>-->
-
-            <!--                <androidx.cardview.widget.CardView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    app:cardElevation="4dp"-->
-            <!--                    app:cardCornerRadius="10dp"-->
-            <!--                    app:cardUseCompatPadding="true">-->
-            <!--                    <LinearLayout-->
-            <!--                        android:layout_width="match_parent"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:background="@color/farmerprofilecardcolor"-->
-            <!--                        android:orientation="vertical">-->
-
-
-            <!--                        <ImageView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="70dp"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:src="@drawable/cowicon"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-
-            <!--                        <TextView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:text="Cow"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-            <!--                        <com.smb.animatedtextview.AnimatedTextView-->
-            <!--                            -->
-            <!--                            android:layout_width="wrap_content"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:layout_gravity="center"-->
-            <!--                            android:layout_marginTop="15dp"-->
-            <!--                            android:layout_marginBottom="15dp"-->
-            <!--                            android:padding="6dp"-->
-            <!--                            android:text="10000"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:textSize="30dp"-->
-            <!--                            android:textStyle="bold"-->
-            <!--                            app:atv_animationDuration="4000" />-->
-
-            <!--                    </LinearLayout>-->
-
-            <!--                </androidx.cardview.widget.CardView>-->
-
-            <!--                <androidx.cardview.widget.CardView-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    app:cardElevation="4dp"-->
-            <!--                    app:cardCornerRadius="10dp"-->
-            <!--                    app:cardUseCompatPadding="true">-->
-            <!--                    <LinearLayout-->
-            <!--                        android:layout_width="match_parent"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:background="@color/farmerprofilecardcolor"-->
-            <!--                        android:orientation="vertical">-->
-
-
-            <!--                        <ImageView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="70dp"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:src="@drawable/buffaloicon"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-
-            <!--                        <TextView-->
-            <!--                            android:layout_width="match_parent"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:padding="10dp"-->
-            <!--                            android:text="Buffalo"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:autoSizeTextType="uniform" />-->
-
-            <!--                        <com.smb.animatedtextview.AnimatedTextView-->
-            <!--                            -->
-            <!--                            android:layout_width="wrap_content"-->
-            <!--                            android:layout_height="wrap_content"-->
-            <!--                            android:layout_gravity="center"-->
-            <!--                            android:layout_marginTop="15dp"-->
-            <!--                            android:layout_marginBottom="15dp"-->
-            <!--                            android:padding="6dp"-->
-            <!--                            android:text="10000"-->
-            <!--                            android:textAlignment="center"-->
-            <!--                            android:textColor="@color/textcolor"-->
-            <!--                            android:textSize="30dp"-->
-            <!--                            android:textStyle="bold"-->
-            <!--                            app:atv_animationDuration="4000" />-->
-
-            <!--                    </LinearLayout>-->
-
-            <!--                </androidx.cardview.widget.CardView>-->
-
-            <!--            </LinearLayout>-->
-
-            <LinearLayout
-                android:id="@+id/searchLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    app:cardElevation="5dp">
-
-                    <EditText
-                        android:id="@+id/SearchEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:iconifiedByDefault="false"
-                        android:hint="Search"
-                        android:imeOptions="actionSearch"
-                        android:padding="10dp"
-                        android:drawableEnd="@drawable/baseline_search_24"
-                        app:cardPreventCornerOverlap="true" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="5dp">
-
-                    <Spinner
-                        android:id="@+id/spinnerStatus"
-                        android:layout_width="300dp"
-                        android:entries="@array/filter_list"
-                        android:layout_height="50dp" />
-
-                </androidx.cardview.widget.CardView>
-
-                <Button
-                    android:id="@+id/btnSubmit"
-                    android:layout_width="100dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    app:cornerRadius="15dp"
-                    android:textColor="@color/btncolortext"
-                    android:backgroundTint="@color/lightblue"
-                    android:text="Submit" />
-
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="15dp">
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:layout_constraintVertical_bias="0.056">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/backgroundColorpanel"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CATTLES"
+
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textcolor"
+                        android:textSize="25dp" />
+
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
+                    </View>
 
                     <LinearLayout
-
-                        android:layout_width="match_parent"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:orientation="horizontal">
+                        android:background="?android:attr/selectableItemBackground">
 
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:id="@+id/btnaddcattle"
+                            android:layout_gravity="center_vertical"
+                            app:cornerRadius="10dp"
+                            android:padding="5dp"
+                            android:textSize="10dp"
+                            android:backgroundTint="@color/primaryblue"
+                            android:drawableEnd="@drawable/baseline_add_24"
+                            android:text="@string/addcattle"
+                            android:textColor="@color/textcolor" />
 
-                        <TextView
-                            android:id="@+id/image"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:text="Image"
-                            android:textStyle="bold"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
+                    </LinearLayout>
 
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
 
+                    </View>
 
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground">
 
-                        <TextView
-                            android:id="@+id/farmNametxt"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Breed"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            app:cornerRadius="10dp"
+                            android:padding="5dp"
+                            android:textSize="10dp"
+                            android:backgroundTint="@color/primaryblue"
+                            android:text="Entity"
 
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/farmAddress"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Type"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-
-                        <TextView
-                            android:id="@+id/farmerName"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Gender"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/addedAt"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="15dp"
-                            android:text="Added At"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="50dp"
-                            android:text="Actions"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
+                            android:textColor="@color/textcolor" />
 
                     </LinearLayout>
 
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyccattle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="0.75"
-                tools:listitem="@layout/data_grid_recycler" />
 
-            <LinearLayout
-                android:id="@+id/btnLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:visibility="gone">
 
-                <Button
-                    android:id="@+id/btnFirst"
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/btncolortext"
-                    android:backgroundTint="@color/lightblue"
-                    android:text="First" />
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            app:cornerRadius="10dp"
+                            android:padding="5dp"
+                            android:textSize="10dp"
+                            android:backgroundTint="@color/primaryblue"
+                            android:drawableEnd="@drawable/baseline_add_24"
+                            android:text="@string/addcattle"
+                            android:textColor="@color/textcolor" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
+
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
+                            app:cornerRadius="10dp"
+                            android:padding="5dp"
+                            android:textSize="10dp"
+                            android:drawableEnd="@drawable/baseline_add_24"
+                            android:backgroundTint="@color/primaryblue"
+                            android:text="Add Entity"
+
+                            android:textColor="@color/textcolor" />
+
+                    </LinearLayout>
 
 
-                <Button
-                    android:id="@+id/btnPrevious"
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:orientation="horizontal">-->
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:cardElevation="4dp"-->
+                <!--                    app:cardCornerRadius="10dp"-->
+                <!--                    app:cardUseCompatPadding="true">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:background="@color/farmerprofilecardcolor"-->
+                <!--                        android:orientation="vertical">-->
+
+
+                <!--                        <ImageView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="70dp"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:src="@drawable/cowicon"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+
+                <!--                        <TextView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:text="Cow"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+                <!--                        <com.smb.animatedtextview.AnimatedTextView-->
+                <!--                            -->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginTop="15dp"-->
+                <!--                            android:layout_marginBottom="15dp"-->
+                <!--                            android:padding="6dp"-->
+                <!--                            android:text="10000"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:textSize="30dp"-->
+                <!--                            android:textStyle="bold"-->
+                <!--                            app:atv_animationDuration="4000" />-->
+
+                <!--                    </LinearLayout>-->
+
+                <!--                </androidx.cardview.widget.CardView>-->
+
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:cardElevation="4dp"-->
+                <!--                    app:cardCornerRadius="10dp"-->
+                <!--                    app:cardUseCompatPadding="true">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:background="@color/farmerprofilecardcolor"-->
+                <!--                        android:orientation="vertical">-->
+
+
+                <!--                        <ImageView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="70dp"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:src="@drawable/cowicon"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+
+                <!--                        <TextView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:text="Cow"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+                <!--                        <com.smb.animatedtextview.AnimatedTextView-->
+                <!--                            -->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginTop="15dp"-->
+                <!--                            android:layout_marginBottom="15dp"-->
+                <!--                            android:padding="6dp"-->
+                <!--                            android:text="10000"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:textSize="30dp"-->
+                <!--                            android:textStyle="bold"-->
+                <!--                            app:atv_animationDuration="4000" />-->
+
+                <!--                    </LinearLayout>-->
+
+                <!--                </androidx.cardview.widget.CardView>-->
+
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:cardElevation="4dp"-->
+                <!--                    app:cardCornerRadius="10dp"-->
+                <!--                    app:cardUseCompatPadding="true">-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:background="@color/farmerprofilecardcolor"-->
+                <!--                        android:orientation="vertical">-->
+
+
+                <!--                        <ImageView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="70dp"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:src="@drawable/buffaloicon"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+
+                <!--                        <TextView-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:padding="10dp"-->
+                <!--                            android:text="Buffalo"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:autoSizeTextType="uniform" />-->
+
+                <!--                        <com.smb.animatedtextview.AnimatedTextView-->
+                <!--                            -->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginTop="15dp"-->
+                <!--                            android:layout_marginBottom="15dp"-->
+                <!--                            android:padding="6dp"-->
+                <!--                            android:text="10000"-->
+                <!--                            android:textAlignment="center"-->
+                <!--                            android:textColor="@color/textcolor"-->
+                <!--                            android:textSize="30dp"-->
+                <!--                            android:textStyle="bold"-->
+                <!--                            app:atv_animationDuration="4000" />-->
+
+                <!--                    </LinearLayout>-->
+
+                <!--                </androidx.cardview.widget.CardView>-->
+
+                <!--            </LinearLayout>-->
+
+                <LinearLayout
+                    android:id="@+id/searchLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/btncolortext"
-                    android:backgroundTint="@color/lightblue"
-                    android:text="Previous" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnNext"
-                    android:layout_width="wrap_content"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="15dp"
+                        app:cardElevation="5dp">
+
+                        <EditText
+                            android:id="@+id/SearchEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:iconifiedByDefault="false"
+                            android:hint="Search"
+                            android:imeOptions="actionSearch"
+                            android:padding="10dp"
+                            android:drawableEnd="@drawable/baseline_search_24"
+                            app:cardPreventCornerOverlap="true" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="5dp">
+
+                        <Spinner
+                            android:id="@+id/spinnerStatus"
+                            android:layout_width="300dp"
+                            android:entries="@array/filter_list"
+                            android:layout_height="50dp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <Button
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        app:cornerRadius="15dp"
+                        android:textColor="@color/btncolortext"
+                        android:backgroundTint="@color/lightblue"
+                        android:text="Submit" />
+
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/btncolortext"
-                    android:layout_marginEnd="50dp"
-                    android:backgroundTint="@color/lightblue"
-                    android:text="Next" />
+                    android:gravity="center"
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/backgroundColorpanel"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:orientation="horizontal">
 
 
-                <Button
-                    android:id="@+id/btnLast"
-                    android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/image"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:text="Image"
+                                android:textStyle="bold"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:text="Sample Id"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/farmNametxt"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:text="Breed"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/farmAddress"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:text="Type"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+
+                            <TextView
+                                android:id="@+id/farmerName"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:text="Gender"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/addedAt"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:layout_marginStart="15dp"
+                                android:text="Added At"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:layout_marginStart="100dp"
+                                android:text="Actions"
+                                android:textColor="@color/textcolor"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyccattle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/btncolortext"
-                    android:backgroundTint="@color/lightblue"
-                    android:text="Last" />
+                    android:layout_weight="1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintVertical_bias="0.75"
+                    tools:listitem="@layout/datagridlayout" />
+
+                <LinearLayout
+                    android:id="@+id/btnLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btnFirst"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50dp"
+                        android:textColor="@color/btncolortext"
+                        android:backgroundTint="@color/lightblue"
+                        android:text="First" />
+
+
+                    <Button
+                        android:id="@+id/btnPrevious"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50dp"
+                        android:textColor="@color/btncolortext"
+                        android:backgroundTint="@color/lightblue"
+                        android:text="Previous" />
+
+                    <Button
+                        android:id="@+id/btnNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/btncolortext"
+                        android:layout_marginEnd="50dp"
+                        android:backgroundTint="@color/lightblue"
+                        android:text="Next" />
+
+
+                    <Button
+                        android:id="@+id/btnLast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50dp"
+                        android:textColor="@color/btncolortext"
+                        android:backgroundTint="@color/lightblue"
+                        android:text="Last" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-        </LinearLayout>
+
 
 
     </LinearLayout>

@@ -155,6 +155,7 @@ public class ActivityDashboard extends AppCompatActivity {
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
+        activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
         viewModel.dashboardData();
         viewModel.dashboardDataJson.observe(this, new Observer<JsonObject>() {
             @Override
