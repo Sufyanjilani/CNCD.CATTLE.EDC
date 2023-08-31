@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryblue">#03A9F4</color>
+    <color name="secondaryblue">#2175F3</color>
+    <color name="textcolor">#0C0B0B</color>
+    <color name="backgroundColorpanel">#EFF2FE</color>
+    <color name="textdashboardMenu">#9F9E9E</color>
+    <color name="dashcardcolor">#03A9F4</color>
+    <color name="btncolor">#FFFFFF</color>
+    <color name="farmerprofilecardcolor">#FFFFFF</color>
+    <color name="farmerprofilecardpanel1color">#FFFFFF</color>
+    <color name="loginpanelcolor">#71C9F1</color>
+    <color name="seperatorcolor">@android:color/darker_gray</color>
+    <color name="wholecolor">#FFFF</color>
+    <color name="lightblue">#59A0EE</color>
+    <color name="btncolortext">#FFFFFF</color>
+    <color name="grey">#756C6C</color>
+
+    
 </resources>

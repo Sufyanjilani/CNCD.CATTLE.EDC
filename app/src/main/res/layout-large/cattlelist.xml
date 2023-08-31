@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="15dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColorpanel"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="25dp"
+            android:src="@drawable/cow" />
+
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal">
+
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/farmerId"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Farmer Id"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="16sp" />-->
+
+
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="1dp"-->
+            <!--                android:layout_height="match_parent" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/farmID"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Farm Id"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="16sp" />-->
+
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/farmName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Farm Name"
+                android:textColor="@color/textcolor"
+                android:textSize="16sp" />
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+
+            <TextView
+                android:id="@+id/farmAddress"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Farm Address"
+                android:textColor="@color/textcolor"
+                android:textSize="16sp" />
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/farmerName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Farmer Name"
+                android:textColor="@color/textcolor"
+                android:textSize="16sp" />
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/createdAt"
+                android:gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Created At"
+                android:textColor="@color/textcolor"
+                android:textSize="18sp" />
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/manage"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:text="Manage"-->
+            <!--                android:textColor="@color/textcolor"-->
+            <!--                android:textSize="18sp" />-->
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="1dp"-->
+            <!--                android:layout_height="match_parent" />-->
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/manage"
+                    android:text="Manage"
+                    android:layout_weight="1"
+                    android:drawableTint="@color/textcolor"
+                    android:textColor="@color/btncolortext"
+                    android:backgroundTint="@color/lightblue" />
+
+
+            </LinearLayout>
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/actionDelete"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_width="100dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:src="@android:drawable/ic_delete"-->
+            <!--                android:textSize="18sp" />-->
+
+
+
+        </LinearLayout>
+
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="1dp"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:layout_marginEnd="10dp" />-->
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+

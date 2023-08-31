@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Jameel Noori Nastaleef';
+    src: url('file:///android_asset/basic/fonts/JameelNooriNastaleeqKasheeda.ttf') format('truetype');
+    /* Add other font formats (e.g., .woff, .woff2) for better browser support */
+}
+
+body {
+    font-family: 'Jameel Noori Nastaleef', Arial, sans-serif;
+    background-color: #f7f7f7;
+
+}
+
+.content-container {
+    direction: rtl;
+    text-align: right;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+     font-family: 'Jameel Noori Nastaleef', Times, serif;
+
+}
+
+.content-container h1 {
+    color: #333;
+}
+
+.content-container h2 {
+    color: #555;
+}
+
+.content-container p {
+    color: #777;
+}
+
+.content-container ul {
+    color: #444;
+    list-style-type: disc;
+    padding-right: 20px;
+}
+
+.content-container li {
+    margin-bottom: 10px;
+}

@@ -1,7 +1,31 @@
 <resources>
-    <string name="app_name">CNCD.CattleEDC.Android</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="appversion">Version 1.0.0</string>
     <string name="userName">Research Officer</string>
+    <string name="addFarmer">Add Farmer</string>
+    <string name="cowName">Cattle Name</string>
+    <string name="addcattle">Add cattle</string>
+    <string name="transition_name">profileimage</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="welcome">WELCOME</string>
+    <string name="singIn">Signin</string>
+    <string name="farmername">Farmer Name</string>
+    <string name="Farm">Farm</string>
+
+    <string name="app_name">LiveStock Lens</string>
+    <string name="poweredBy">Powered By</string>
+    
+
+    <array name="filter_list">
+
+        <item>Sort By Date</item>
+        <item>Sort By Name</item>
+        <item>Sort By Newest</item>
+        <item>Sort By Oldest</item>
+    </array>
+
+
 </resources>

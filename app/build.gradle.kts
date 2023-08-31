@@ -1,6 +1,19 @@
 plugins {
     id("com.android.application")
+    id("realm-android")
+
+
 }
+
+
+
+apply{
+
+    plugin("realm-android")
+
+}
+
+
 
 android {
     namespace = "com.example.cncdcattleedcandroid"
@@ -11,7 +24,7 @@ android {
         minSdk = 26
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,6 +44,7 @@ android {
 
         viewBinding = true;
     }
+
 }
 
 dependencies {
@@ -44,4 +58,46 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
+    //for logging
+    implementation("com.orhanobut:logger:2.2.0")
+
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    //Gson
+    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
+
+    //chart
+    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("com.github.SMehranB:AnimatedTextView:1.1.0")
+    implementation ("com.daimajia.androidanimations:library:2.4@aar")
+
+
+    //animation
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+    //loading Dialog
+    implementation("com.github.basusingh:BeautifulProgressDialog:1.001")
+
+
+    //table data grid
+
+    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
+
+
+    //image loading
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    implementation("androidx.webkit:webkit:1.5.0")
+
+
+    //realm database
+
+
 }

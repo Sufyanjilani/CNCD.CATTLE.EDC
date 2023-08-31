@@ -13,8 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:layout_marginTop="15dp"
         app:headerLayout="@layout/nav_header"
         android:id="@+id/navigationView"
         app:menu="@menu/drawaermenu"/>
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primaryblue">#0D47A1</color>
+    <color name="secondaryblue">#1A237E</color>
+    <color name="textcolor">#ffffff</color>
+    <color name="backgroundColorpanel">#191C3B</color>
+    <color name="textdashboardMenu">#FFFFFF</color>
+    <color name="dashcardcolor">#0D47A1</color>
+    <color name="btncolor">#0D47A1</color>
+    <color name="farmerprofilecardcolor">#0D47A1</color>
+    <color name="farmerprofilecardpanel1color">#191C3B</color>
+    <color name="loginpanelcolor">#0D47A1</color>
+    <color name="seperatorcolor">#FFFFFF</color>
+    <color name="wholecolor">#191C3B</color>
+    <color name="lightblue">#0D47A1</color>
+    <color name="btncolortext">#FFFFFFFF</color>
+    <color name="grey">#756C6C</color>
+
+
+
+</resources>
