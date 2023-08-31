@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">CNCD Cattle EDC</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="appversion">Version 1.0.0</string>
@@ -15,6 +14,9 @@
     <string name="singIn">Signin</string>
     <string name="farmername">Farmer Name</string>
     <string name="Farm">Farm</string>
+
+    <string name="app_name">LiveStock Lens</string>
+    <string name="poweredBy">Powered By</string>
     
 
     <array name="filter_list">

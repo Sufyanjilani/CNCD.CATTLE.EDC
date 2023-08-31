@@ -330,40 +330,50 @@ public class DashboardViewModel extends AndroidViewModel {
         getData.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     JsonObject dashboardData = response.body();
-                    JsonObject dataObject = dashboardData.get("data").getAsJsonObject();
-                    JsonObject cardObject = dataObject.get("cardsData").getAsJsonObject();
-                    Log.d(constants.Tag, cardObject.toString());;
-                    String totalFarms = cardObject.get("totalFarms").getAsString();
-                    String totalFarmers = cardObject.get("totalFarmers").getAsString();
-                    String totalCattles = cardObject.get("totalCattles").getAsString();
 
-                    JsonObject gridObject = dataObject.get("gridsData").getAsJsonObject();
-                    JsonArray farmerData = gridObject.get("farmers").getAsJsonArray();
-                    Log.d(constants.Tag, gridObject.toString());
-                    for (int i = 0; i < farmerData.size(); i++){
-                        JsonObject obj = farmerData.get(i).getAsJsonObject();
-                        String farmerID = obj.get("farmerID").getAsString();
-                        String farmID = obj.get("farmID").getAsString();
-                        String farmName = obj.get("farmName").getAsString();
-                        String farmAddress = obj.get("farmAddress").getAsString();
-                        String farmerName = obj.get("farmerName").getAsString();
-                        String created_at = obj.get("created_at").getAsString();
 
-                     //   DashboardDataModel dashboardDataModel = new DashboardDataModel(totalFarms, totalFarmers, totalCattles);
+                    if (response.body().get("data").isJsonObject()) {
+                        JsonObject dataObject = dashboardData.get("data").getAsJsonObject();
+                        JsonObject cardObject = dataObject.get("cardsData").getAsJsonObject();
+                        Log.d(constants.Tag, cardObject.toString());
+                        ;
+                        String totalFarms = cardObject.get("totalFarms").getAsString();
+                        String totalFarmers = cardObject.get("totalFarmers").getAsString();
+                        String totalCattles = cardObject.get("totalCattles").getAsString();
+
+                        JsonObject gridObject = dataObject.get("gridsData").getAsJsonObject();
+                        JsonArray farmerData = gridObject.get("farmers").getAsJsonArray();
+                        Log.d(constants.Tag, gridObject.toString());
+                        for (int i = 0; i < farmerData.size(); i++) {
+                            JsonObject obj = farmerData.get(i).getAsJsonObject();
+                            String farmerID = obj.get("farmerID").getAsString();
+                            String farmID = obj.get("farmID").getAsString();
+                            String farmName = obj.get("farmName").getAsString();
+                            String farmAddress = obj.get("farmAddress").getAsString();
+                            String farmerName = obj.get("farmerName").getAsString();
+                            String created_at = obj.get("created_at").getAsString();
+
+                            //   DashboardDataModel dashboardDataModel = new DashboardDataModel(totalFarms, totalFarmers, totalCattles);
 //
-                        Cattles cattles = new Cattles(farmerID, farmID,
-                                farmName, farmAddress, farmerName, created_at);
-                        cattlesArrayList.add(cattles);
-                        Log.d("listdata",cattlesArrayList.toString());
+                            Cattles cattles = new Cattles(farmerID, farmID,
+                                    farmName, farmAddress, farmerName, created_at);
+                            cattlesArrayList.add(cattles);
+                            Log.d("listdata", cattlesArrayList.toString());
 
 
+                        }
+                        dashboardDataResponse.setValue("success");
+                        dashboardDataJson.setValue(dataObject);
+                        dashboardFarmerData.setValue(gridObject);
                     }
-                    dashboardDataResponse.setValue("success");
-                    dashboardDataJson.setValue(dataObject);
-                    dashboardFarmerData.setValue(gridObject);
+                    else{
+
+                        dashboardDataResponse.setValue(response.body().get("msg").getAsString());
+                    }
                 }
+
             }
 
             @Override

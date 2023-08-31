@@ -172,6 +172,9 @@ public class ActivityDashboard extends AppCompatActivity {
                 }
             }
         });
+
+
+
 //        arrayList = viewModel.dashboardData();
 //        Log.d("TAGlist",viewModel.dashboardData().toString());
 //        cattleAdapter = new CattleAdapter(arrayList, ActivityDashboard.this);
@@ -267,6 +270,32 @@ public class ActivityDashboard extends AppCompatActivity {
 
                     loadingDialog.dissmissDialog();
                 }
+            }
+        });
+
+
+        viewModel.dashboardDataResponse.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if (!s.equals("")){
+
+                    if (s.equals("token_expired")){
+
+                        Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ActivityDashboard.this,ActivityLogin.class));
+                        sessionManager.SaveCattleID("");
+                        sessionManager.savebarearToken("null");
+                        sessionManager.Save_Farm_and_Farmer_ID("","");
+                        sessionManager.saveStartCoordinatesAndTime(0,0,"");
+                        finish();
+                    }
+                    else{
+
+                        Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         });
 

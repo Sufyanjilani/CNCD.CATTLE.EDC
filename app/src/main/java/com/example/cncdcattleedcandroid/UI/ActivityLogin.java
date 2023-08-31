@@ -62,6 +62,9 @@ public class ActivityLogin extends AppCompatActivity {
 
     RealmDatabaseHlper realmDatabaseHlper;
 
+    String appVersion = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,13 @@ public class ActivityLogin extends AppCompatActivity {
         realmDatabaseHlper.InitializeRealm(this);
 
 
+        try {
+            appVersion = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        activityLoginBinding.appVersion.setText("Version: "+appVersion);
 
         loginViewModel.isloginsucces.observe(this, new Observer<String>() {
             @Override
@@ -94,16 +104,12 @@ public class ActivityLogin extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            if (sessionManager.checkisApplicationFirstTime()) {
+
 
                                 startActivity(new Intent(ActivityLogin.this, ActivitySettingData.class));
                                 loadingDialog.dissmissDialog();
-                            }
-                            else{
 
-                                startActivity(new Intent(ActivityLogin.this, ActivityDashboard.class));
-                                loadingDialog.dissmissDialog();
-                            }
+
                         }
                     },2000);
                 }

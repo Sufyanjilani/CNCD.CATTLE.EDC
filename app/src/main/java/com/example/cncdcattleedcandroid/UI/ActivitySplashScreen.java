@@ -91,6 +91,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                     if (sessionManager.checkisApplicationFirstTime()){
                         Intent i = new Intent(ActivitySplashScreen.this, ActivitySettingData.class);
                         startActivity(i);
+                        finish();
 
                     }
                     else {
@@ -98,6 +99,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                         Intent i = new Intent(ActivitySplashScreen.this, ActivityDashboard.class);
                         Log.d(constants.Tag, sessionManager.getbearer());
                         startActivity(i);
+                        finish();
                     }
 
                 }

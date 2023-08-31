@@ -941,8 +941,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Total Cattels"
-                    android:textSize="18dp"
+                    android:text="Total Cattles"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -1002,8 +1002,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Total Cows"
-                    android:textSize="18dp"
+                    android:text="Cows"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -1063,8 +1063,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Total Buffalo"
-                    android:textSize="18dp"
+                    android:text="Buffaloes"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
             </LinearLayout>

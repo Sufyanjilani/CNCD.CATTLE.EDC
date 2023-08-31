@@ -21,10 +21,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationRequest;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -48,6 +50,8 @@ import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
 import com.example.cncdcattleedcandroid.databinding.ActivityWebViewSurveyFormBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -120,10 +124,17 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     RetrofitClientSurvey retrofitClientSurvey;
 
-    String farmId,farmerId;
+    String farmId, farmerId;
 
 
+    //live data for end Coordinates
 
+    MutableLiveData<Boolean> isEndCoordinatesObtained = new MutableLiveData<>();
+
+    ArrayList<String> locationCoordinates = new ArrayList<>();
+
+
+    private LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +151,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         setUpLocation();
         surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
         LoadWebViewWithDifferentSettings();
-
-
-
 
 
     }
@@ -216,7 +224,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "Android.ShowProgressDialog()\n" +
                         "setTimeout(function(){\n" +
                         " const results = JSON.stringify(sender.data);\n" +
-                        function+"\n" +
+                        function + "\n" +
                         "},2000)" +
                         "  });\n" +
                         "\n" +
@@ -224,11 +232,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "  $(\"#surveyElement\").Survey({ model: survey });";
 
 
-
-
-
         webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
-
 
 
     }
@@ -495,8 +499,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     class JavaScriptInterface {
 
         Context context;
-//
-        public JavaScriptInterface(Context context){
+
+        //
+        public JavaScriptInterface(Context context) {
 
             this.context = context;
         }
@@ -512,7 +517,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         @JavascriptInterface
         public void dissmissdialog() {
 
-            pd.dismiss();
+            loadingDialog.dissmissDialog();
         }
 
         @JavascriptInterface
@@ -574,11 +579,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
 
 
-
-
-
         @JavascriptInterface
-        public void changevalue(Boolean value, String data){
+        public void changevalue(Boolean value, String data) {
 
             beginpost.postValue(value);
             formdata = data;
@@ -608,37 +610,36 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
             String locationCoordinate = "23.32,45.32";
-                String formJSON = formjson;
+            String formJSON = formjson;
 
 
-                String accessToken = sessionManager.getbearer();
-                String interviewtakenAt = getTimeStamp("Interview_taken_at-");
-                String interviewTimeStart = sessionManager.getStartTimestamp();
-                String interviewTimeEnd = getTimeStamp("end-");
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
 
 
-                String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
-                        sessionManager.getLongitudeStart();
+            String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
+                    sessionManager.getLongitudeStart();
 
 
-                String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = "0.0,0.0";
 
 
-                surveyViewModel.PostFirstFormData(context,
-                        questionnaireID,
-                        appVersion,
-                        locationCoordinate,
-                        formJSON,
-                        accessToken,
-                        interviewtakenAt,
-                        interviewTimeStart,
-                        interviewTimeEnd,
-                        locationCoordinatesStart,
-                        locationCoordinatesEnd
-                );
+            surveyViewModel.PostFirstFormData(context,
+                    questionnaireID,
+                    appVersion,
+                    locationCoordinate,
+                    formJSON,
+                    accessToken,
+                    interviewtakenAt,
+                    interviewTimeStart,
+                    interviewTimeEnd,
+                    locationCoordinatesStart,
+                    locationCoordinatesEnd
+            );
 
         }
-
 
 
         @JavascriptInterface
@@ -649,7 +650,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -696,15 +697,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
 
 
-
-
         @JavascriptInterface
-        public void SubmitSecondForm(String formjson){
+        public void SubmitSecondForm(String formjson) {
             String questionnaireID = entityId;
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -750,18 +749,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
 
-
-
-
         }
 
         @JavascriptInterface
-        public void SubmitThirdForm(String formjson){
+        public void SubmitThirdForm(String formjson) {
             String questionnaireID = entityId;
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -790,7 +786,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = "0.0,0.0";
 
 
-
             surveyViewModel.SubmitThirdForm(context,
                     questionnaireID,
                     sessionManager.get_Farm_ID(),
@@ -808,19 +803,16 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
 
-
-
-
         }
 
 
         @JavascriptInterface
-        public void SubmitCattleEntityForm(String formjson){
+        public void SubmitCattleEntityForm(String formjson) {
             String questionnaireID = entityId;
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -864,21 +856,16 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
 
-
-
-
-
-
         }
 
 
         @JavascriptInterface
-        public void SubmitCattleEntityForm3(String formjson){
+        public void SubmitCattleEntityForm3(String formjson) {
             String questionnaireID = entityId;
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -922,20 +909,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
 
-
-
-
-
-
         }
 
         @JavascriptInterface
-        public void SubmitCattleEntityForm4(String formjson){
+        public void SubmitCattleEntityForm4(String formjson) {
             String questionnaireID = entityId;
             String appVersion = "";
 
 
-            Log.d(constants.info,"post called");
+            Log.d(constants.info, "post called");
             loadingDialog.dissmissDialog();
 
 
@@ -979,19 +961,10 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
 
-
-
-
-
-
         }
 
 
     }
-
-
-
-
 
 
     public void injectCities() {
@@ -1018,7 +991,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         String formjson = realmDatabaseHlper.readDataSurvey(id);
 
         Log.d(constants.info + "function", formjson);
-        Log.d(constants.Tag,entityId);
+        Log.d(constants.Tag, entityId);
 
         return formjson;
 
@@ -1324,11 +1297,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         Log.d(constants.Tag, json);
         JsonObject parsedjson = (JsonObject) new JsonParser().parse(json);
 
-        Log.d(constants.Tag,parsedjson.toString());
+        Log.d(constants.Tag, parsedjson.toString());
 
 
         return
-                parsedjson.toString() ;
+                parsedjson.toString();
 
     }
 
@@ -1433,7 +1406,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadSecondForm("general_diet","Android.SubmitSecondForm(results)");
+                        LoadSecondForm("general_diet", "Android.SubmitSecondForm(results)\n" + "dissmissdialog()\n");
 
                     }
                 }
@@ -1444,9 +1417,20 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 @Override
                 public void onChanged(String s) {
 
-                    if (!s.equals("")){
+                    if (!s.equals("")) {
 
                         ShowAllToastMessages(s);
+
+                        if (s.equals("token_expired")) {
+
+                            Toast.makeText(ActivityWebViewSurveyForm.this, s, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ActivityWebViewSurveyForm.this, ActivityLogin.class));
+                            sessionManager.SaveCattleID("");
+                            sessionManager.savebarearToken("null");
+                            sessionManager.Save_Farm_and_Farmer_ID("", "");
+                            sessionManager.saveStartCoordinatesAndTime(0, 0, "");
+                            finish();
+                        }
                     }
 
                 }
@@ -1459,7 +1443,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadThirdForm("general_medical","Android.SubmitThirdForm(results)");
+                        LoadThirdForm("general_medical", "Android.SubmitThirdForm(results)");
                     }
                 }
             });
@@ -1471,14 +1455,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        Intent i = new Intent(ActivityWebViewSurveyForm.this,ActivityDashboard.class);
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityDashboard.class);
                         startActivity(i);
                         finish();
                     }
                 }
             });
-        }
-        else if(formId.equals("personal_basic")){
+        } else if (formId.equals("personal_basic")) {
 
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
@@ -1532,7 +1515,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadSecondForm("personal_milk","Android.SubmitCattleEntityForm(results)");
+                        LoadSecondForm("personal_milk", "Android.SubmitCattleEntityForm(results)");
                     }
                 }
             });
@@ -1544,7 +1527,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadThirdForm("personal_medical","Android.SubmitCattleEntityForm3(results)");
+                        LoadThirdForm("personal_medical", "Android.SubmitCattleEntityForm3(results)");
                     }
                 }
             });
@@ -1556,7 +1539,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        Intent i = new Intent(ActivityWebViewSurveyForm.this,ActivityDashboard.class);
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityDashboard.class);
                         startActivity(i);
                         finish();
                     }
@@ -1568,9 +1551,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 @Override
                 public void onChanged(Boolean aBoolean) {
 
-                    if (aBoolean){
+                    if (aBoolean) {
 
-                        LoadFourthForm("personal_traits","Android.SubmitCattleEntityForm4(results)");
+                        LoadFourthForm("personal_traits", "Android.SubmitCattleEntityForm4(results)");
 
                     }
                 }
@@ -1581,8 +1564,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 @Override
                 public void onChanged(Boolean aBoolean) {
 
-                    if (aBoolean){
-                        Intent i = new Intent(ActivityWebViewSurveyForm.this,ActivityDashboard.class);
+                    if (aBoolean) {
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityDashboard.class);
                         startActivity(i);
                         finish();
                     }
@@ -1590,8 +1573,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             });
 
 
-        }
-        else{
+        } else {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1614,14 +1596,14 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         JsonObject object = getEntities();
         String firstformId = object.get(key).getAsString();
         entityId = firstformId;
-        Log.d(constants.Tag,entityId);
+        Log.d(constants.Tag, entityId);
         return firstformId;
 
 
     }
 
 
-    public void ForceWebViewToDarkMode2(String formjson,String function) {
+    public void ForceWebViewToDarkMode2(String formjson, String function) {
 
         String javascriptCode =
                 "      window['surveyjs-widgets'].inputmask(Survey);\n" +
@@ -1681,7 +1663,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "Android.ShowProgressDialog()\n" +
                         "setTimeout(function(){\n" +
                         " const results = JSON.stringify(sender.data);\n" +
-                        function+"\n" +
+                        function + "\n" +
                         "},2000)" +
                         "  });\n" +
                         "\n" +
@@ -1695,9 +1677,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         WebSettingsCompat.setForceDark(webViewSurveyFormBinding.surveyWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
     }
-
-
-
 
 
     public void Loadgetjavascript(String formjson) {
@@ -1756,7 +1735,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "\n" +
                         "  // You can delete the line below if you do not use a customized theme\n" +
                         "  survey.applyTheme(themeJson);\n" +
-                        "survey.data = JSON.stringify({\"farmName\":\"Tftdb\",\"farmerName\":\"Tfbtf\",\"address\":\"Tft\",\"sector\":\"Tfgfb\",\"province\":\"4\",\"city\":\"8\",\"mobileNo\":\"0312-9578544\",\"alternateMobile\":\"0356-4945549\",\"cnicNo\":\"03584-4595495-7\",\"animalType\":\"cow\",\"numberOfCows\":1,\"cowBreeds\":[\"sahiwal\"],\"reproduceCows\":false,\"choosingCow_breed\":[\"lessSick\"],\"businessModule\":\"dairy\",\"animalSource\":\"self\",\"animalSourceLocation\":\"sindh\",\"milkYeild_dialy\":[\"daily\"],\"dailyMilk_yeild_weight\":2,\"improvementToBreed\":[\"milkProduction\"],\"animalPurchased_age\":\"notPregnant\",\"eliminationReason\":\"lactation\",\"animalEliminated_age\":2,\"highestMilk_yield\":2,\"lowestMilk_yield\":5,\"averageLactation_period\":6});\n"+
+                        "survey.data = JSON.stringify({\"farmName\":\"Tftdb\",\"farmerName\":\"Tfbtf\",\"address\":\"Tft\",\"sector\":\"Tfgfb\",\"province\":\"4\",\"city\":\"8\",\"mobileNo\":\"0312-9578544\",\"alternateMobile\":\"0356-4945549\",\"cnicNo\":\"03584-4595495-7\",\"animalType\":\"cow\",\"numberOfCows\":1,\"cowBreeds\":[\"sahiwal\"],\"reproduceCows\":false,\"choosingCow_breed\":[\"lessSick\"],\"businessModule\":\"dairy\",\"animalSource\":\"self\",\"animalSourceLocation\":\"sindh\",\"milkYeild_dialy\":[\"daily\"],\"dailyMilk_yeild_weight\":2,\"improvementToBreed\":[\"milkProduction\"],\"animalPurchased_age\":\"notPregnant\",\"eliminationReason\":\"lactation\",\"animalEliminated_age\":2,\"highestMilk_yield\":2,\"lowestMilk_yield\":5,\"averageLactation_period\":6});\n" +
                         "  survey.onComplete.add((sender, options) => {\n" +
                         "Android.ShowProgressDialog()\n" +
                         "setTimeout(function(){\n" +
@@ -1776,11 +1755,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void setUpWebView2(String key,String function) {
+    public void setUpWebView2(String key, String function) {
 
         webViewSurveyFormBinding.surveyWebView.getSettings().setJavaScriptEnabled(true);
         webViewSurveyFormBinding.surveyWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -1802,12 +1778,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 if (!sessionManager.getthemstate()) {
-                    Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))),function);
+                    Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))), function);
                     injectCities();
 
                 } else {
 
-                    ForceWebViewToDarkMode2(JsonToInject((JsonToInject(getSurveyFormData(getFormEntity(key))))),function);
+                    ForceWebViewToDarkMode2(JsonToInject((JsonToInject(getSurveyFormData(getFormEntity(key))))), function);
                     InjectDarkMode();
                 }
             }
@@ -1945,18 +1921,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     }
 
 
-
     public void PostFirstFormData(String formjson) {
-
 
 
         String questionnaireID = entityId;
         String appVersion = "";
 
 
-        Log.d(constants.info,"post called");
-       // loadingDialog.dissmissDialog();
-
+        Log.d(constants.info, "post called");
+        // loadingDialog.dissmissDialog();
 
 
         try {
@@ -1967,96 +1940,194 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
 
 
-
-            String locationCoordinate = "";
-            String formJSON = formjson;
-
-
-            String accessToken = sessionManager.getbearer();
-            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
-            String interviewTimeStart = sessionManager.getStartTimestamp();
-            String interviewTimeEnd = getTimeStamp("end-");
+        String locationCoordinate = "";
+        String formJSON = formjson;
 
 
-            String locationCoordinatesStart = "Latitude_start " + sessionManager.getLatitudeStart() + "," +
-                    "Longitude_start " +
-                    sessionManager.getLongitudeStart();
+        String accessToken = sessionManager.getbearer();
+        String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+        String interviewTimeStart = sessionManager.getStartTimestamp();
+        String interviewTimeEnd = getTimeStamp("end-");
 
 
-            String locationCoordinatesEnd = "Latitude_End " + 0 + "," +
-                    "Longitude_End " +
-                    0;
+        String locationCoordinatesStart = "Latitude_start " + sessionManager.getLatitudeStart() + "," +
+                "Longitude_start " +
+                sessionManager.getLongitudeStart();
 
 
-
-            JsonObject payloadObject = new JsonObject();
-
-
-
-            JsonObject firstformObject = new JsonObject();
-            firstformObject.addProperty("questionnaireID",questionnaireID);
-            firstformObject.addProperty("appVersion",appVersion);
-            firstformObject.addProperty("locationCoordinates",locationCoordinate);
-            firstformObject.addProperty("formJSON","formJSON");
-            firstformObject.addProperty("accessToken",accessToken);
-            firstformObject.addProperty("interviewTakenAt",interviewtakenAt);
-            firstformObject.addProperty("interviewTimeStart",interviewTimeStart);
-            firstformObject.addProperty("interviewTimeEnd",interviewTimeEnd);
-            firstformObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
-            firstformObject.addProperty("locationCoordinatesEnd","lat 0,lon 0");
-
-            firstformObject.add("payload",payloadObject);
+        String locationCoordinatesEnd = "Latitude_End " + 0 + "," +
+                "Longitude_End " +
+                0;
 
 
-            Call<JsonObject> apicall = new RetrofitClientSurvey(this).retrofitclient()
-                    .Addfarmer(firstformObject);
+        JsonObject payloadObject = new JsonObject();
 
-            apicall.enqueue(new Callback<JsonObject>() {
+
+        JsonObject firstformObject = new JsonObject();
+        firstformObject.addProperty("questionnaireID", questionnaireID);
+        firstformObject.addProperty("appVersion", appVersion);
+        firstformObject.addProperty("locationCoordinates", locationCoordinate);
+        firstformObject.addProperty("formJSON", "formJSON");
+        firstformObject.addProperty("accessToken", accessToken);
+        firstformObject.addProperty("interviewTakenAt", interviewtakenAt);
+        firstformObject.addProperty("interviewTimeStart", interviewTimeStart);
+        firstformObject.addProperty("interviewTimeEnd", interviewTimeEnd);
+        firstformObject.addProperty("locationCoordinatesStart", locationCoordinatesStart);
+        firstformObject.addProperty("locationCoordinatesEnd", "lat 0,lon 0");
+
+        firstformObject.add("payload", payloadObject);
+
+
+        Call<JsonObject> apicall = new RetrofitClientSurvey(this).retrofitclient()
+                .Addfarmer(firstformObject);
+
+        apicall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.isSuccessful()) {
+
+                    Log.d(constants.Tag, "Worked Yeay!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d("TAG", "called");
+            }
+        });
+
+
+    }
+
+    public void LoadSecondForm(String formname, String method) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setUpWebView2(formname, method);
+        }
+
+    }
+
+    public void LoadThirdForm(String formname, String method) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setUpWebView2(formname, method);
+        }
+    }
+
+
+    public void LoadFourthForm(String formname, String method) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setUpWebView2(formname, method);
+        }
+    }
+
+    public void ShowAllToastMessages(String msg) {
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public class EndLocationAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(constants.Tag, "getting end location");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            getcurrentlocationstarEnd();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+
+            if (locationCoordinates.size() != 0) {
+
+                isEndCoordinatesObtained.setValue(true);
+            } else {
+
+                isEndCoordinatesObtained.setValue(false);
+            }
+
+            Log.d(constants.Tag, "getting end location exited" + isEndCoordinatesObtained.getValue().toString());
+        }
+
+
+        public void getcurrentlocationstarEnd() {
+
+
+            if (ActivityCompat.checkSelfPermission(ActivityWebViewSurveyForm.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActivityWebViewSurveyForm.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+
+
+            locationProviderClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, new CancellationToken() {
+                @NonNull
                 @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                    if (response.isSuccessful()){
-
-                        Log.d(constants.Tag,"Worked Yeay!");
-                    }
+                public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                    return null;
                 }
 
                 @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Log.d("TAG","called");
+                public boolean isCancellationRequested() {
+                    return false;
+                }
+
+
+            }).addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    if (location != null) {
+
+                        locationCoordinates.add(String.valueOf(location.getLatitude()));
+                        locationCoordinates.add(String.valueOf(location.getLongitude()));
+
+
+                    }
                 }
             });
 
 
-    }
-
-    public void LoadSecondForm(String formname, String method){
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2(formname,method);
         }
 
+
     }
 
-    public void LoadThirdForm(String formname, String method){
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2(formname,method);
+    public void LocationUpdates() {
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+
+
+                }
+            }
+        };
+    }
+
+
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        locationProviderClient.requestLocationUpdates(new com.google.android.gms.location.LocationRequest(),
+                locationCallback,
+                Looper.getMainLooper());
     }
 
-
-    public void LoadFourthForm(String formname, String method){
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setUpWebView2(formname,method);
-        }
-    }
-    public void ShowAllToastMessages(String msg){
-
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
-    }
 
 
 

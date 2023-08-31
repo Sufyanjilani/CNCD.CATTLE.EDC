@@ -111,7 +111,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                     Log.d(constants.Tag, String.valueOf(cardsData));
                     totalCattles = cardsData.get("totalCattles").getAsString();
                     totalCows = cardsData.get("totalCows").getAsString();
-                    totalBuffalo = cardsData.get("totalBuffalo").getAsString();
+                    totalBuffalo = cardsData.get("totalBuffaloes").getAsString();
 
 
                     JsonObject gridData = dataObject.get("gridsData").getAsJsonObject();

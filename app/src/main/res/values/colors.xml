@@ -16,6 +16,7 @@
     <color name="wholecolor">#FFFF</color>
     <color name="lightblue">#59A0EE</color>
     <color name="btncolortext">#FFFFFF</color>
+    <color name="grey">#756C6C</color>
 
     
 </resources>
