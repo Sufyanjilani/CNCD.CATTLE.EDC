@@ -22,6 +22,7 @@ import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.UI.FarmerAdapter;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
 import com.google.gson.JsonArray;
@@ -38,18 +39,28 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 
 
     ActivityFarmerProfileBinding farmerProfileBinding;
+
+    LoadingDialog loadingDialog;
     SessionManager sessionManager;
     Constants constants;
     DataGridAdapter gridAdapter;
 
     String farmId, farmerId, uri;
     String totalCattles, totalCows, googleMapsURL, totalBuffalo, farmID, farmName, farmAddress, farmSector, created_at, farmerID, farmerName, farmerMobileNumber, farmerMobileAlternative;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getFarmerProfile();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         farmerProfileBinding = ActivityFarmerProfileBinding.inflate(getLayoutInflater());
         setContentView(farmerProfileBinding.getRoot());
         constants = new Constants();
+        loadingDialog = new LoadingDialog(this,this);
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
         farmId = extra.getString("farmID");
@@ -88,12 +99,21 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 
             }
         });
+        loadingDialog.ShowCustomLoadingDialog();
         getFarmerProfile();
 
         farmerProfileBinding.locationMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(googleMapsURL));
+                startActivity(intent);
+            }
+        });
+
+        farmerProfileBinding.btnAddEntity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityFarmerProfile.this, ActivityEntity.class);
                 startActivity(intent);
             }
         });
@@ -108,72 +128,77 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
-                    JsonObject farmerData = response.body();
-                    JsonObject dataObject = farmerData.get("data").getAsJsonObject();
-                    JsonObject cardsData = dataObject.get("cardsData").getAsJsonObject();
-                    Log.d(constants.Tag, String.valueOf(cardsData));
-                    totalCattles = cardsData.get("totalCattles").getAsString();
-                    totalCows = cardsData.get("totalCows").getAsString();
-                    totalBuffalo = cardsData.get("totalBuffaloes").getAsString();
+
+                    if (!response.body().get("error").getAsString().equals("true")){
+
+                        JsonObject farmerData = response.body();
+                        JsonObject dataObject = farmerData.get("data").getAsJsonObject();
+                        JsonObject cardsData = dataObject.get("cardsData").getAsJsonObject();
+                        Log.d(constants.Tag, String.valueOf(cardsData));
+                        totalCattles = cardsData.get("totalCattles").getAsString();
+                        totalCows = cardsData.get("totalCows").getAsString();
+                        totalBuffalo = cardsData.get("totalBuffaloes").getAsString();
 
 
-                    JsonObject gridData = dataObject.get("gridsData").getAsJsonObject();
-                    JsonObject farmObject = gridData.get("farm").getAsJsonObject();
-                    Log.d(constants.Tag, String.valueOf(farmObject));
-                    farmID = farmObject.get("farmID").getAsString();
-                    farmName = farmObject.get("farmName").getAsString();
-                    farmAddress = farmObject.get("farmAddress").getAsString();
-                    farmSector = farmObject.get("farmSector").getAsString();
-                    googleMapsURL = farmObject.get("googleMapsURL").getAsString();
-                    created_at = farmObject.get("created_at").getAsString();
+                        JsonObject gridData = dataObject.get("gridsData").getAsJsonObject();
+                        JsonObject farmObject = gridData.get("farm").getAsJsonObject();
+                        Log.d(constants.Tag, String.valueOf(farmObject));
+                        farmID = farmObject.get("farmID").getAsString();
+                        farmName = farmObject.get("farmName").getAsString();
+                        farmAddress = farmObject.get("farmAddress").getAsString();
+                        farmSector = farmObject.get("farmSector").getAsString();
+                        googleMapsURL = farmObject.get("googleMapsURL").getAsString();
+                        created_at = farmObject.get("created_at").getAsString();
 
 
-                    JsonObject farmerObject = gridData.get("farmer").getAsJsonObject();
-                    Log.d(constants.Tag, String.valueOf(farmerObject));
-                    farmerID = farmerObject.get("farmerID").getAsString();
-                    farmerName = farmerObject.get("farmerName").getAsString();
-                    farmerMobileNumber = farmerObject.get("farmerMobileNumber").getAsString();
-                    farmerMobileAlternative = farmerObject.get("farmerMobileAlternative").getAsString();
+                        JsonObject farmerObject = gridData.get("farmer").getAsJsonObject();
+                        Log.d(constants.Tag, String.valueOf(farmerObject));
+                        farmerID = farmerObject.get("farmerID").getAsString();
+                        farmerName = farmerObject.get("farmerName").getAsString();
+                        farmerMobileNumber = farmerObject.get("farmerMobileNumber").getAsString();
+                        farmerMobileAlternative = farmerObject.get("farmerMobileAlternative").getAsString();
 
-                    JsonArray cattleArray = gridData.get("cattles").getAsJsonArray();
-                    for (int i = 0; i <cattleArray.size(); i++){
-                        JsonObject cattelObject = cattleArray.get(i).getAsJsonObject();
-                        String cattleID = cattelObject.get("cattleID").getAsString();
-                        String farmerCattleID = cattelObject.get("farmerCattleID").getAsString();
-                        String cTypeID = cattelObject.get("cTypeID").getAsString();
-                        String cTypeName = cattelObject.get("cTypeName").getAsString();
-                        String cattleGender = cattelObject.get("cattleGender").getAsString();
-                        String cBreedID = cattelObject.get("cBreedID").getAsString();
-                        String cBreedName = cattelObject.get("cBreedName").getAsString();
-                        String created_at = cattelObject.get("created_at").getAsString();
-                        String created_by = cattelObject.get("created_by").getAsString();
-                        String updated_at = cattelObject.get("updated_at").toString() == null ? "null":cattelObject.get("updated_at").toString();
-                        String updated_by = cattelObject.get("updated_by").getAsString();
-                        String sampleID = cattelObject.get("sampleID").getAsString();
+                        JsonArray cattleArray = gridData.get("cattles").getAsJsonArray();
+                        for (int i = 0; i <cattleArray.size(); i++){
+                            JsonObject cattelObject = cattleArray.get(i).getAsJsonObject();
+                            String cattleID = cattelObject.get("cattleID").getAsString();
+                            String farmerCattleID = cattelObject.get("farmerCattleID").getAsString();
+                            String cTypeID = cattelObject.get("cTypeID").getAsString();
+                            String cTypeName = cattelObject.get("cTypeName").getAsString();
+                            String cattleGender = cattelObject.get("cattleGender").getAsString();
+                            String cBreedID = cattelObject.get("cBreedID").getAsString();
+                            String cBreedName = cattelObject.get("cBreedName").getAsString();
+                            String created_at = cattelObject.get("created_at").getAsString();
+                            String created_by = cattelObject.get("created_by").getAsString();
+                            String updated_at = cattelObject.get("updated_at").toString() == null ? "null":cattelObject.get("updated_at").toString();
+                            String updated_by = cattelObject.get("updated_by").getAsString();
+                            String sampleID = cattelObject.get("sampleID").getAsString();
 
-                        DataGridModel dataGridModel = new DataGridModel(cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID,
-                                cBreedName, created_at, created_by, updated_at, updated_by, sampleID);
-                        dataGridModelArrayList.add(dataGridModel);
-                    }
+                            DataGridModel dataGridModel = new DataGridModel(cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID,
+                                    cBreedName, created_at, created_by, updated_at, updated_by, sampleID);
+                            dataGridModelArrayList.add(dataGridModel);
+                        }
 
-                    gridAdapter = new DataGridAdapter(dataGridModelArrayList,ActivityFarmerProfile.this);
-                    farmerProfileBinding.recyccattle.setLayoutManager(new LinearLayoutManager(ActivityFarmerProfile.this));
-                    farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
+                        gridAdapter = new DataGridAdapter(dataGridModelArrayList,ActivityFarmerProfile.this);
+                        farmerProfileBinding.recyccattle.setLayoutManager(new LinearLayoutManager(ActivityFarmerProfile.this));
+                        farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
 
-                    farmerProfileBinding.animtextcattel.setText(totalCattles);
-                    farmerProfileBinding.animtextcow.setText(totalCows);
-                    farmerProfileBinding.animtextbuffalo.setText(totalBuffalo);
-                    farmerProfileBinding.name.setText(farmerName);
-                    if (farmerMobileAlternative != ""){
-                        farmerProfileBinding.farmerMobile.setText(farmerMobileNumber+" / "+farmerMobileAlternative);
-                    }else {
-                        farmerProfileBinding.farmerMobile.setText(farmerMobileNumber);
-                    }
+                        farmerProfileBinding.animtextcattel.setText(totalCattles);
+                        farmerProfileBinding.animtextcow.setText(totalCows);
+                        farmerProfileBinding.animtextbuffalo.setText(totalBuffalo);
+                        farmerProfileBinding.name.setText(farmerName);
+                        if (farmerMobileAlternative != ""){
+                            farmerProfileBinding.farmerMobile.setText(farmerMobileNumber+" / "+farmerMobileAlternative);
+                        }else {
+                            farmerProfileBinding.farmerMobile.setText(farmerMobileNumber);
+                        }
 
-                    farmerProfileBinding.farmName.setText(farmName);
-                    farmerProfileBinding.farmAddress.setText(farmAddress+", "+ farmSector);
+                        farmerProfileBinding.farmName.setText(farmName);
+                        farmerProfileBinding.farmAddress.setText(farmAddress+", "+ farmSector);
 //                    farmerProfileBinding.farmSector.setText("Farm Sector: "+farmSector);
 //        Log.d("name", farmerName);
+                    }
+                    loadingDialog.dissmissDialog();
                 }
             }
 

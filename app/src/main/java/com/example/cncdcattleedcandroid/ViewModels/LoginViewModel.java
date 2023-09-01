@@ -58,7 +58,7 @@ public class LoginViewModel extends AndroidViewModel {
 
                         if (!response.body().get("error").getAsString().equals("true")) {
 
-                            _isLoginSuccess.setValue("Login Successs");
+                            _isLoginSuccess.setValue("Login Successes");
                             JsonObject loginObject = response.body();
 
                             JsonObject data = loginObject.get("data").getAsJsonObject();
