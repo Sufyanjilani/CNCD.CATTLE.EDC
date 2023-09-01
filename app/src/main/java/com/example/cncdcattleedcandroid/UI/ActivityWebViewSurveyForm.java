@@ -67,8 +67,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,6 +140,10 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     private LocationCallback locationCallback;
 
+
+    String latStart = "";
+    String lonStart = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +159,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         setUpLocation();
         surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
         LoadWebViewWithDifferentSettings();
+        LocationUpdates();
 
 
     }
@@ -609,7 +618,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -623,7 +632,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.PostFirstFormData(context,
@@ -662,7 +671,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -676,7 +685,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.PostFirstCattleFormData(context,
@@ -715,7 +724,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -729,7 +738,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.SubmitSecondForm(context,
@@ -769,7 +778,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -783,13 +792,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.SubmitThirdForm(context,
                     questionnaireID,
-                    sessionManager.get_Farm_ID(),
                     sessionManager.get_Farmer_ID(),
+                    sessionManager.get_Farm_ID(),
                     appVersion,
                     locationCoordinate,
                     formJSON,
@@ -824,7 +833,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -838,7 +847,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.SubmitSecondFormCattle(context,
@@ -877,7 +886,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -891,7 +900,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.SubmitThirdFormCattle(context,
@@ -907,6 +916,29 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd
 
             );
+
+
+    String[] imageUrls = {"url1", "url2", "url3"};
+
+
+    ArrayList<MultipartBody.Part> imageParts = new ArrayList<>();
+            for (String imageUrl : imageUrls) {
+        File imageFile = new File(imageUrl);
+        RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images[]", imageFile.getName(), imageBody);
+        imageParts.add(imagePart);
+    }
+
+    // Create your JSON object
+    JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("key1", "value1");
+            jsonObject.addProperty("key2", "value2");
+
+    // Convert JSON object to RequestBody
+    RequestBody jsonBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+
+    surveyViewModel.SubmitThirdFormDataMultipart(jsonBody,imageParts);
 
 
         }
@@ -929,7 +961,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             }
 
 
-            String locationCoordinate = "23.32,45.32";
+            String locationCoordinate = latStart+","+lonStart;
             String formJSON = formjson;
 
 
@@ -943,7 +975,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     sessionManager.getLongitudeStart();
 
 
-            String locationCoordinatesEnd = "0.0,0.0";
+            String locationCoordinatesEnd = latStart+","+lonStart;
 
 
             surveyViewModel.SubmitFourthFormCattle(context,
@@ -1158,7 +1190,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopLocation();
         sessionManager.saveStartCoordinatesAndTime(0.0, 0.0, "00/00/0000 00:00");
+
     }
 
 
@@ -2113,6 +2147,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 for (Location location : locationResult.getLocations()) {
 
 
+                    Log.d("lat", String.valueOf(location.getLatitude()));
+                    Log.d("lon", String.valueOf(location.getLatitude()));
                 }
             }
         };
@@ -2123,14 +2159,52 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        locationProviderClient.requestLocationUpdates(new com.google.android.gms.location.LocationRequest(),
-                locationCallback,
-                Looper.getMainLooper());
+        com.google.android.gms.location.LocationRequest locationRequest = com.google.android.gms.location.LocationRequest.create();
+        locationRequest.setInterval(100);
+        locationRequest.setFastestInterval(50);
+        locationRequest.setPriority(com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+//instantiating the LocationCallBack
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null) {
+                    if (locationResult == null) {
+                        return;
+                    }
+                    //Showing the latitude, longitude and accuracy on the home screen.
+                    for (Location location : locationResult.getLocations()) {
+
+                        latStart = String.valueOf(location.getLatitude());
+                        lonStart = String.valueOf(location.getLongitude());
+                        Log.d("lat",String.valueOf(location.getLatitude()));
+                        Log.d("lon",String.valueOf(location.getLongitude()));
+                    }
+                }
+            }
+        };
+        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
+    }
 
+    public void stopLocation(){
+
+        locationProviderClient.removeLocationUpdates(locationCallback);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopLocation();
+    }
 }
 
 

@@ -150,7 +150,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
                         Log.d(constants.info,form);
 
-                        realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
+                       // realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
 
 //                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
 //                    Log.d(constants.Tag, cattleObject.toString());
@@ -215,7 +215,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
                     Log.d(constants.info,form);
 
-                    realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
+                  //  realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
 
 //                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
 //                    Log.d(constants.Tag, cattleObject.toString());
@@ -265,7 +265,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            getSurveyForm();
+           // getSurveyForm();
             Log.d(constants.Tag,"Background Operation Resumes=======");
             return null;
         }
@@ -334,7 +334,7 @@ public class DashboardViewModel extends AndroidViewModel {
                     JsonObject dashboardData = response.body();
 
 
-                    if (response.body().get("data").isJsonObject()) {
+                    if (!response.body().get("error").getAsString().equals("true")){
                         JsonObject dataObject = dashboardData.get("data").getAsJsonObject();
                         JsonObject cardObject = dataObject.get("cardsData").getAsJsonObject();
                         Log.d(constants.Tag, cardObject.toString());
