@@ -12,11 +12,20 @@ import androidx.lifecycle.ViewModel;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.Utils.LinkExtractor;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -219,7 +228,14 @@ public class SettingDataViewModel extends AndroidViewModel {
                         String questionairId = formObject.get("questionnaireID").getAsString();
                         String questionnaireName = formObject.get("questionnaireName").getAsString();
                         String form = formObject.get("questionnaireJSON").getAsString();
-                        ;
+                        String haveimagesFlag = formObject.get("haveImages").getAsString();
+
+
+                        String parsedForm = String.valueOf(new JsonParser().parse(form));
+
+                        List<String> links = LinkExtractor.extractLinks(parsedForm);
+
+                        Log.d(constants.Tag,links.toString());
 
                         //String farmerType = formObject.get("type").getAsString();
 
@@ -266,5 +282,10 @@ public class SettingDataViewModel extends AndroidViewModel {
             }
         });
     }
+
+
+
+
+
 
 }

@@ -103,7 +103,6 @@ public class ActivityDashboard extends AppCompatActivity {
     DrawerLayout mDrawer;
 
     ActionBarDrawerToggle drawerToggle;
-
     NavigationView navigationView;
 
     CattleAdapter cattleAdapter;
@@ -127,6 +126,13 @@ public class ActivityDashboard extends AppCompatActivity {
     ArrayList<Cattles> arrayList = new ArrayList<>() ;
 
     String totalFarms, totalFarmers, totalCattles;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setCardsData();
+        setrecyclerAdapter();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,23 +161,9 @@ public class ActivityDashboard extends AppCompatActivity {
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
-        viewModel.dashboardData();
-        viewModel.dashboardDataJson.observe(this, new Observer<JsonObject>() {
-            @Override
-            public void onChanged(JsonObject jsonObject) {
-                if (jsonObject != null){
-                    JsonObject cardObject = jsonObject.get("cardsData").getAsJsonObject();
-                    Log.d("obj", cardObject.toString());;
-                    totalFarms = cardObject.get("totalFarms").getAsString();
-                    totalFarmers = cardObject.get("totalFarmers").getAsString();
-                    totalCattles = cardObject.get("totalCattles").getAsString();
-
-                    activityDashboardBinding.farmtext.setText(totalFarms);
-                    activityDashboardBinding.farmertext.setText(totalFarmers);
-                    activityDashboardBinding.catteltext.setText(totalCattles);
-                }
-            }
-        });
+        loadingDialog.ShowCustomLoadingDialog();
+        activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
+       setCardsData();
 
 
 
@@ -188,6 +180,7 @@ public class ActivityDashboard extends AppCompatActivity {
             public void run() {
 
                 setrecyclerAdapter();
+
             }
         },200);
 
@@ -300,6 +293,26 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
 
+    }
+
+    public void setCardsData(){
+        viewModel.dashboardData();
+        viewModel.dashboardDataJson.observe(this, new Observer<JsonObject>() {
+            @Override
+            public void onChanged(JsonObject jsonObject) {
+                if (jsonObject != null){
+                    JsonObject cardObject = jsonObject.get("cardsData").getAsJsonObject();
+                    Log.d("obj", cardObject.toString());;
+                    totalFarms = cardObject.get("totalFarms").getAsString();
+                    totalFarmers = cardObject.get("totalFarmers").getAsString();
+                    totalCattles = cardObject.get("totalCattles").getAsString();
+
+                    activityDashboardBinding.farmtext.setText(totalFarms);
+                    activityDashboardBinding.farmertext.setText(totalFarmers);
+                    activityDashboardBinding.catteltext.setText(totalCattles);
+                }
+            }
+        });
     }
 
 
@@ -865,6 +878,7 @@ public class ActivityDashboard extends AppCompatActivity {
                     cattleAdapter.notifyDataSetChanged();
 
                 }
+                loadingDialog.dissmissDialog();
             }
         });
 

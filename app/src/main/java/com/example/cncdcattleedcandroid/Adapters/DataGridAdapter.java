@@ -45,10 +45,11 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     public void onBindViewHolder(@NonNull Viewholer holder, int position) {
 
         DataGridModel model = dataGridModels.get(position);
-        holder.datagridlayoutBinding.cattlenames.setText(model.farmname);
-        holder.datagridlayoutBinding.cattleId.setText(model.cattleid);
-        holder.datagridlayoutBinding.farmid.setText(model.farmid);
-        holder.datagridlayoutBinding.farmerId.setText(model.farmerid);
+        holder.datagridlayoutBinding.cattleSample.setText(model.getSampleID());
+        holder.datagridlayoutBinding.cattleBreed.setText(model.getcBreedName());
+        holder.datagridlayoutBinding.cattleType.setText(model.getcTypeName());
+        holder.datagridlayoutBinding.cattleGender.setText(model.getCattleGender());
+        holder.datagridlayoutBinding.createdAt.setText(model.getCreated_at());
 
         Glide.with(holder.datagridlayoutBinding.profileImagedatagrid.getContext()).
                 load(model.cattleimagepath).into(holder.datagridlayoutBinding.profileImagedatagrid);

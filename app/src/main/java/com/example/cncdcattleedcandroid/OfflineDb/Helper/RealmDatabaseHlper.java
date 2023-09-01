@@ -286,15 +286,15 @@ public class RealmDatabaseHlper {
 
         FarmerFormCompleted formCompleted = new
                 FarmerFormCompleted(
-                        formid,
-                        formstartime,
-                        formEndtime,
-                        coordinate_start_lat,
-                        coordinate_start_lon,
-                        coordinate_end_lat,
-                        coordinate_end_lon,
-                        completedform,
-                        appversion
+                formid,
+                formstartime,
+                formEndtime,
+                coordinate_start_lat,
+                coordinate_start_lon,
+                coordinate_end_lat,
+                coordinate_end_lon,
+                completedform,
+                appversion
         );
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -439,21 +439,21 @@ public class RealmDatabaseHlper {
     public void InsertEntities(
             String general_basic,
 
-    String general_diet,
+            String general_diet,
 
-    String generaL_medical,
+            String generaL_medical,
 
-    String personal_basic,
+            String personal_basic,
 
-    String personal_milk,
+            String personal_milk,
 
-    String personal_medical,
+            String personal_medical,
 
-    String personal_traits,
+            String personal_traits,
 
-    String personal_mik_weight
+            String personal_mik_weight
 
-            ){
+    ){
 
         Realm realm = Realm.getDefaultInstance();
         EntitiesModel entitiesModel =new EntitiesModel(

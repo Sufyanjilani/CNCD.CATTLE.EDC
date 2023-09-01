@@ -6,6 +6,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -37,6 +38,8 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
     Constants constants;
 
+    String appVersion = "";
+
     RealmDatabaseHlper realmDatabaseHlper;
 
     @Override
@@ -60,7 +63,13 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
         checkThemesState();
 
-
+        try {
+            appVersion = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        splashScreenBinding.appVersion.setText("Version: "+appVersion);
 
     }
 
