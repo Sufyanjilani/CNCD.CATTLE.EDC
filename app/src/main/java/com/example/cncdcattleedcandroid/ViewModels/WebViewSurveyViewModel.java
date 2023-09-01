@@ -16,12 +16,19 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerSurveyModel;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -165,7 +172,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 String farmer_id = data.get("farmer_id").getAsString();
                 sessionManager.Save_Farm_and_Farmer_ID(farmer_id,farm_id);
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("true")) {
 
 
                     String message = response.body().get("msg").getAsString();
@@ -210,6 +217,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
         Log.d("TAG","called");
 
+        Log.d("farmerId",farmer_ID);
+        Log.d("farmId",farm_ID);
 
         payloadObject.addProperty("farmID",farm_ID);
         payloadObject.addProperty("farmerID",farmer_ID);
@@ -217,7 +226,6 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
         payloadObject.addProperty("appVersion",appVersion);
         payloadObject.addProperty("locationCoordinates",locationCoordinate);
         payloadObject.addProperty("formJSON",formJSON);
-        payloadObject.addProperty("accessToken",accessToken);
         payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
         payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
         payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
@@ -242,12 +250,17 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,response.body().toString());
                 _is_secondformSent.setValue(true);
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("true")) {
 
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
 
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
                 }
             }
 
@@ -318,12 +331,17 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,response.body().toString());
                 _isthirdformSent.setValue(true);
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("msg")) {
 
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
 
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
                 }
             }
 
@@ -333,6 +351,34 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,t.getMessage());
             }
         });
+
+
+    }
+
+
+    public  void SubmitThirdFormDataMultipart(
+
+            RequestBody jsonBody,
+            ArrayList<MultipartBody.Part> imageParts
+
+    ){
+
+        Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(imageParts.get(0), imageParts.get(1), imageParts.get(2), jsonBody);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Handle success
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Handle failure
+            }
+        });
+
+
+
+
 
 
     }
@@ -383,30 +429,38 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                Log.d(constants.Tag,response.body().toString());
+                Log.d(constants.Tag, response.body().toString());
                 _isfirstformSent.setValue(true);
                 JsonObject object = response.body();
-                if (object.get("data").isJsonObject()) {
-                    JsonObject data = object.get("data").getAsJsonObject();
-                    String cattleID = data.get("cattle_id").getAsString();
 
-                    sessionManager.SaveCattleID(cattleID);
+                if (!object.get("error").getAsString().equals("true")) {
+
+                    if (object.get("data").isJsonObject()) {
+                        JsonObject data = object.get("data").getAsJsonObject();
+                        String cattleID = data.get("cattle_id").getAsString();
+
+                        sessionManager.SaveCattleID(cattleID);
 
 
-                    if (!response.body().get("msg").getAsString().equals("")) {
+                        if (!response.body().get("msg").getAsString().equals("")) {
 
 
+                            String message = response.body().get("msg").getAsString();
+                            formMsg.setValue(message);
+
+                        }
+                    } else {
                         String message = response.body().get("msg").getAsString();
                         formMsg.setValue(message);
 
                     }
+
                 }
                 else{
+
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
-
                 }
-
             }
 
             @Override
@@ -473,8 +527,14 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,response.body().toString());
                 _is_secondformSent.setValue(true);
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("true")) {
 
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+
+                }
+                else{
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
@@ -545,12 +605,17 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,response.body().toString());
                 isthirdCattleformSubmitted.setValue(true);
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("true")) {
 
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
 
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
                 }
             }
 
@@ -618,11 +683,17 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 Log.d(constants.Tag,response.body().toString());
 
 
-                if (!response.body().get("msg").getAsString().equals("")) {
+                if (!response.body().get("error").getAsString().equals("true")) {
                     isFourthCattleformSubmitted.setValue(true);
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
+
+                }
+                else{
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+
 
                 }
             }
@@ -637,6 +708,27 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
 
     }
+
+//    public void insertFarmerForm(
+//            String id,
+//            String name,
+//            String formPages,
+//            String imagesflag
+//    ){
+//
+//        realm = Realm.getDefaultInstance();
+//
+//        FarmerSurveyModel farmerSurveyModel = new FarmerSurveyModel(id, name, "type", formPages,imagesflag);
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                realm.insertOrUpdate(farmerSurveyModel);
+//            }
+//        });
+//
+//    }
+
+
 
 
 }
