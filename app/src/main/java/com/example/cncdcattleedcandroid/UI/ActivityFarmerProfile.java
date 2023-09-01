@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,13 +46,37 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     Constants constants;
     DataGridAdapter gridAdapter;
 
-    String farmId, farmerId, uri;
+    String farmId, farmerId, entity;
     String totalCattles, totalCows, googleMapsURL, totalBuffalo, farmID, farmName, farmAddress, farmSector, created_at, farmerID, farmerName, farmerMobileNumber, farmerMobileAlternative;
 
     @Override
     protected void onResume() {
         super.onResume();
-        getFarmerProfile();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.ShowCustomLoadingDialog();
+                getFarmerProfile();
+                loadingDialog.dissmissDialog();
+            }
+        },2000);
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.ShowCustomLoadingDialog();
+                getFarmerProfile();
+                loadingDialog.dissmissDialog();
+            }
+        },2000);
     }
 
     @Override
@@ -63,10 +88,9 @@ public class ActivityFarmerProfile extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this,this);
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
-        farmId = extra.getString("farmID");
+//        entity = extra.getString("entityProfile");
+        farmId = extra.getString("farmId");
         farmerId = extra.getString("farmerId");
-        Log.d("farmId", farmId);
-        Log.d("farmerId", farmerId);
 
 
 
@@ -118,12 +142,19 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             }
         });
 
+        farmerProfileBinding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityFarmerProfile.this, ActivityDashboard.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
     public void getFarmerProfile(){
         ArrayList<DataGridModel> dataGridModelArrayList = new ArrayList<>();
-        Call<JsonObject> apiGet = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getFarmerData("12","5");
+        Call<JsonObject> apiGet = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getFarmerData(farmId,farmerId);
         apiGet.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -195,8 +226,18 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 
                         farmerProfileBinding.farmName.setText(farmName);
                         farmerProfileBinding.farmAddress.setText(farmAddress+", "+ farmSector);
+
+
 //                    farmerProfileBinding.farmSector.setText("Farm Sector: "+farmSector);
 //        Log.d("name", farmerName);
+
+                        sessionManager.saveFarmerData(
+                                farmerName,
+                                farmName,
+                                farmAddress,
+                                farmSector,
+                                farmerMobileNumber,
+                                farmerMobileAlternative);
                     }
                     loadingDialog.dissmissDialog();
                 }

@@ -126,7 +126,7 @@ public class ActivityDashboard extends AppCompatActivity {
     ArrayList<Cattles> arrayList = new ArrayList<>() ;
 
     String totalFarms, totalFarmers, totalCattles;
-
+    String farmerID, farmID;
     @Override
     protected void onResume() {
         super.onResume();
@@ -854,8 +854,8 @@ public class ActivityDashboard extends AppCompatActivity {
 //                    Log.d(constants.Tag, gridObject.toString());
                     for (int i = 0; i < farmerData.size(); i++){
                         JsonObject obj = farmerData.get(i).getAsJsonObject();
-                        String farmerID = obj.get("farmerID").getAsString();
-                        String farmID = obj.get("farmID").getAsString();
+                        farmerID = obj.get("farmerID").getAsString();
+                        farmID = obj.get("farmID").getAsString();
                         String farmName = obj.get("farmName").getAsString();
                         String farmAddress = obj.get("farmAddress").getAsString();
                         String farmerName = obj.get("farmerName").getAsString();
@@ -876,7 +876,12 @@ public class ActivityDashboard extends AppCompatActivity {
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ActivityDashboard.this, resId);
                     activityDashboardBinding.recycler.setLayoutAnimation(animation);
                     cattleAdapter.notifyDataSetChanged();
-
+                    sessionManager.saveDashboardFarmFarmerId(
+                            farmID,
+                            farmerID
+                    );
+                    Log.d("id",farmID);
+                    Log.d("id",farmerID);
                 }
                 loadingDialog.dissmissDialog();
             }
