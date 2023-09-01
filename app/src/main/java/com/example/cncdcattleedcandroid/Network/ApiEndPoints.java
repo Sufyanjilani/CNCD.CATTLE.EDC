@@ -2,6 +2,8 @@ package com.example.cncdcattleedcandroid.Network;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -61,11 +63,7 @@ public interface ApiEndPoints {
     @Multipart
     @POST("upload")
     Call<ResponseBody> uploadImagesAndJson(
-            @Part MultipartBody.Part image1,
-            @Part MultipartBody.Part image2,
-            @Part MultipartBody.Part image3,
-            @Body RequestBody data
-    );
+            @Part List<MultipartBody.Part> parts);
 
 
 }

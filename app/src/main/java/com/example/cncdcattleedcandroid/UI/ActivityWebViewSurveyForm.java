@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationRequest;
@@ -42,9 +44,11 @@ import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
+import com.example.cncdcattleedcandroid.OfflineDb.Models.ImageInfo;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
+import com.example.cncdcattleedcandroid.Utils.ImageUploader;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
@@ -144,6 +148,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     String latStart = "";
     String lonStart = "";
 
+
+    ArrayList<String> imagestoragepath = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +167,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         surveyViewModel = new ViewModelProvider(ActivityWebViewSurveyForm.this).get(WebViewSurveyViewModel.class);
         LoadWebViewWithDifferentSettings();
         LocationUpdates();
+        loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this,this);
 
 
     }
@@ -174,6 +182,34 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     public void Loadgetjavascript2(String formjson, String function) {
+
+        String sumbitmethod = "\n" +
+                "survey.onComplete.add((sender, options) => {" +
+                "\n" +
+                "Android.ShowProgressDialog()\n"+
+                "        console.log(JSON.stringify(sender.data, null, 3));\n" +
+                "        let refinedData = {};" +
+                "\n" +
+                "        let images_url = [];\n" +
+                "        for (const key in sender.data) {\n" +
+                "          if (Array.isArray(sender.data[key])) {\n" +
+                "            sender.data[key].map((field, fk) => {\n" +
+                "              if((field.type).indexOf(\"image/\" === 0) ) {\n" +
+                "                field.content = '';\n" +
+                "                images_url.push({\n" +
+                "                  image_name: key,\n" +
+                "                  image_path: field.name\n" +
+                "                });\n" +
+                "              }\n" +
+                "            });\n" +
+                "          }\n" +
+                "        }\n" +
+                "setTimeout(function(){\n" +
+                "        console.log(sender.data);\n" +
+                "        console.log(images_url);\n" +
+                " const results = JSON.stringify(sender.data);" +"\n"+
+                function+"\n},2000)\n"+
+                "      });";
 
         String javascriptCode =
                 "      window['surveyjs-widgets'].inputmask(Survey);\n" +
@@ -229,13 +265,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "\n" +
                         "  // You can delete the line below if you do not use a customized theme\n" +
                         "  survey.applyTheme(themeJson);\n" +
-                        "  survey.onComplete.add((sender, options) => {\n" +
-                        "Android.ShowProgressDialog()\n" +
-                        "setTimeout(function(){\n" +
-                        " const results = JSON.stringify(sender.data);\n" +
-                        function + "\n" +
-                        "},2000)" +
-                        "  });\n" +
+                        sumbitmethod+
                         "\n" +
                         "\n" +
                         "  $(\"#surveyElement\").Survey({ model: survey });";
@@ -602,6 +632,10 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         public void PostFirstFormData(String formjson) {
 
 
+            JsonObject parsestring = (JsonObject) new JsonParser().parse(formjson);
+            Log.d(constants.Tag,parsestring.toString());
+
+
             String questionnaireID = entityId;
             String appVersion = "";
 
@@ -704,6 +738,102 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
 
         }
+
+
+
+
+
+        //Post Personal Traits
+
+
+        @JavascriptInterface
+        public void PostTraitsForm(String formjson, String[] imageurls) {
+
+
+            String questionnaireID = entityId;
+            String appVersion = "";
+
+
+            Log.d(constants.info, "post called");
+            loadingDialog.dissmissDialog();
+
+
+
+
+
+
+            try {
+                appVersion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            String locationCoordinate = latStart+","+lonStart;
+            String formJSON = formjson;
+
+
+
+            Log.d("responseJson",formJSON);
+
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
+
+
+            String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
+                    sessionManager.getLongitudeStart();
+
+
+            String locationCoordinatesEnd = latStart+","+lonStart;
+            Log.d("urls",imageurls[0]);
+
+            if (!imageurls.toString().equals("")) {
+
+                List<ImageInfo> imageInfoList = new ArrayList<>();
+                for (int i = 0; i < imagestoragepath.size(); i++) {
+
+
+                    Bitmap bitmap = BitmapFactory.decodeFile(imagestoragepath.get(i));
+                    imageInfoList.add(new ImageInfo("IMG_20230901_144701.jpg", imagestoragepath.get(i), bitmap));
+                    imageInfoList.add(new ImageInfo("IMG_20230901_144708.jpg", imagestoragepath.get(i), bitmap));
+                    imageInfoList.add(new ImageInfo("IMG_20230901_144716.jpg", imagestoragepath.get(i), bitmap));
+
+                    Log.d("IMAGE", imagestoragepath.get(i).toString());
+                    Log.d("Bitmaps", bitmap.toString());
+
+                }
+
+
+                ImageUploader imageUploader = new ImageUploader();
+                List<MultipartBody.Part> parts = imageUploader.prepareImages(imageInfoList);
+
+                //surveyViewModel.SubmitThirdFormDataMultipart(parts);
+            }
+            else {
+
+
+                surveyViewModel.PostFirstCattleFormData(context,
+                        questionnaireID,
+                        farmId,
+                        farmerId,
+                        appVersion,
+                        locationCoordinate,
+                        formJSON,
+                        accessToken,
+                        interviewtakenAt,
+                        interviewTimeStart,
+                        interviewTimeEnd,
+                        locationCoordinatesStart,
+                        locationCoordinatesEnd);
+            }
+//            );
+
+        }
+
+
 
 
         @JavascriptInterface
@@ -938,7 +1068,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     RequestBody jsonBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
 
-    surveyViewModel.SubmitThirdFormDataMultipart(jsonBody,imageParts);
+//    surveyViewModel.SubmitThirdFormDataMultipart(jsonBody,imageParts);
 
 
         }
@@ -1327,7 +1457,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     public String JsonToInject(String json) {
 
 
-        String title = formName = realmDatabaseHlper.getFormName(formId);
+
         Log.d(constants.Tag, json);
         JsonObject parsedjson = (JsonObject) new JsonParser().parse(json);
 
@@ -1607,7 +1737,39 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             });
 
 
-        } else {
+        }
+
+
+        else if (formId.equals("personal_traits")){
+
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            Log.d("ebd","called");
+            sessionManager = new SessionManager(this);
+
+            CheckLocationTurnedOn();
+
+
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+            //PostFirstFormData("POST");
+
+            constants = new Constants();
+            setUpLocation();
+            getcurrentlocationstart();
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_traits", "Android.PostTraitsForm(results,images_url)");
+
+            }
+
+
+
+
+        }
+
+        else {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1911,6 +2073,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         //photoFile = 'Utility.createImageFile()';
                         photoFile = createImageFile();
                         Logger.i("Image-File-Path", photoFile.getAbsolutePath());
+                        Log.d("imagePath",photoFile.getAbsolutePath());
+                        imagestoragepath.add(photoFile.getAbsolutePath());
                         Logger.i("filechooserparams", String.valueOf(fileChooserParams));
                         takePictureIntent.putExtra("PhotoPath", mCM);
                     } catch (Exception ex) {

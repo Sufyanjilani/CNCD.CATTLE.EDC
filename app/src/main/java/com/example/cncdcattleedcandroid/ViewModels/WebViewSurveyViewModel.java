@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -358,12 +359,11 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public  void SubmitThirdFormDataMultipart(
 
-            RequestBody jsonBody,
-            ArrayList<MultipartBody.Part> imageParts
+            List<MultipartBody.Part> parts
 
     ){
 
-        Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(imageParts.get(0), imageParts.get(1), imageParts.get(2), jsonBody);
+        Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(parts);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

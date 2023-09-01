@@ -91,7 +91,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ActivityFarmerProfile.this, ActivityWebViewSurveyForm.class);
-                i.putExtra("formID","personal_basic");
+                i.putExtra("formID","personal_traits");
                 i.putExtra("farmID",farmID);
                 i.putExtra("farmerID",farmerID);
 
