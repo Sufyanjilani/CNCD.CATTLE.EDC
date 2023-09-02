@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cncdcattleedcandroid.Models.Cattles;
 import com.example.cncdcattleedcandroid.R;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.UI.ActivityFarmerProfile;
 import com.example.cncdcattleedcandroid.UI.FarmerAdapter;
 import com.example.cncdcattleedcandroid.databinding.CattlelistBinding;
@@ -24,7 +25,6 @@ public class CattleAdapter extends RecyclerView.Adapter<CattleAdapter.ViewHolder
 
     ArrayList<Cattles> cattlesList;
     Context context;
-
     public CattleAdapter(ArrayList<Cattles> cattlesArrayList, Context context){
 
         cattlesList = cattlesArrayList;
@@ -50,16 +50,14 @@ public class CattleAdapter extends RecyclerView.Adapter<CattleAdapter.ViewHolder
         holder.cattlelistBinding.farmAddress.setText(cattles.getFarmAddress());
         holder.cattlelistBinding.farmerName.setText(cattles.getFarmerName());
         holder.cattlelistBinding.createdAt.setText(cattles.getCreated_at());
-        holder.cattlelistBinding.manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.cattlelistBinding.manage.setOnClickListener(view -> ViewDetails(cattles.getFarmID(), cattles.getFarmerID()));
+    }
 
-                Intent intent = new Intent(context, ActivityFarmerProfile.class);
-                intent.putExtra("farmID",cattles.getFarmID());
-                intent.putExtra("farmerId", cattles.getFarmerID());
-                context.startActivity(intent);
-            }
-        });
+    public void ViewDetails(String farmId, String farmerId){
+        Intent intent = new Intent(context,ActivityFarmerProfile.class);
+        intent.putExtra("farmId",farmId);
+        intent.putExtra("farmerId", farmerId);
+        context.startActivity(intent);
     }
 
     @Override

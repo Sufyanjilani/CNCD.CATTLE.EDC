@@ -124,6 +124,22 @@ public class SessionManager {
         return sharedPreferences.getBoolean("installedFirstTime",true);
     }
 
+    public void saveDashboardFarmFarmerId(
+            String farmId,
+            String farmerId
+    ){
+        editor.putString("farmId",farmId);
+        editor.putString("farmerId",farmerId);
+        editor.commit();
+    }
+
+    public String getFarmId(){
+        return sharedPreferences.getString("farmId","0").toString();
+    }
+
+    public String getFarmerId(){
+        return sharedPreferences.getString("farmerId","0").toString();
+    }
 
     public void Save_Farm_and_Farmer_ID(
 
@@ -165,6 +181,46 @@ public class SessionManager {
 
     }
 
+    public void saveFarmerData(
+            String farmerName,
+            String farmName,
+            String farmAddress,
+            String farmSector,
+            String mobileNumber,
+            String altNumber
+    ){
+        editor.putString("farmerName",farmerName);
+        editor.putString("farmName",farmName);
+        editor.putString("farmAddress",farmAddress);
+        editor.putString("farmSector",farmSector);
+        editor.putString("mobileNumber",mobileNumber);
+        editor.putString("altNumber",altNumber);
+        editor.commit();
+    }
+
+    public String getFarmerName(){
+        return sharedPreferences.getString("farmerName","null");
+    }
+
+    public String getFarmName(){
+        return sharedPreferences.getString("farmName","null");
+    }
+
+    public String getFarmAddress(){
+        return sharedPreferences.getString("farmAddress","null");
+    }
+
+    public String getFarmSector(){
+        return sharedPreferences.getString("farmSector","null");
+    }
+
+    public String getMobileNumber(){
+        return sharedPreferences.getString("mobileNumber","null");
+    }
+
+    public String getAltNumber(){
+        return sharedPreferences.getString("altNumber","null");
+    }
 
     public String getName(){
 
@@ -199,7 +255,36 @@ public class SessionManager {
         return sharedPreferences.getString("cattleId","null");
     }
 
+    public void saveCattleDetails(
+            String cattleType,
+            String cattleGender,
+            String cattleBreed,
+            String cattleSampleId
+    ){
+        editor.putString("cattleType",cattleType);
+        editor.putString("cattleGender",cattleGender);
+        editor.putString("cattleBreed",cattleBreed);
+        editor.putString("cattleSampleId",cattleSampleId);
+        editor.commit();
+        editor.apply();
+    }
 
+    public String getcattleType(){
+
+        return sharedPreferences.getString("cattleType",null);
+    }
+    public String getcattleGender(){
+
+        return sharedPreferences.getString("cattleGender",null);
+    }
+    public String getcattleBreed(){
+
+        return sharedPreferences.getString("cattleBreed",null);
+    }
+    public String getcattleSampleId(){
+
+        return sharedPreferences.getString("cattleSampleId",null);
+    }
 
 }
 
