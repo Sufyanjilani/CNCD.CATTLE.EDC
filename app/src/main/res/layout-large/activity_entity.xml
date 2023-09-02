@@ -363,6 +363,7 @@
             android:layout_height="match_parent"
             app:cardCornerRadius="15dp"
             app:cardElevation="10dp"
+            android:visibility="gone"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -446,9 +447,30 @@
 
             </LinearLayout>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Milk Entity"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textcolor"
+                        android:textSize="20dp" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent">
+                </View>
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
@@ -834,6 +856,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Diet Entity"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textcolor"
+                        android:textSize="20dp" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent">
+                </View>
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"

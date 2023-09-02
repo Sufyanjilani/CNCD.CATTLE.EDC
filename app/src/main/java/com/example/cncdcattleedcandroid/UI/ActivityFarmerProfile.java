@@ -49,19 +49,20 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     String farmId, farmerId, entity;
     String totalCattles, totalCows, googleMapsURL, totalBuffalo, farmID, farmName, farmAddress, farmSector, created_at, farmerID, farmerName, farmerMobileNumber, farmerMobileAlternative;
 
+    String cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID, cBreedName, cattleCreated_at, created_by, updated_at, updated_by, sampleID;
     @Override
     protected void onResume() {
         super.onResume();
 
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.ShowCustomLoadingDialog();
-                getFarmerProfile();
-                loadingDialog.dissmissDialog();
-            }
-        },2000);
+        getFarmerProfile();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                loadingDialog.ShowCustomLoadingDialog();
+//                getFarmerProfile();
+//                loadingDialog.dissmissDialog();
+//            }
+//        },2000);
 
     }
 
@@ -166,50 +167,56 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                         JsonObject dataObject = farmerData.get("data").getAsJsonObject();
                         JsonObject cardsData = dataObject.get("cardsData").getAsJsonObject();
                         Log.d(constants.Tag, String.valueOf(cardsData));
-                        totalCattles = cardsData.get("totalCattles").getAsString();
-                        totalCows = cardsData.get("totalCows").getAsString();
-                        totalBuffalo = cardsData.get("totalBuffaloes").getAsString();
+                        totalCattles = cardsData.get("totalCattles").toString() == null ? "null":cardsData.get("totalCattles").toString().replace("\"", "");;
+                        totalCows = cardsData.get("totalCows").toString() == null ? "null":cardsData.get("totalCows").toString().replace("\"", "");;
+                        totalBuffalo = cardsData.get("totalBuffaloes").toString() == null ? "null":cardsData.get("totalBuffaloes").toString().replace("\"", "");;
 
 
                         JsonObject gridData = dataObject.get("gridsData").getAsJsonObject();
                         JsonObject farmObject = gridData.get("farm").getAsJsonObject();
                         Log.d(constants.Tag, String.valueOf(farmObject));
-                        farmID = farmObject.get("farmID").getAsString();
-                        farmName = farmObject.get("farmName").getAsString();
-                        farmAddress = farmObject.get("farmAddress").getAsString();
-                        farmSector = farmObject.get("farmSector").getAsString();
-                        googleMapsURL = farmObject.get("googleMapsURL").getAsString();
-                        created_at = farmObject.get("created_at").getAsString();
+                        farmID = farmObject.get("farmID").toString() == null ? "null":farmObject.get("farmID").toString().replace("\"", "");;
+                        farmName = farmObject.get("farmName").toString() == null ? "null":farmObject.get("farmName").toString().replace("\"", "");;
+                        farmAddress = farmObject.get("farmAddress").toString() == null ? "null":farmObject.get("farmAddress").toString().replace("\"", "");;
+                        farmSector = farmObject.get("farmSector").toString() == null ? "null":farmObject.get("farmSector").toString().replace("\"", "");;
+                        googleMapsURL = farmObject.get("googleMapsURL").toString() == null ? "null":farmObject.get("googleMapsURL").toString().replace("\"", "");;
+                        created_at = farmObject.get("created_at").toString() == null ? "null":farmObject.get("created_at").toString().replace("\"", "");;
 
 
                         JsonObject farmerObject = gridData.get("farmer").getAsJsonObject();
                         Log.d(constants.Tag, String.valueOf(farmerObject));
-                        farmerID = farmerObject.get("farmerID").getAsString();
-                        farmerName = farmerObject.get("farmerName").getAsString();
-                        farmerMobileNumber = farmerObject.get("farmerMobileNumber").getAsString();
-                        farmerMobileAlternative = farmerObject.get("farmerMobileAlternative").getAsString();
+                        farmerID = farmerObject.get("farmerID").toString() == null ? "null":farmerObject.get("farmerID").toString().replace("\"", "");;
+                        farmerName = farmerObject.get("farmerName").toString() == null ? "null":farmerObject.get("farmerName").toString().replace("\"", "");;
+                        farmerMobileNumber = farmerObject.get("farmerMobileNumber").toString() == null ? "null":farmerObject.get("farmerMobileNumber").toString().replace("\"", "");;
+                        farmerMobileAlternative = farmerObject.get("farmerMobileAlternative").toString() == null ? "null":farmerObject.get("farmerMobileAlternative").toString().replace("\"", "");;
 
                         JsonArray cattleArray = gridData.get("cattles").getAsJsonArray();
                         for (int i = 0; i <cattleArray.size(); i++){
                             JsonObject cattelObject = cattleArray.get(i).getAsJsonObject();
-                            String cattleID = cattelObject.get("cattleID").getAsString();
-                            String farmerCattleID = cattelObject.get("farmerCattleID").getAsString();
-                            String cTypeID = cattelObject.get("cTypeID").getAsString();
-                            String cTypeName = cattelObject.get("cTypeName").getAsString();
-                            String cattleGender = cattelObject.get("cattleGender").getAsString();
-                            String cBreedID = cattelObject.get("cBreedID").getAsString();
-                            String cBreedName = cattelObject.get("cBreedName").getAsString();
-                            String created_at = cattelObject.get("created_at").getAsString();
-                            String created_by = cattelObject.get("created_by").getAsString();
-                            String updated_at = cattelObject.get("updated_at").toString() == null ? "null":cattelObject.get("updated_at").toString();
-                            String updated_by = cattelObject.get("updated_by").getAsString();
-                            String sampleID = cattelObject.get("sampleID").getAsString();
+                            cattleID = cattelObject.get("cattleID").toString() == null ? "null":cattelObject.get("cattleID").toString().replace("\"", "");;
+                            farmerCattleID = cattelObject.get("farmerCattleID").toString()== null ? "null":cattelObject.get("farmerCattleID").toString().replace("\"", "");;
+                            cTypeID = cattelObject.get("cTypeID").toString()== null ? "null":cattelObject.get("cTypeID").toString().replace("\"", "");;
+                            cTypeName = cattelObject.get("cTypeName").toString()== null ? "null":cattelObject.get("cTypeName").toString().replace("\"", "");;
+                            cattleGender = cattelObject.get("cattleGender").toString()== null ? "null":cattelObject.get("cattleGender").toString().replace("\"", "");;
+                            cBreedID = cattelObject.get("cBreedID").toString()== null ? "null":cattelObject.get("cBreedID").toString().replace("\"", "");;
+                            cBreedName = cattelObject.get("cBreedName").toString()== null ? "null":cattelObject.get("cBreedName").toString().replace("\"", "");;
+                            cattleCreated_at = cattelObject.get("created_at").toString()== null ? "null":cattelObject.get("created_at").toString().replace("\"", "");;
+                            created_by = cattelObject.get("created_by").toString()== null ? "null":cattelObject.get("created_by").toString().replace("\"", "");;
+                            updated_at = cattelObject.get("updated_at").toString() == null ? "null":cattelObject.get("updated_at").toString().replace("\"", "");;
+                            updated_by = cattelObject.get("updated_by").toString()== null ? "null":cattelObject.get("updated_by").toString().replace("\"", "");;
+                            sampleID = cattelObject.get("sampleID").toString()== null ? "null":cattelObject.get("sampleID").toString().replace("\"", "");;
 
                             DataGridModel dataGridModel = new DataGridModel(cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID,
                                     cBreedName, created_at, created_by, updated_at, updated_by, sampleID);
                             dataGridModelArrayList.add(dataGridModel);
                         }
 
+                        sessionManager.saveCattleDetails(
+                                cTypeName,
+                                cattleGender,
+                                cBreedName,
+                                sampleID
+                        );
                         gridAdapter = new DataGridAdapter(dataGridModelArrayList,ActivityFarmerProfile.this);
                         farmerProfileBinding.recyccattle.setLayoutManager(new LinearLayoutManager(ActivityFarmerProfile.this));
                         farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
@@ -218,7 +225,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                         farmerProfileBinding.animtextcow.setText(totalCows);
                         farmerProfileBinding.animtextbuffalo.setText(totalBuffalo);
                         farmerProfileBinding.name.setText(farmerName);
-                        if (farmerMobileAlternative != ""){
+                        if (farmerMobileAlternative != "" ){
                             farmerProfileBinding.farmerMobile.setText(farmerMobileNumber+" / "+farmerMobileAlternative);
                         }else {
                             farmerProfileBinding.farmerMobile.setText(farmerMobileNumber);

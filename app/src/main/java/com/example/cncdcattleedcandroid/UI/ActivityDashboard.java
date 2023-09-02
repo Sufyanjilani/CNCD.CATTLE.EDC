@@ -124,7 +124,8 @@ public class ActivityDashboard extends AppCompatActivity {
     LoadingDialog loadingDialog;
 
     ArrayList<Cattles> arrayList = new ArrayList<>() ;
-
+    String appVersion = "";
+    TextView headerName, headerVersion;
     String totalFarms, totalFarmers, totalCattles;
     String farmerID, farmID;
     @Override
@@ -163,6 +164,8 @@ public class ActivityDashboard extends AppCompatActivity {
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
         loadingDialog.ShowCustomLoadingDialog();
         activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
+        InitializeHeader(navigationView);
+
        setCardsData();
 
 
@@ -547,9 +550,17 @@ public class ActivityDashboard extends AppCompatActivity {
     public void InitializeHeader(NavigationView navigationView) {
 
         View headerView = navigationView.getHeaderView(0);
-        TextView appversiontextview = headerView.findViewById(R.id.textViewVersion);
-
-
+        headerName = headerView.findViewById(R.id.researchOfficer);
+        headerVersion = headerView.findViewById(R.id.textViewVersion);
+        headerName.setText(sessionManager.getName());
+        Log.d("headerName",headerName.toString());
+        try {
+            appVersion = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        headerVersion.setText(appVersion);
     }
 
 

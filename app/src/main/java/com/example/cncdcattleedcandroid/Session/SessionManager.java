@@ -255,7 +255,36 @@ public class SessionManager {
         return sharedPreferences.getString("cattleId","null");
     }
 
+    public void saveCattleDetails(
+            String cattleType,
+            String cattleGender,
+            String cattleBreed,
+            String cattleSampleId
+    ){
+        editor.putString("cattleType",cattleType);
+        editor.putString("cattleGender",cattleGender);
+        editor.putString("cattleBreed",cattleBreed);
+        editor.putString("cattleSampleId",cattleSampleId);
+        editor.commit();
+        editor.apply();
+    }
 
+    public String getcattleType(){
+
+        return sharedPreferences.getString("cattleType",null);
+    }
+    public String getcattleGender(){
+
+        return sharedPreferences.getString("cattleGender",null);
+    }
+    public String getcattleBreed(){
+
+        return sharedPreferences.getString("cattleBreed",null);
+    }
+    public String getcattleSampleId(){
+
+        return sharedPreferences.getString("cattleSampleId",null);
+    }
 
 }
 

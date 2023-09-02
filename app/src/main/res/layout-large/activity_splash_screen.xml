@@ -12,12 +12,14 @@
         android:gravity="center">
 
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textAlignment="center"
+            android:fontFamily="@font/raleway_thin"
             android:textColor="@color/textcolor"
-            android:textSize="30sp" />
+            android:textSize="40sp" />
 
     </LinearLayout>
     <ImageView
@@ -51,7 +53,8 @@
                 android:text="@string/poweredBy"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
-                android:textSize="16sp" />
+                android:textSize="20sp"
+                android:fontFamily="@font/raleway_thin"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -69,7 +72,8 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/grey"
-            android:textSize="16sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/raleway_thin"/>
 
 
     </LinearLayout>
