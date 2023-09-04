@@ -891,8 +891,8 @@ public class ActivityDashboard extends AppCompatActivity {
                             farmID,
                             farmerID
                     );
-                    Log.d("id",farmID);
-                    Log.d("id",farmerID);
+//                    Log.d("id",farmID);
+//                    Log.d("id",farmerID);
                 }
                 loadingDialog.dissmissDialog();
             }
