@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.cncdcattleedcandroid.R;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.databinding.ActivityCattleProfileBinding;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -28,53 +29,72 @@ public class ActivityCattleProfile extends AppCompatActivity {
 
     BarChart chart;
     ActivityCattleProfileBinding cattleProfileBinding;
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cattleProfileBinding = ActivityCattleProfileBinding.inflate(getLayoutInflater());
         setContentView(cattleProfileBinding.getRoot());
-        setUpMPChart();
-        CreateMPPicChart();
-        setData(5,100);
+        sessionManager = new SessionManager(this);
+//        setUpMPChart();
+//        CreateMPPicChart();
+//        setData(5,100);
 
-        cattleProfileBinding.btnaddcattle.setOnClickListener(new View.OnClickListener() {
+//        cattleProfileBinding.btnaddcattle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
+//                i.putExtra("formID","1");
+//                startActivity(i);
+//            }
+//        });
+
+        cattleProfileBinding.name.setText(sessionManager.getFarmerName());
+        cattleProfileBinding.farmName.setText(sessionManager.getFarmName());
+        cattleProfileBinding.farmAddress.setText(sessionManager.getFarmAddress()+", "+sessionManager.getFarmSector());
+        cattleProfileBinding.farmerMobile.setText(sessionManager.getMobileNumber()+" / "+sessionManager.getAltNumber());
+
+        cattleProfileBinding.cattleType.setText("Type: "+sessionManager.getcattleType());
+        cattleProfileBinding.cattleGender.setText("Gender: "+sessionManager.getcattleGender());
+        cattleProfileBinding.cattleBreed.setText("Breed: "+sessionManager.getcattleBreed());
+        cattleProfileBinding.cattleSampleId.setText("Sample ID: "+sessionManager.getcattleSampleId());
+
+        cattleProfileBinding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
-                i.putExtra("formID","1");
-                startActivity(i);
+            public void onClick(View v) {
+                finish();
             }
         });
 
 
     }
 
-    public void setUpMPChart() {
-
-        chart = cattleProfileBinding.piempchart2;
-        chart.setDrawBarShadow(false);
-        chart.setDrawValueAboveBar(true);
-        chart.getDescription().setEnabled(false);
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        chart.setMaxVisibleValueCount(60);
-
-        // scaling can now only be done on x- and y-axis separately
-        chart.setPinchZoom(false);
-        chart.setDrawGridBackground(false);
-        Legend l = chart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setForm(Legend.LegendForm.SQUARE);
-        l.setFormSize(9f);
-        l.setTextSize(11f);
-        l.setXEntrySpace(4f);
-        l.setTextColor(ContextCompat.getColor(this,R.color.textcolor));
-    }
+//    public void setUpMPChart() {
+//
+//        chart = cattleProfileBinding.piempchart2;
+//        chart.setDrawBarShadow(false);
+//        chart.setDrawValueAboveBar(true);
+//        chart.getDescription().setEnabled(false);
+//
+//        // if more than 60 entries are displayed in the chart, no values will be
+//        // drawn
+//        chart.setMaxVisibleValueCount(60);
+//
+//        // scaling can now only be done on x- and y-axis separately
+//        chart.setPinchZoom(false);
+//        chart.setDrawGridBackground(false);
+//        Legend l = chart.getLegend();
+//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+//        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+//        l.setDrawInside(false);
+//        l.setForm(Legend.LegendForm.SQUARE);
+//        l.setFormSize(9f);
+//        l.setTextSize(11f);
+//        l.setXEntrySpace(4f);
+//        l.setTextColor(ContextCompat.getColor(this,R.color.textcolor));
+//    }
 
     private void setData(int count, float range) {
         float start = 1f;
@@ -129,30 +149,30 @@ public class ActivityCattleProfile extends AppCompatActivity {
         }
     }
 
-    public void CreateMPPicChart(){
-
-        ArrayList<PieEntry> visitors = new ArrayList<>();
-        visitors.add(new PieEntry(200,"Buffalo"));
-        visitors.add(new PieEntry(600,"Cow"));
-
-
-        PieDataSet pieDataSet = new PieDataSet(visitors,"");
-        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieDataSet.setValueTextColor(R.color.textcolor);
-        pieDataSet.setValueTextSize(16f);
-
-
-
-        PieData pieData = new PieData(pieDataSet);
-         cattleProfileBinding.piempchart1.setData(pieData);
-         cattleProfileBinding.piempchart1.getDescription().setEnabled(false);
-         cattleProfileBinding.piempchart1.setCenterText("Animals");
-         cattleProfileBinding.piempchart1.setCenterTextSize(5f);
-         cattleProfileBinding.piempchart1.setCenterTextColor(R.color.textcolor);
-         cattleProfileBinding.piempchart1.setEntryLabelTextSize(8f);
-         cattleProfileBinding.piempchart1.setEntryLabelColor(R.color.textcolor);
-         cattleProfileBinding.piempchart1.animate();
-    }
+//    public void CreateMPPicChart(){
+//
+//        ArrayList<PieEntry> visitors = new ArrayList<>();
+//        visitors.add(new PieEntry(200,"Buffalo"));
+//        visitors.add(new PieEntry(600,"Cow"));
+//
+//
+//        PieDataSet pieDataSet = new PieDataSet(visitors,"");
+//        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+//        pieDataSet.setValueTextColor(R.color.textcolor);
+//        pieDataSet.setValueTextSize(16f);
+//
+//
+//
+//        PieData pieData = new PieData(pieDataSet);
+//         cattleProfileBinding.piempchart1.setData(pieData);
+//         cattleProfileBinding.piempchart1.getDescription().setEnabled(false);
+//         cattleProfileBinding.piempchart1.setCenterText("Animals");
+//         cattleProfileBinding.piempchart1.setCenterTextSize(5f);
+//         cattleProfileBinding.piempchart1.setCenterTextColor(R.color.textcolor);
+//         cattleProfileBinding.piempchart1.setEntryLabelTextSize(8f);
+//         cattleProfileBinding.piempchart1.setEntryLabelColor(R.color.textcolor);
+//         cattleProfileBinding.piempchart1.animate();
+//    }
 
 
 

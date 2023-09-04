@@ -124,9 +124,10 @@ public class ActivityDashboard extends AppCompatActivity {
     LoadingDialog loadingDialog;
 
     ArrayList<Cattles> arrayList = new ArrayList<>() ;
-
+    String appVersion = "";
+    TextView headerName, headerVersion;
     String totalFarms, totalFarmers, totalCattles;
-
+    String farmerID, farmID;
     @Override
     protected void onResume() {
         super.onResume();
@@ -163,6 +164,8 @@ public class ActivityDashboard extends AppCompatActivity {
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
         loadingDialog.ShowCustomLoadingDialog();
         activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
+        InitializeHeader(navigationView);
+
        setCardsData();
 
 
@@ -547,9 +550,17 @@ public class ActivityDashboard extends AppCompatActivity {
     public void InitializeHeader(NavigationView navigationView) {
 
         View headerView = navigationView.getHeaderView(0);
-        TextView appversiontextview = headerView.findViewById(R.id.textViewVersion);
-
-
+        headerName = headerView.findViewById(R.id.researchOfficer);
+        headerVersion = headerView.findViewById(R.id.textViewVersion);
+        headerName.setText(sessionManager.getName());
+        Log.d("headerName",headerName.toString());
+        try {
+            appVersion = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        headerVersion.setText(appVersion);
     }
 
 
@@ -854,8 +865,8 @@ public class ActivityDashboard extends AppCompatActivity {
 //                    Log.d(constants.Tag, gridObject.toString());
                     for (int i = 0; i < farmerData.size(); i++){
                         JsonObject obj = farmerData.get(i).getAsJsonObject();
-                        String farmerID = obj.get("farmerID").getAsString();
-                        String farmID = obj.get("farmID").getAsString();
+                        farmerID = obj.get("farmerID").getAsString();
+                        farmID = obj.get("farmID").getAsString();
                         String farmName = obj.get("farmName").getAsString();
                         String farmAddress = obj.get("farmAddress").getAsString();
                         String farmerName = obj.get("farmerName").getAsString();
@@ -876,7 +887,12 @@ public class ActivityDashboard extends AppCompatActivity {
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ActivityDashboard.this, resId);
                     activityDashboardBinding.recycler.setLayoutAnimation(animation);
                     cattleAdapter.notifyDataSetChanged();
-
+                    sessionManager.saveDashboardFarmFarmerId(
+                            farmID,
+                            farmerID
+                    );
+                    Log.d("id",farmID);
+                    Log.d("id",farmerID);
                 }
                 loadingDialog.dissmissDialog();
             }

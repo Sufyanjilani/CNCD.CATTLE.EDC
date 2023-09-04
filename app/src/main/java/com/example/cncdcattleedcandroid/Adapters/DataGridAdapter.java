@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cncdcattleedcandroid.Models.DataGridModel;
+import com.example.cncdcattleedcandroid.UI.ActivityCattleProfile;
+import com.example.cncdcattleedcandroid.UI.ActivityFarmerProfile;
 import com.example.cncdcattleedcandroid.UI.ActivityWebViewSurveyForm;
 import com.example.cncdcattleedcandroid.databinding.DatagridlayoutBinding;
 import com.example.cncdcattleedcandroid.databinding.RowBinding;
@@ -76,7 +78,19 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             }
         });
 
+        holder.datagridlayoutBinding.viewData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewDetails();
+            }
+        });
+
     }
+    public void ViewDetails(){
+        Intent intent = new Intent(ctx, ActivityCattleProfile.class);
+        ctx.startActivity(intent);
+    }
+
 
     @Override
     public int getItemCount() {
