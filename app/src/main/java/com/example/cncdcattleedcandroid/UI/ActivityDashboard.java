@@ -354,6 +354,12 @@ public class ActivityDashboard extends AppCompatActivity {
             }
         });
 
+
+
+
+        InitializeHeader(navigationView);
+
+
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
@@ -386,7 +392,6 @@ public class ActivityDashboard extends AppCompatActivity {
 
 
         }
-
 
         //setTitle(menuItem.getTitle());
         // Close the navigation drawer
@@ -550,17 +555,28 @@ public class ActivityDashboard extends AppCompatActivity {
     public void InitializeHeader(NavigationView navigationView) {
 
         View headerView = navigationView.getHeaderView(0);
-        headerName = headerView.findViewById(R.id.researchOfficer);
-        headerVersion = headerView.findViewById(R.id.textViewVersion);
+        TextView headerName = headerView.findViewById(R.id.researchOfficer);
+        TextView headerVersion = headerView.findViewById(R.id.textViewVersion);
         headerName.setText(sessionManager.getName());
         Log.d("headerName",headerName.toString());
+
+        String appVersion;
         try {
             appVersion = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionName;
+            headerVersion.setText(appVersion);
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        headerVersion.setText(appVersion);
+
+        headerVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.d("TAG","clicked");
+                headerVersion.setText("1.0.3");
+            }
+        });
     }
 
 

@@ -62,9 +62,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -133,7 +138,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     RetrofitClientSurvey retrofitClientSurvey;
 
-    String farmId, farmerId;
+    String farmId, farmerId ="0";
 
 
     //live data for end Coordinates
@@ -195,12 +200,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 "        for (const key in sender.data) {\n" +
                 "          if (Array.isArray(sender.data[key])) {\n" +
                 "            sender.data[key].map((field, fk) => {\n" +
+                "if(field.type != undefined){"+
                 "              if((field.type).indexOf(\"image/\" === 0) ) {\n" +
                 "                field.content = '';\n" +
                 "                images_url.push({\n" +
                 "                  image_name: key,\n" +
                 "                  image_path: field.name\n" +
-                "                });\n" +
+                "                })};\n" +
                 "              }\n" +
                 "            });\n" +
                 "          }\n" +
@@ -208,6 +214,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 "setTimeout(function(){\n" +
                 "        console.log(sender.data);\n" +
                 "        console.log(images_url[0]);\n" +
+
                 "var myJsonString = JSON.stringify(images_url);\n"+
                 " const results = JSON.stringify(sender.data);" +"\n"+
                 function+"\n},2000)\n"+
@@ -749,7 +756,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void PostTraitsForm(String formjson, String imageurls) {
+        public void PostTraitsForm(String formjson, String imageurls) throws JSONException {
 
 
             String questionnaireID = entityId;
@@ -792,74 +799,99 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
             Log.d("urls", imageurls.toString());
 
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(imageurls);
+
+            JSONArray jsonArray = new JSONArray(imageurls);
 
 
-            String[] items = imageurls
-                    .substring(1, imageurls.length() - 1)
-                    .split(", ");
+           // MultipartBody.Part signbody = MultipartBody.Part.createFormData("signature","signature",signaturerequestfile);
 
 
 
-            Log.d("urls2", items[0].toString());
+
+//            if (! .toString().equals("")) {
+//    IMG_20230904_124118_319.jpg
+//                List<ImageInfo> imageInfoList = new ArrayList<>();
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                    Bitmap bitmap = BitmapFactory.decodeFile(imagestoragepath.get(i));
+//                    File file = new File(imagestoragepath.get(i));
+//
+//
+//
+//
+//
+//                    imageInfoList.add(new ImageInfo(jsonObject.getString("image_name"), imagestoragepath.get(i), bitmap));
+//                    imageInfoList.add(new ImageInfo(jsonObject.getString("image_name"), imagestoragepath.get(i), bitmap));
+//                    imageInfoList.add(new ImageInfo(jsonObject.getString("image_name"), imagestoragepath.get(i), bitmap));
+//
+//                    Log.d("IMAGE", imagestoragepath.get(i).toString());
+//                    Log.d("Bitmaps", bitmap.toString());
+//
+//                }
+//
+//
+//                ImageUploader imageUploader = new ImageUploader();
+//                List<MultipartBody.Part> parts = imageUploader.prepareImages(imageInfoList);
+//
+//                String cattleId = "4";
+//
+
+            String cattleId ="4";
+
+            File imageFile = new File(imagestoragepath.get(0));
+            Log.d(constants.Tag,imagestoragepath.get(0).toString());
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
+            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", imageFile.getName(), requestFile);
 
 
-            if (!imageurls.toString().equals("")) {
 
-                List<ImageInfo> imageInfoList = new ArrayList<>();
-                for (int i = 0; i < imagestoragepath.size(); i++) {
-
-
-                    Bitmap bitmap = BitmapFactory.decodeFile(imagestoragepath.get(i));
-                    imageInfoList.add(new ImageInfo("IMG_20230901_144701.jpg", imagestoragepath.get(i), bitmap));
-                    imageInfoList.add(new ImageInfo("IMG_20230901_144708.jpg", imagestoragepath.get(i), bitmap));
-                    imageInfoList.add(new ImageInfo("IMG_20230901_144716.jpg", imagestoragepath.get(i), bitmap));
-
-                    Log.d("IMAGE", imagestoragepath.get(i).toString());
-                    Log.d("Bitmaps", bitmap.toString());
-
-                }
-
-
-                ImageUploader imageUploader = new ImageUploader();
-                List<MultipartBody.Part> parts = imageUploader.prepareImages(imageInfoList);
+//                surveyViewModel.SubmitThirdFormDataMultipart(
+//                        imagePart,
+//                        context,
+//                        questionnaireID,
+//                        cattleId,
+//                        farmId,
+//                        farmerId,
+//                        appVersion,
+//                        locationCoordinate,
+//                        formJSON,
+//                        accessToken,
+//                        interviewtakenAt,
+//                        interviewTimeStart,
+//                        interviewTimeEnd,
+//                        locationCoordinatesStart,
+//                        locationCoordinatesEnd);
 
 
-                surveyViewModel.SubmitThirdFormDataMultipart(
-                        parts,
-                        context,
-                        questionnaireID,
-                        farmId,
-                        farmerId,
-                        appVersion,
-                        locationCoordinate,
-                        formJSON,
-                        accessToken,
-                        interviewtakenAt,
-                        interviewTimeStart,
-                        interviewTimeEnd,
-                        locationCoordinatesStart,
-                        locationCoordinatesEnd);
 
-                );
-            }
-            else {
-
-
-                surveyViewModel.PostFirstCattleFormData(context,
-                        questionnaireID,
-                        farmId,
-                        farmerId,
-                        appVersion,
-                        locationCoordinate,
-                        formJSON,
-                        accessToken,
-                        interviewtakenAt,
-                        interviewTimeStart,
-                        interviewTimeEnd,
-                        locationCoordinatesStart,
-                        locationCoordinatesEnd);
-            }
+//            else {
+//
+//
+//                surveyViewModel.PostFirstCattleFormData(context,
+//                        questionnaireID,
+//                        farmId,
+//                        farmerId,
+//                        appVersion,
+//                        locationCoordinate,
+//                        formJSON,
+//                        accessToken,
+//                        interviewtakenAt,
+//                        interviewTimeStart,
+//                        interviewTimeEnd,
+//                        locationCoordinatesStart,
+//                        locationCoordinatesEnd);
+//            }
 //            );
+
+        }
+
+
+        public void SubmitPersonalTraits(){
+
+
 
         }
 
@@ -1184,6 +1216,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         Log.d(constants.info + "function", formjson);
         Log.d(constants.Tag, entityId);
+        Log.d("form",formjson);
 
         return formjson;
 
@@ -1558,7 +1591,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         formId = extras.getString("formID");
 
+        Log.d(constants.Tag,formId);
 
+        assert formId != null;
         if (formId.equals("general_basic")) {
 
             sessionManager = new SessionManager(this);
@@ -1765,7 +1800,9 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 public void onChanged(Boolean aBoolean) {
 
                     if (aBoolean) {
-                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityDashboard.class);
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityFarmerProfile.class);
+                        i.putExtra("farmId",farmId);
+                        i.putExtra("farmerId", farmerId);
                         startActivity(i);
                         finish();
                     }
@@ -1775,6 +1812,35 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         }
 
+
+        else if (formId.equals("personal_mik_weight")){
+
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            Log.d("ebd","called");
+            sessionManager = new SessionManager(this);
+
+            CheckLocationTurnedOn();
+
+
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+            //PostFirstFormData("POST");
+
+            constants = new Constants();
+            setUpLocation();
+            getcurrentlocationstart();
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_mik_weight", "Android.PostTraitsForm(results,myJsonString)");
+
+            }
+
+
+
+
+        }
 
         else if (formId.equals("personal_traits")){
 
@@ -1828,7 +1894,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         JsonObject object = getEntities();
         String firstformId = object.get(key).getAsString();
         entityId = firstformId;
-        Log.d(constants.Tag, entityId);
+        Log.d(constants.Tag+"key", entityId);
         return firstformId;
 
 
@@ -2011,7 +2077,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                 if (!sessionManager.getthemstate()) {
                     Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))), function);
-                    injectCities();
+                    Log.d("key",key);
+                   // injectCities();
 
                 } else {
 

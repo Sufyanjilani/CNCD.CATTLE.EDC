@@ -359,9 +359,10 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public  void SubmitThirdFormDataMultipart(
 
-            List<MultipartBody.Part> parts,
+           MultipartBody.Part image,
             Context context,
             String questionnaireID,
+            String cattleId,
             String farmId,
             String farmerId,
             String appVersion,
@@ -380,20 +381,41 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("json_data", json.toString())
+                .addFormDataPart("formdata",formJSON)
                 .build();
 
+        JsonObject payloadObject = new JsonObject();
+        JsonObject parsedjson = (JsonObject) new JsonParser().parse(formJSON);
+        Log.d("TAG","called");
+        payloadObject.addProperty("farmID",farmId);
+        payloadObject.addProperty("farmerID",farmerId);
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",parsedjson.toString());
+        payloadObject.addProperty("accessToken",accessToken);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
 
-        Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(parts);
-        call.enqueue(new Callback<ResponseBody>() {
+
+        Call<JsonObject> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().
+                getFarmerDataMutlipart(cattleId,requestBody,image);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // Handle success
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.isSuccessful()){
+
+                    Log.d(constants.Tag,response.body().toString());
+                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Handle failure
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
             }
         });
 

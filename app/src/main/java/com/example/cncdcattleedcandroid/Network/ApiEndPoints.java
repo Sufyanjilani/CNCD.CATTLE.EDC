@@ -1,5 +1,7 @@
 package com.example.cncdcattleedcandroid.Network;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -63,7 +65,15 @@ public interface ApiEndPoints {
     @Multipart
     @POST("upload")
     Call<ResponseBody> uploadImagesAndJson(
-            @Part List<MultipartBody.Part> parts);
+            @Part List<MultipartBody.Part> parts,
+            @Part RequestBody body);
+
+    @Multipart
+    @POST("cattles/{cattle_id}/entities")
+    Call<JsonObject> getFarmerDataMutlipart(@Path("cattle_id") String cattleID,
+                                            @Part("form_data") RequestBody requestBody,
+                                            @Part MultipartBody.Part part
+    );
 
 
 }
