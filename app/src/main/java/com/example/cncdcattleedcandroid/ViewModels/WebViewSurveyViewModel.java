@@ -359,9 +359,30 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public  void SubmitThirdFormDataMultipart(
 
-            List<MultipartBody.Part> parts
+            List<MultipartBody.Part> parts,
+            Context context,
+            String questionnaireID,
+            String farmId,
+            String farmerId,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String accessToken,
+            String interviewtakenAt ,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
 
     ){
+
+
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("json_data", json.toString())
+                .build();
+
 
         Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(parts);
         call.enqueue(new Callback<ResponseBody>() {

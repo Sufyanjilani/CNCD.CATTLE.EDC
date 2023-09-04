@@ -98,7 +98,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                if (s.equals("Login Successs")){
+                if (s.equals("Login Successes")){
                     loadingDialog.ShowCustomLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override

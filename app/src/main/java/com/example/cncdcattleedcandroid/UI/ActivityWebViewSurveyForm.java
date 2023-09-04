@@ -61,6 +61,7 @@ import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
@@ -206,7 +207,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 "        }\n" +
                 "setTimeout(function(){\n" +
                 "        console.log(sender.data);\n" +
-                "        console.log(images_url);\n" +
+                "        console.log(images_url[0]);\n" +
+                "var myJsonString = JSON.stringify(images_url);\n"+
                 " const results = JSON.stringify(sender.data);" +"\n"+
                 function+"\n},2000)\n"+
                 "      });";
@@ -747,7 +749,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void PostTraitsForm(String formjson, String[] imageurls) {
+        public void PostTraitsForm(String formjson, String imageurls) {
 
 
             String questionnaireID = entityId;
@@ -788,7 +790,18 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
             String locationCoordinatesEnd = latStart+","+lonStart;
-            Log.d("urls",imageurls[0]);
+            Log.d("urls", imageurls.toString());
+
+
+
+            String[] items = imageurls
+                    .substring(1, imageurls.length() - 1)
+                    .split(", ");
+
+
+
+            Log.d("urls2", items[0].toString());
+
 
             if (!imageurls.toString().equals("")) {
 
@@ -810,7 +823,24 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 ImageUploader imageUploader = new ImageUploader();
                 List<MultipartBody.Part> parts = imageUploader.prepareImages(imageInfoList);
 
-                //surveyViewModel.SubmitThirdFormDataMultipart(parts);
+
+                surveyViewModel.SubmitThirdFormDataMultipart(
+                        parts,
+                        context,
+                        questionnaireID,
+                        farmId,
+                        farmerId,
+                        appVersion,
+                        locationCoordinate,
+                        formJSON,
+                        accessToken,
+                        interviewtakenAt,
+                        interviewTimeStart,
+                        interviewTimeEnd,
+                        locationCoordinatesStart,
+                        locationCoordinatesEnd);
+
+                );
             }
             else {
 
@@ -1463,9 +1493,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         Log.d(constants.Tag, parsedjson.toString());
 
+        if (parsedjson.toString().equals("")){
 
-        return
-                parsedjson.toString();
+            return "";
+        }
+        else {
+
+            return
+                    parsedjson.toString();
+        }
 
     }
 
@@ -1760,7 +1796,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("personal_traits", "Android.PostTraitsForm(results,images_url)");
+                setUpWebView2("personal_traits", "Android.PostTraitsForm(results,myJsonString)");
 
             }
 

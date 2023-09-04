@@ -381,6 +381,7 @@ public class DashboardViewModel extends AndroidViewModel {
                     }else{
 
                         isResponseSuccess.setValue(response.body().get("msg").getAsString());
+                        dashboardDataResponse.setValue(response.body().get("msg").getAsString());
                     }
 
                 }
