@@ -24,7 +24,7 @@ android {
         minSdk = 26
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0.2"
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,6 +34,15 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
+//        debug {
+//            buildConfigField "String", "API_BASE_URL", '"http://192.168.20.136:8888/api/v1/"'
+//            // Additional debug configurations
+//        }
+//        release {
+//            buildConfigField "String", "API_BASE_URL", '"https://api.example.com/"'
+//            // Additional release configurations
+//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -44,6 +53,8 @@ android {
 
         viewBinding = true;
     }
+
+
 
 }
 

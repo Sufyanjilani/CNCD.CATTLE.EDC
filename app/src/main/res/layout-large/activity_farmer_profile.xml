@@ -302,7 +302,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="230dp">
+            android:layout_height="150dp">
 
         </View>
 
@@ -471,7 +471,7 @@
                             android:padding="5dp"
                             android:textSize="10dp"
                             android:backgroundTint="@color/primaryblue"
-                            android:text="Entity"
+                            android:text="Farmer Entities"
 
                             android:textColor="@color/textcolor" />
 
@@ -723,6 +723,7 @@
                             android:layout_alignParentTop="true"
                             android:iconifiedByDefault="false"
                             android:hint="Search"
+                            android:focusable="false"
                             android:imeOptions="actionSearch"
                             android:padding="10dp"
                             android:drawableEnd="@drawable/baseline_search_24"

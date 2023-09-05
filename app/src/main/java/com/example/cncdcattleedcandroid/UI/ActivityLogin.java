@@ -64,6 +64,8 @@ public class ActivityLogin extends AppCompatActivity {
 
     String appVersion = "";
 
+    String lat,lon = "0.0";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
 
-                if (s.equals("Login Successs")){
+                if (s.equals("Login Successes")){
                     loadingDialog.ShowCustomLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -144,6 +146,9 @@ public class ActivityLogin extends AppCompatActivity {
                 }
                 else{
 
+//                    Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
+//                    startActivity(new Intent(ActivityLogin.this, ActivitySettingData.class));
+//                    loadingDialog.dissmissDialog();
                     Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
                 }
             }
@@ -193,7 +198,7 @@ public class ActivityLogin extends AppCompatActivity {
             Log.d("package", nameNotFoundException.getMessage().toString());
         }
 
-        loginViewModel.Login(email,password,appversion,"24.2");
+        loginViewModel.Login(email,password,appversion,lat+","+lon);
 
     }
 
@@ -229,6 +234,9 @@ public class ActivityLogin extends AppCompatActivity {
 
                     arrayList.add(String.valueOf(location.getLatitude()));
                     arrayList.add(String.valueOf(location.getLongitude()));
+
+                    lat = String.valueOf(location.getLatitude());
+                    lon = String.valueOf(location.getLongitude());
 
                     Log.d(constants.Tag,String.valueOf(location.getLatitude()));
                     Log.d(constants.Tag,String.valueOf(location.getLongitude()));

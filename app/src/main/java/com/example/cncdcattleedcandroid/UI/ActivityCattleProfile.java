@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
@@ -63,6 +64,7 @@ public class ActivityCattleProfile extends AppCompatActivity {
         cattleProfileBinding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sessionManager.saveCattleDetails("","","","");
                 finish();
             }
         });
@@ -175,5 +177,10 @@ public class ActivityCattleProfile extends AppCompatActivity {
 //    }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sessionManager.saveCattleDetails("","","","");
 
+    }
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="appversion">Version 1.0.0</string>
+    <string name="appversion">Version 1.0.3</string>
     <string name="userName">Research Officer</string>
     <string name="addFarmer">Add Farmer</string>
     <string name="cowName">Cattle Name</string>

@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import okhttp3.MultipartBody;
@@ -60,6 +61,9 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isthirdCattleformSubmitted = new MutableLiveData<Boolean>();
 
     public MutableLiveData<Boolean> isFourthCattleformSubmitted = new MutableLiveData<Boolean>();
+
+    public MutableLiveData<Boolean> isMedicalEntitySubmitted = new MutableLiveData<Boolean>();
+    public MutableLiveData<Boolean> isDietEntitySubmitted = new MutableLiveData<Boolean>();
 
 
 
@@ -121,6 +125,153 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 //            }
 //        });
 //    }
+
+    public void PostFarmerMedicalFormData(
+            Context context,
+            String questionnaireID,
+            String farm_ID,
+            String farmer_ID,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String interviewtakenAt ,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
+    ){
+
+        JsonObject payloadObject = new JsonObject();
+
+
+        Log.d("TAG","called");
+
+        Log.d("farmerId",farmer_ID);
+        Log.d("farmId",farm_ID);
+
+        payloadObject.addProperty("farmID",farm_ID);
+        payloadObject.addProperty("farmerID",farmer_ID);
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",formJSON);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
+
+        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().addEntity(
+
+                farm_ID,
+                farmer_ID,
+                payloadObject
+
+        );
+        apicall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.d(constants.Tag,response.body().toString());
+
+
+                if (!response.body().get("error").getAsString().equals("true")) {
+
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+                    isMedicalEntitySubmitted.setValue(true);
+
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+                    isMedicalEntitySubmitted.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //   _is_secondformSent.setValue(false);
+                Log.d(constants.Tag,t.getMessage());
+                isMedicalEntitySubmitted.setValue(false);
+            }
+        });
+    }
+
+    public void PostFarmerDietFormData(
+            Context context,
+            String questionnaireID,
+            String farm_ID,
+            String farmer_ID,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String interviewtakenAt ,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
+    ){
+
+        JsonObject payloadObject = new JsonObject();
+
+
+        Log.d("TAG","called");
+
+        Log.d("farmerId",farmer_ID);
+        Log.d("farmId",farm_ID);
+
+        payloadObject.addProperty("farmID",farm_ID);
+        payloadObject.addProperty("farmerID",farmer_ID);
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",formJSON);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
+
+        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().addEntity(
+
+                farm_ID,
+                farmer_ID,
+                payloadObject
+
+        );
+        apicall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.d(constants.Tag,response.body().toString());
+
+
+                if (!response.body().get("error").getAsString().equals("true")) {
+
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+                    isDietEntitySubmitted.setValue(true);
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+                    isDietEntitySubmitted.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //   _is_secondformSent.setValue(false);
+                Log.d(constants.Tag,t.getMessage());
+                isDietEntitySubmitted.setValue(false);
+            }
+        });
+    }
 
     public void PostFirstFormData(
 
@@ -191,6 +342,70 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     }
 
+    public void SubmitMilkWeight(
+            Context context,
+            String questionnaireID,
+            String cattleId,
+            String farm_ID,
+            String farmer_ID,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String interviewtakenAt ,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
+    ){
+        JsonObject payloadObject = new JsonObject();
+        payloadObject.addProperty("cattleId",cattleId);
+        payloadObject.addProperty("farmID",farm_ID);
+        payloadObject.addProperty("farmerID",farmer_ID);
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",formJSON);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
+
+        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().insertCattleEntities(
+
+                cattleId,
+                payloadObject
+
+        );
+        apicall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.d(constants.Tag,response.body().toString());
+                _is_secondformSent.setValue(true);
+
+                if (!response.body().get("error").getAsString().equals("true")) {
+
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+
+                }
+                else{
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //   _is_secondformSent.setValue(false);
+                Log.d(constants.Tag,t.getMessage());
+            }
+        });
+    }
 
     public void SubmitSecondForm(
 
@@ -358,21 +573,63 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public  void SubmitThirdFormDataMultipart(
 
-            RequestBody jsonBody,
-            ArrayList<MultipartBody.Part> imageParts
+           MultipartBody.Part image,
+            Context context,
+            String questionnaireID,
+            String cattleId,
+            String farmId,
+            String farmerId,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String accessToken,
+            String interviewtakenAt ,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
 
     ){
 
-        Call<ResponseBody> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().uploadImagesAndJson(imageParts.get(0), imageParts.get(1), imageParts.get(2), jsonBody);
-        call.enqueue(new Callback<ResponseBody>() {
+
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("formdata",formJSON)
+                .build();
+
+        JsonObject payloadObject = new JsonObject();
+        JsonObject parsedjson = (JsonObject) new JsonParser().parse(formJSON);
+        Log.d("TAG","called");
+        payloadObject.addProperty("farmID",farmId);
+        payloadObject.addProperty("farmerID",farmerId);
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",parsedjson.toString());
+        payloadObject.addProperty("accessToken",accessToken);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
+
+
+        Call<JsonObject> call = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().
+                getFarmerDataMutlipart(cattleId,requestBody,image);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // Handle success
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if (response.isSuccessful()){
+
+                    Log.d(constants.Tag,response.body().toString());
+                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Handle failure
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
             }
         });
 

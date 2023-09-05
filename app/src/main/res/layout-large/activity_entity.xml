@@ -305,6 +305,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:visibility="gone"
                 android:background="?android:attr/selectableItemBackground">
 
 
@@ -326,7 +327,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="220dp">
+            android:layout_height="150dp">
 
         </View>
 
@@ -344,7 +345,7 @@
                 android:layout_gravity="bottom"
                 android:backgroundTint="@color/primaryblue"
                 android:drawableStart="@drawable/baseline_arrow_back_ios_24"
-                android:text="Back to Cattel"
+                android:text="Back to Cattle"
                 android:textColor="@color/textcolor"/>
 
         </LinearLayout>
@@ -440,8 +441,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Entites"
                     android:layout_gravity="center_vertical"
+                    android:text="Entities"
                     android:textColor="@color/textcolor"
                     android:textSize="25dp" />
 
@@ -461,7 +462,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Milk Entity"
+                        android:text="Medical Entity"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/textcolor"
                         android:textSize="20dp" />
@@ -477,6 +478,7 @@
                     android:background="?android:attr/selectableItemBackground">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddMedical"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
@@ -485,7 +487,7 @@
                         android:textSize="10dp"
                         android:backgroundTint="@color/primaryblue"
                         android:drawableEnd="@drawable/baseline_add_24"
-                        android:text="Add Milk Entity"
+                        android:text="Add Medical Entity"
                         android:textColor="@color/textcolor" />
 
                 </LinearLayout>
@@ -732,10 +734,10 @@
 
                         <TextView
                             android:id="@+id/image"
-                            android:layout_width="70dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            android:text="Image"
+                            android:text="EntityID"
                             android:textStyle="bold"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
@@ -747,11 +749,11 @@
                             android:layout_height="match_parent" />
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:textStyle="bold"
-                            android:text="Sample Id"
+                            android:text="Created At"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
 
@@ -763,75 +765,14 @@
 
                         <TextView
                             android:id="@+id/farmNametxt"
-                            android:layout_width="90dp"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:textStyle="bold"
-                            android:text="Breed"
+                            android:text="Created By"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
 
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/farmAddress"
-                            android:layout_width="70dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Type"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-
-                        <TextView
-                            android:id="@+id/farmerName"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Gender"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/addedAt"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="15dp"
-                            android:text="Added At"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="100dp"
-                            android:text="Actions"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -841,9 +782,9 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyccattle"
+                android:id="@+id/medicalRecyler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_weight="1"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -851,7 +792,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintVertical_bias="0.75"
-                tools:listitem="@layout/datagridlayout" />
+                tools:listitem="@layout/medical_layout" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -865,7 +806,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Diet Entity"
+                        android:text="Diet Entity"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/textcolor"
                         android:textSize="20dp" />
@@ -881,6 +822,7 @@
                     android:background="?android:attr/selectableItemBackground">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddDiet"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
@@ -920,26 +862,11 @@
 
 
                         <TextView
-                            android:layout_width="70dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:text="Image"
-                            android:textStyle="bold"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
+                            android:text="EntityID"
                             android:textStyle="bold"
-                            android:text="Sample Id"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
 
@@ -950,11 +877,11 @@
                             android:layout_height="match_parent" />
 
                         <TextView
-                            android:layout_width="90dp"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:textStyle="bold"
-                            android:text="Breed"
+                            android:text="Created At"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
 
@@ -965,57 +892,14 @@
                             android:layout_height="match_parent" />
 
                         <TextView
-                            android:layout_width="70dp"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:textStyle="bold"
-                            android:text="Type"
+                            android:text="Created By"
                             android:textColor="@color/textcolor"
                             android:textSize="16sp" />
 
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:text="Gender"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="15dp"
-                            android:text="Added At"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textStyle="bold"
-                            android:layout_marginStart="100dp"
-                            android:text="Actions"
-                            android:textColor="@color/textcolor"
-                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -1023,6 +907,18 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dietRecyler"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.75"
+                tools:listitem="@layout/diet_layout" />
 
             <LinearLayout
                 android:id="@+id/btnLayout"
