@@ -138,7 +138,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     RetrofitClientSurvey retrofitClientSurvey;
 
-    String farmId, farmerId ="0";
+    String farmId, farmerId, cattleID ="0";
 
 
     //live data for end Coordinates
@@ -735,57 +735,57 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             );
         }
 
-//        @JavascriptInterface
-//        public void SubmitMilkWeight(String formjson){
-//            String questionnaireID = entityId;
-//            String appVersion = "";
-//
-//
-//            Log.d(constants.info, "post called");
-//            loadingDialog.dissmissDialog();
-//
-//
-//            try {
-//                appVersion = getPackageManager()
-//                        .getPackageInfo(getPackageName(), 0).versionName;
-//            } catch (PackageManager.NameNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//
-//            String locationCoordinate = latStart+","+lonStart;
-//            String formJSON = formjson;
-//
-//
-//            String accessToken = sessionManager.getbearer();
-//            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
-//            String interviewTimeStart = sessionManager.getStartTimestamp();
-//            String interviewTimeEnd = getTimeStamp("end-");
-//
-//
-//            String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
-//                    sessionManager.getLongitudeStart();
-//
-//
-//            String locationCoordinatesEnd = latStart+","+lonStart;
-//
-//
-//            surveyViewModel.SubmitMilkWeight(context,
-//                    questionnaireID,
-//                    cattleId,
-//                    farmId,
-//                    farmerId,
-//                    appVersion,
-//                    locationCoordinate,
-//                    formJSON,
-//                    accessToken,
-//                    interviewtakenAt,
-//                    interviewTimeStart,
-//                    interviewTimeEnd,
-//                    locationCoordinatesStart,
-//                    locationCoordinatesEnd
-//            );
-//        }
+        @JavascriptInterface
+        public void SubmitMilkWeight(String formjson){
+            String questionnaireID = entityId;
+            String appVersion = "";
+
+
+            Log.d(constants.info, "post called");
+            loadingDialog.dissmissDialog();
+
+
+            try {
+                appVersion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            String locationCoordinate = latStart+","+lonStart;
+            String formJSON = formjson;
+
+
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
+
+
+            String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
+                    sessionManager.getLongitudeStart();
+
+
+            String locationCoordinatesEnd = latStart+","+lonStart;
+
+
+            surveyViewModel.SubmitMilkWeight(
+                    context,
+                    questionnaireID,
+                    cattleID,
+                    farmId,
+                    farmerId,
+                    appVersion,
+                    locationCoordinate,
+                    formJSON,
+                    interviewtakenAt,
+                    interviewTimeStart,
+                    interviewTimeEnd,
+                    locationCoordinatesStart,
+                    locationCoordinatesEnd
+            );
+        }
 
         @JavascriptInterface
         public void PostFirstFormData(String formjson) {
@@ -1963,34 +1963,34 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         }
 
 
-        else if (formId.equals("personal_mik_weight")){
-
-            Bundle extraspersonalbasic = getIntent().getExtras();
-            farmId = extraspersonalbasic.getString("farmID");
-            farmerId = extraspersonalbasic.getString("farmerID");
-            Log.d("ebd","called");
-            sessionManager = new SessionManager(this);
-
-            CheckLocationTurnedOn();
-
-
-            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
-            //PostFirstFormData("POST");
-
-            constants = new Constants();
-            setUpLocation();
-            getcurrentlocationstart();
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("personal_mik_weight", "Android.PostTraitsForm(results,myJsonString)");
-
-            }
-
-
-
-
-        }
+//        else if (formId.equals("personal_mik_weight")){
+//
+//            Bundle extraspersonalbasic = getIntent().getExtras();
+//            farmId = extraspersonalbasic.getString("farmID");
+//            farmerId = extraspersonalbasic.getString("farmerID");
+//            Log.d("ebd","called");
+//            sessionManager = new SessionManager(this);
+//
+//            CheckLocationTurnedOn();
+//
+//
+//            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+//            //PostFirstFormData("POST");
+//
+//            constants = new Constants();
+//            setUpLocation();
+//            getcurrentlocationstart();
+//
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//          \\      setUpWebView2("personal_mik_weight", "Android.PostTraitsForm(results,myJsonString)");
+//
+//            }
+//
+//
+//
+//
+//        }
 
         else if (formId.equals("personal_traits")){
 
@@ -2094,6 +2094,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
             farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleID");
             Log.d("ebd","called");
             sessionManager = new SessionManager(this);
 
@@ -2109,13 +2110,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("personal_mik_weight", "Android.PostFarmerDietFormData(results)");
+                setUpWebView2("personal_mik_weight", "Android.SubmitMilkWeight(results)");
 
 
 
             }
 
-            surveyViewModel.isDietEntitySubmitted.observe(this, new Observer<Boolean>() {
+            surveyViewModel.isMilkWeightSubmitted.observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
                     if (aBoolean){

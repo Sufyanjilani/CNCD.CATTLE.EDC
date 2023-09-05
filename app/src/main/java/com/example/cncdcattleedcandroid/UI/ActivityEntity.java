@@ -16,6 +16,7 @@ import com.example.cncdcattleedcandroid.Models.MedicalEntityModel;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.databinding.ActivityEntityBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -31,6 +32,7 @@ public class ActivityEntity extends AppCompatActivity {
     ActivityEntityBinding activityEntityBinding;
     MedicalAdapter medicalAdapter;
     DietAdapter dietAdapter;
+    LoadingDialog loadingDialog;
     SessionManager sessionManager;
     String farmId, farmerId;
     @Override
@@ -39,6 +41,7 @@ public class ActivityEntity extends AppCompatActivity {
         activityEntityBinding = ActivityEntityBinding.inflate(getLayoutInflater());
         setContentView(activityEntityBinding.getRoot());
         sessionManager = new SessionManager(this);
+        loadingDialog = new LoadingDialog(this,this);
 
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
@@ -79,6 +82,7 @@ public class ActivityEntity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        loadingDialog.ShowCustomLoadingDialog();
         getFarmerEntity();
     }
 
@@ -127,6 +131,7 @@ public class ActivityEntity extends AppCompatActivity {
                         activityEntityBinding.dietRecyler.setLayoutManager(new LinearLayoutManager(ActivityEntity.this));
                         activityEntityBinding.dietRecyler.setAdapter(dietAdapter);
                     }
+                    loadingDialog.dissmissDialog();
                 }
             }
 

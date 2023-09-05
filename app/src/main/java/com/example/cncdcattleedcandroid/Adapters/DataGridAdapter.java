@@ -27,6 +27,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     private Context ctx;
 
     private ArrayList<DataGridModel> filteredData;
+    String cattleID;
 
     public DataGridAdapter(ArrayList<DataGridModel> gridModels, Context context){
 
@@ -47,6 +48,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     public void onBindViewHolder(@NonNull Viewholer holder, int position) {
 
         DataGridModel model = dataGridModels.get(position);
+        cattleID = model.getCattleID();
         holder.datagridlayoutBinding.cattleSample.setText(model.getSampleID());
         holder.datagridlayoutBinding.cattleBreed.setText(model.getcBreedName());
         holder.datagridlayoutBinding.cattleType.setText(model.getcTypeName());
@@ -74,6 +76,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             public void onClick(View view) {
                 Intent i = new Intent(ctx, ActivityWebViewSurveyForm.class);
                 i.putExtra("formID","personal_mik_weight");
+                i.putExtra("cattleID", cattleID);
                 ctx.startActivity(i);
             }
         });

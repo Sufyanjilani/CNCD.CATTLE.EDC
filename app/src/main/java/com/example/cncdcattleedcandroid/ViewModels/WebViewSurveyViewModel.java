@@ -64,6 +64,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> isMedicalEntitySubmitted = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> isDietEntitySubmitted = new MutableLiveData<Boolean>();
+    public MutableLiveData<Boolean> isMilkWeightSubmitted = new MutableLiveData<Boolean>();
 
 
 
@@ -351,7 +352,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             String appVersion,
             String locationCoordinate,
             String formJSON,
-            String interviewtakenAt ,
+            String interviewtakenAt,
             String interviewTimeStart,
             String interviewTimeEnd,
             String locationCoordinatesStart,
@@ -382,19 +383,21 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 Log.d(constants.Tag,response.body().toString());
-                _is_secondformSent.setValue(true);
+
 
                 if (!response.body().get("error").getAsString().equals("true")) {
 
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
+                    isMilkWeightSubmitted.setValue(true);
 
                 }
                 else{
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
+                    isMilkWeightSubmitted.setValue(false);
 
                 }
             }
@@ -403,6 +406,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 //   _is_secondformSent.setValue(false);
                 Log.d(constants.Tag,t.getMessage());
+                isMilkWeightSubmitted.setValue(false);
             }
         });
     }
