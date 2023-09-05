@@ -31,7 +31,7 @@ public class RetrofitClientSurvey {
 
 
 
-    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC);
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     //SessionManager sessionManager = new SessionManager(ctx);
     OkHttpClient.Builder okHttpClient = new OkHttpClient().newBuilder().addInterceptor(loggingInterceptor).addInterceptor(new Interceptor() {

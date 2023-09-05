@@ -92,6 +92,8 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 //        entity = extra.getString("entityProfile");
         farmId = extra.getString("farmId");
         farmerId = extra.getString("farmerId");
+        Log.d("farmid",farmId);
+        Log.d("farmerid", farmerId);
 
 
 
@@ -139,6 +141,8 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityFarmerProfile.this, ActivityEntity.class);
+                intent.putExtra("farmID",farmID);
+                intent.putExtra("farmerID",farmerID);
                 startActivity(intent);
             }
         });
@@ -147,6 +151,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityFarmerProfile.this, ActivityDashboard.class);
+                sessionManager.saveFarmerData("","","","","","");
                 startActivity(intent);
             }
         });
@@ -442,5 +447,9 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        sessionManager.saveFarmerData("","","","","","");
+        super.onBackPressed();
+    }
 }

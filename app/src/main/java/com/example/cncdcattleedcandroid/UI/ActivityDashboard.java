@@ -128,12 +128,7 @@ public class ActivityDashboard extends AppCompatActivity {
     TextView headerName, headerVersion;
     String totalFarms, totalFarmers, totalCattles;
     String farmerID, farmID;
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setCardsData();
-        setrecyclerAdapter();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1047,6 +1042,9 @@ public class ActivityDashboard extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         setrecyclerAdapter();
+        Log.d("TAG","restarted");
+
+
     }
 
     @Override
