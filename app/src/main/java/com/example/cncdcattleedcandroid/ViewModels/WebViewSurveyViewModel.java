@@ -330,6 +330,9 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
 
+                }else {
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                 }
 
             }
@@ -711,8 +714,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
                         }
                     } else {
-                        String message = response.body().get("msg").getAsString();
-                        formMsg.setValue(message);
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        formMsg.setValue(msg);
 
                     }
 

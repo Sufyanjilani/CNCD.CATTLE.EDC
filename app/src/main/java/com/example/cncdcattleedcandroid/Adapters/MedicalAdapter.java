@@ -36,7 +36,6 @@ public class MedicalAdapter extends RecyclerView.Adapter<MedicalAdapter.ViewHold
     public void onBindViewHolder(@NonNull MedicalAdapter.ViewHolder holder, int position) {
         MedicalEntityModel medicalEntityModel = medicalEntityModelArrayList.get(position);
         holder.medicalLayoutBinding.farmerEntityId.setText(medicalEntityModel.getFarmerEntityID());
-//        holder.medicalLayoutBinding.questionnaireId.setText(medicalEntityModel.getQuestionnaireID());
         holder.medicalLayoutBinding.createdAt.setText(medicalEntityModel.getCreated_at());
         holder.medicalLayoutBinding.createdBy.setText(medicalEntityModel.getCreated_by());
 
@@ -48,16 +47,14 @@ public class MedicalAdapter extends RecyclerView.Adapter<MedicalAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewHead;
-        public TextView textViewDesc;
+
         MedicalLayoutBinding medicalLayoutBinding;
 
         public ViewHolder(MedicalLayoutBinding medicalLayoutBinding) {
             super(medicalLayoutBinding.getRoot());
             this.medicalLayoutBinding = medicalLayoutBinding;
 
-//            textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
-//            textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+
         }
     }
 }

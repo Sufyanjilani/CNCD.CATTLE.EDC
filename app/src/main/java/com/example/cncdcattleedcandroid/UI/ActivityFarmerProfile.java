@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Adapters.CattleAdapter;
 import com.example.cncdcattleedcandroid.Adapters.DataGridAdapter;
@@ -50,21 +51,6 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     String totalCattles, totalCows, googleMapsURL, totalBuffalo, farmID, farmName, farmAddress, farmSector, created_at, farmerID, farmerName, farmerMobileNumber, farmerMobileAlternative;
 
     String cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID, cBreedName, cattleCreated_at, created_by, updated_at, updated_by, sampleID;
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        getFarmerProfile();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                loadingDialog.ShowCustomLoadingDialog();
-//                getFarmerProfile();
-//                loadingDialog.dissmissDialog();
-//            }
-//        },2000);
-
-    }
 
     @Override
     protected void onRestart() {
@@ -156,6 +142,18 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             }
         });
 
+        farmerProfileBinding.viewFarmerData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ActivityFarmerProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","View_general_basic");
+                i.putExtra("farmID",farmID);
+                i.putExtra("farmerID",farmerID);
+                i.putExtra("mode","readOnly");
+                startActivity(i);
+            }
+        });
+
     }
 
     public void getFarmerProfile(){
@@ -216,12 +214,12 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                             dataGridModelArrayList.add(dataGridModel);
                         }
 
-                        sessionManager.saveCattleDetails(
-                                cTypeName,
-                                cattleGender,
-                                cBreedName,
-                                sampleID
-                        );
+//                        sessionManager.saveCattleDetails(
+//                                cTypeName,
+//                                cattleGender,
+//                                cBreedName,
+//                                sampleID
+//                        );
                         gridAdapter = new DataGridAdapter(dataGridModelArrayList,ActivityFarmerProfile.this);
                         farmerProfileBinding.recyccattle.setLayoutManager(new LinearLayoutManager(ActivityFarmerProfile.this));
                         farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
@@ -250,6 +248,10 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                                 farmSector,
                                 farmerMobileNumber,
                                 farmerMobileAlternative);
+                    }else {
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        Toast.makeText(ActivityFarmerProfile.this,msg,Toast.LENGTH_SHORT).show();
+
                     }
                     loadingDialog.dissmissDialog();
                 }

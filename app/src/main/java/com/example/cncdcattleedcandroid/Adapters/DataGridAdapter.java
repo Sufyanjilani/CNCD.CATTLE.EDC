@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cncdcattleedcandroid.Models.DataGridModel;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.UI.ActivityCattleProfile;
 import com.example.cncdcattleedcandroid.UI.ActivityFarmerProfile;
 import com.example.cncdcattleedcandroid.UI.ActivityWebViewSurveyForm;
@@ -28,6 +29,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
 
     private ArrayList<DataGridModel> filteredData;
     String cattleID;
+    SessionManager sessionManager;
 
     public DataGridAdapter(ArrayList<DataGridModel> gridModels, Context context){
 
@@ -40,6 +42,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     @Override
     public Viewholer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        DatagridlayoutBinding binding = DatagridlayoutBinding.inflate(LayoutInflater.from(parent.getContext()));
+        sessionManager = new SessionManager(ctx);
         return new Viewholer(binding);
 
     }
@@ -63,11 +66,6 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             @Override
             public void onClick(View view) {
 
-//
-//                Intent i = new Intent(ctx, ActivityWebViewSurveyForm.class);
-//                i.putExtra("formID","1");
-//                ctx.startActivity(i);
-
             }
         });
 
@@ -84,13 +82,20 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
         holder.datagridlayoutBinding.viewData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewDetails();
+                ViewDetails(model);
             }
         });
 
     }
-    public void ViewDetails(){
+    public void ViewDetails(DataGridModel model){
         Intent intent = new Intent(ctx, ActivityCattleProfile.class);
+        intent.putExtra("cattleID", cattleID);
+        sessionManager.saveCattleDetails(
+                model.getcTypeName(),
+                model.getCattleGender(),
+                model.getcBreedName(),
+                model.getSampleID()
+        );
         ctx.startActivity(intent);
     }
 

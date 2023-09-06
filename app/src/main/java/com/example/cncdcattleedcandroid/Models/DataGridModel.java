@@ -7,15 +7,6 @@ public class DataGridModel {
 
     String cattleID, farmerCattleID,cTypeID, cTypeName, cattleGender, cBreedID, cBreedName, created_at, created_by, updated_at, updated_by, sampleID;
 
-//    public DataGridModel(String id, String farmerid, String farmid, String farmname, String cattlename, String cattleimagepath, String cattleid) {
-//        this.id = id;
-//        this.farmerid = farmerid;
-//        this.farmid = farmid;
-//        this.farmname = farmname;
-//        this.cattlename = cattlename;
-//        this.cattleimagepath = cattleimagepath;
-//        this.cattleid = cattleid;
-//    }
 
     public DataGridModel(String cattleID, String farmerCattleID, String cTypeID, String cTypeName, String cattleGender, String cBreedID, String cBreedName, String created_at, String created_by, String updated_at, String updated_by, String sampleID){
         this.cattleID = cattleID;

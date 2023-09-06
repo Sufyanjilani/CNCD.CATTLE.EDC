@@ -45,16 +45,13 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewHead;
-        public TextView textViewDesc;
+
         DietLayoutBinding dietLayoutBinding;
 
         public ViewHolder(DietLayoutBinding dietLayoutBinding) {
             super(dietLayoutBinding.getRoot());
             this.dietLayoutBinding = dietLayoutBinding;
 
-//            textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
-//            textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
         }
     }
 }

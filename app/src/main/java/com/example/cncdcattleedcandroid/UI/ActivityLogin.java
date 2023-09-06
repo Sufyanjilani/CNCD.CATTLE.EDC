@@ -146,9 +146,6 @@ public class ActivityLogin extends AppCompatActivity {
                 }
                 else{
 
-//                    Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
-//                    startActivity(new Intent(ActivityLogin.this, ActivitySettingData.class));
-//                    loadingDialog.dissmissDialog();
                     Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
                 }
             }

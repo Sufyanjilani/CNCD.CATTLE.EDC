@@ -138,7 +138,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     RetrofitClientSurvey retrofitClientSurvey;
 
-    String farmId, farmerId, cattleID ="0";
+    String mode = "", farmId, farmerId, cattleID ="0";
 
 
     //live data for end Coordinates
@@ -186,6 +186,68 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     }
 
+    public void LoadJavaScriptReadOnly(String formjson){
+        String javascriptCode =
+                "      window['surveyjs-widgets'].inputmask(Survey);\n" +
+                        "      window['surveyjs-widgets'].nouislider(Survey);\n" +
+                        "const themeJson = {\n" +
+                        "  \"cssVariables\": {\n" +
+                        "    \"--sjs-general-backcolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dark\": \"rgba(248, 248, 248, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim\": \"rgba(243, 243, 243, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim-light\": \"rgba(249, 249, 249, 1)\",\n" +
+                        "    \"--sjs-general-backcolor-dim-dark\": \"rgba(243, 243, 243, 1)\",\n" +
+                        "    \"--sjs-general-forecolor\": \"rgba(0, 0, 0, 0.91)\",\n" +
+                        "    \"--sjs-general-forecolor-light\": \"rgba(0, 0, 0, 0.45)\",\n" +
+                        "    \"--sjs-general-dim-forecolor\": \"rgba(0, 0, 0, 0.91)\",\n" +
+                        "    \"--sjs-general-dim-forecolor-light\": \"rgba(0, 0, 0, 0.45)\",\n" +
+                        "    \"--sjs-primary-backcolor\": \"#2772cb\",\n" +
+                        "    \"--sjs-primary-backcolor-light\": \"rgba(NaN, NaN, NaN, 0.07)\",\n" +
+                        "    \"--sjs-primary-backcolor-dark\": \"rgba(NaN, NaN, NaN, 1)\",\n" +
+                        "    \"--sjs-primary-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-primary-forecolor-light\": \"rgba(255, 255, 255, 0.25)\",\n" +
+                        "    \"--sjs-base-unit\": \"8px\",\n" +
+                        "    \"--sjs-corner-radius\": \"4px\",\n" +
+                        "    \"--sjs-secondary-backcolor\": \"rgba(255, 152, 20, 1)\",\n" +
+                        "    \"--sjs-secondary-backcolor-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                        "    \"--sjs-secondary-backcolor-semi-light\": \"rgba(255, 152, 20, 0.25)\",\n" +
+                        "    \"--sjs-secondary-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-secondary-forecolor-light\": \"rgba(255, 255, 255, 0.25)\",\n" +
+                        "    \"--sjs-shadow-small\": \"0px 1px 2px 0px rgba(0, 0, 0, 0.15)\",\n" +
+                        "    \"--sjs-shadow-medium\": \"0px 2px 6px 0px rgba(0, 0, 0, 0.1)\",\n" +
+                        "    \"--sjs-shadow-large\": \"0px 8px 16px 0px rgba(0, 0, 0, 0.1)\",\n" +
+                        "    \"--sjs-shadow-inner\": \"inset 0px 1px 2px 0px rgba(0, 0, 0, 0.15)\",\n" +
+                        "    \"--sjs-border-light\": \"rgba(0, 0, 0, 0.09)\",\n" +
+                        "    \"--sjs-border-default\": \"rgba(0, 0, 0, 0.16)\",\n" +
+                        "    \"--sjs-border-inside\": \"rgba(0, 0, 0, 0.16)\",\n" +
+                        "    \"--sjs-special-red\": \"rgba(229, 10, 62, 1)\",\n" +
+                        "    \"--sjs-special-red-light\": \"rgba(229, 10, 62, 0.1)\",\n" +
+                        "    \"--sjs-special-red-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-green\": \"rgba(25, 179, 148, 1)\",\n" +
+                        "    \"--sjs-special-green-light\": \"rgba(25, 179, 148, 0.1)\",\n" +
+                        "    \"--sjs-special-green-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-blue\": \"rgba(67, 127, 217, 1)\",\n" +
+                        "    \"--sjs-special-blue-light\": \"rgba(67, 127, 217, 0.1)\",\n" +
+                        "    \"--sjs-special-blue-forecolor\": \"rgba(255, 255, 255, 1)\",\n" +
+                        "    \"--sjs-special-yellow\": \"rgba(255, 152, 20, 1)\",\n" +
+                        "    \"--sjs-special-yellow-light\": \"rgba(255, 152, 20, 0.1)\",\n" +
+                        "    \"--sjs-special-yellow-forecolor\": \"rgba(255, 255, 255, 1)\"\n" +
+                        "  },\n" +
+                        "  \"themeName\": \"default\",\n" +
+                        "  \"colorPalette\": \"light\"\n" +
+                        "}" +
+                        "\n" +
+                        "  const survey = new Survey.Model(" + formjson + ");\n" +
+                        "\n" +
+                        "  // You can delete the line below if you do not use a customized theme\n" +
+                        "  survey.applyTheme(themeJson);\n" +
+                        "\n" +
+                        "\n" +
+                        "  $(\"#surveyElement\").Survey({ model: survey });";
+
+
+        webViewSurveyFormBinding.surveyWebView.evaluateJavascript(javascriptCode, null);
+    }
 
     public void Loadgetjavascript2(String formjson, String function) {
 
@@ -1360,6 +1422,26 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     }
 
+    public String getSurveyReadOnly(String id){
+        String formjson = realmDatabaseHlper.readDataSurvey(id);
+        String json = formjson;
+        int charactersToRemove = 1;
+
+        String stringWithoutStart = json.substring(charactersToRemove).substring(0, json.length() - charactersToRemove);
+        String finalString = stringWithoutStart.substring(0, stringWithoutStart.length() - charactersToRemove);
+
+        Log.d("constants.Tag", finalString);
+        Log.d(constants.info + "function", formjson);
+        Log.d(constants.Tag, entityId);
+        Log.d("form",formjson);
+
+        String form = "{"+finalString+",\n" +
+                "\"mode\": \"display\"}";
+
+        Log.d("Tag1", form);
+        return form.toString();
+    }
+
 
     public String getSurveyFormData(String id) {
         String formjson = realmDatabaseHlper.readDataSurvey(id);
@@ -1673,6 +1755,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         Log.d(constants.Tag, json);
         JsonObject parsedjson = (JsonObject) new JsonParser().parse(json);
+
 
         Log.d(constants.Tag, parsedjson.toString());
 
@@ -2090,11 +2173,121 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     }
                 }
             });
-        } else if (formId.equals("personal_mik_weight")) {
+        } else if (formId.equals("View_general_basic")) {
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("general_basic", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("View_general_diet")) {
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("general_diet", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("View_general_medical")) {
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("general_medical", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("view_personal_basic")){
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleId");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_basic", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("view_personal_milk")){
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleId");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_milk", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("view_personal_medical")){
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleId");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_medical", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("view_personal_traits")){
+            Bundle extraspersonalbasic = getIntent().getExtras();
+            farmId = extraspersonalbasic.getString("farmID");
+            farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleId");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setUpWebView2("personal_traits", "Android.PostFirstFormData(results)");
+
+
+
+            }
+        }
+        else if (formId.equals("personal_mik_weight")) {
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
             farmerId = extraspersonalbasic.getString("farmerID");
             cattleID = extraspersonalbasic.getString("cattleID");
+
             Log.d("ebd","called");
             sessionManager = new SessionManager(this);
 
@@ -2309,7 +2502,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void setUpWebView2(String key, String function) {
 
@@ -2333,8 +2525,15 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 if (!sessionManager.getthemstate()) {
-                    Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))), function);
-                    Log.d("key",key);
+                    if (mode.equals("readOnly")){
+                        LoadJavaScriptReadOnly(JsonToInject(getSurveyReadOnly(getFormEntity(key))));
+                        Log.d("key",key);
+                    }else {
+                        Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))), function);
+                        Log.d("key",key);
+                    }
+
+//                    Log.d("key",key);
                    // injectCities();
 
                 } else {

@@ -3,6 +3,7 @@ package com.example.cncdcattleedcandroid.ViewModels;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -13,6 +14,7 @@ import com.airbnb.lottie.L;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.UI.ActivityFarmerProfile;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -115,8 +117,10 @@ public class LoginViewModel extends AndroidViewModel {
 
                         }
                         else{
-
-                            isloginsucces.setValue(response.body().get("msg").getAsString());
+                            String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+//                            Toast.makeText(ActivityFarmerProfile.this,msg,Toast.LENGTH_SHORT).show();
+                            isloginsucces.setValue(msg);
+//                            isloginsucces.setValue(response.body().get("msg").getAsString());
                         }
                     }
 

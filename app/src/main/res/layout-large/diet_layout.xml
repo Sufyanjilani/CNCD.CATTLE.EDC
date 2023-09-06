@@ -183,29 +183,7 @@
 
                 </LinearLayout>
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/viewData"-->
-                <!--                    android:layout_width="50dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:src="@drawable/ic_baseline_visibility_24"-->
-                <!--                    android:textAlignment="center"-->
-                <!--                    android:padding="10dp"/>-->
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/deleteData"-->
-                <!--                    android:layout_width="50dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:src="@drawable/ic_baseline_delete_24"-->
-                <!--                    android:textAlignment="center"-->
-                <!--                    android:padding="10dp"/>-->
-
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/printData"-->
-                <!--                    android:layout_width="50dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:src="@drawable/ic_baseline_print_24"-->
-                <!--                    android:textAlignment="center"-->
-                <!--                    android:padding="10dp"/>-->
                 <LinearLayout
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -247,30 +225,6 @@
                 android:orientation="horizontal">
 
 
-                <!--            <TextView-->
-                <!--                android:id="@+id/farmerId"-->
-                <!--                android:layout_width="100dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:padding="10dp"-->
-                <!--                android:text="Farmer Id"-->
-                <!--                android:textColor="@color/textcolor"-->
-                <!--                android:textSize="16sp" />-->
-
-
-
-                <!--            <LinearLayout-->
-                <!--                android:layout_width="1dp"-->
-                <!--                android:layout_height="match_parent" />-->
-
-                <!--            <TextView-->
-                <!--                android:id="@+id/farmID"-->
-                <!--                android:layout_width="100dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:padding="10dp"-->
-                <!--                android:text="Farm Id"-->
-                <!--                android:textColor="@color/textcolor"-->
-                <!--                android:textSize="16sp" />-->
-
 
 
                 <LinearLayout
@@ -288,19 +242,6 @@
                     android:textSize="16sp" />
 
 
-                <!--                <LinearLayout-->
-                <!--                    android:layout_width="1dp"-->
-                <!--                    android:layout_height="match_parent" />-->
-
-                <!--                <TextView-->
-                <!--                    android:id="@+id/questionnaireId"-->
-                <!--                    android:layout_width="100dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:padding="10dp"-->
-                <!--                    android:layout_marginStart="15dp"-->
-                <!--                    android:text="Questionnaire ID"-->
-                <!--                    android:textColor="@color/textcolor"-->
-                <!--                    android:textSize="16sp" />-->
 
 
                 <LinearLayout
@@ -335,19 +276,6 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent" />
 
-                <!--            <TextView-->
-                <!--                android:id="@+id/manage"-->
-                <!--                android:gravity="center"-->
-                <!--                android:layout_width="100dp"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:padding="10dp"-->
-                <!--                android:text="Manage"-->
-                <!--                android:textColor="@color/textcolor"-->
-                <!--                android:textSize="18sp" />-->
-
-                <!--            <LinearLayout-->
-                <!--                android:layout_width="1dp"-->
-                <!--                android:layout_height="match_parent" />-->
 
 
 
@@ -358,11 +286,6 @@
             </LinearLayout>
 
 
-            <!--        <LinearLayout-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="1dp"-->
-            <!--            android:layout_marginStart="10dp"-->
-            <!--            android:layout_marginEnd="10dp" />-->
 
         </LinearLayout>
 

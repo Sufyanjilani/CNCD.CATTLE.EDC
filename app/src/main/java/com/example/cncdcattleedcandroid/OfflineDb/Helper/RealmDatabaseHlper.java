@@ -137,18 +137,6 @@ public class RealmDatabaseHlper {
         int id=1;
 
 
-// logic for incrementing Primary key
-//        if (sessionManager.checkisApplicationFirstTime()){
-//
-//            id = 1;
-//            Log.d(constants.info,"Check first"+id);
-//            sessionManager.SavePrimarykey(1);
-//        }
-//        else{
-//            id = sessionManager.getPrimaryKey()+1;
-//            sessionManager.SavePrimarykey(id);
-//            Log.d(constants.info,"Check second"+id);
-//        }
 
 
 
@@ -185,26 +173,6 @@ public class RealmDatabaseHlper {
     }
 
 
-//    public ArrayList<String> readDatafromFarmerModel(){
-//
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmResults<citiesModel> tasks = realm.where(citiesModel.class).findAll();
-//        ArrayList<String> datalist = new ArrayList<>();
-//        Log.d("TAG",tasks.toString());
-//        for (citiesModel task : tasks) {
-//            String cities = task.getCities();
-//            datalist.add(cities);
-//
-//
-//            // Handle the task data
-//        }
-//        Log.d("TAG","readtask");
-//
-//        realm.close();
-//
-//        return  datalist;
-//
-//    }
 
     public void insertFarmerForm(
             String id,
