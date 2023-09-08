@@ -18,6 +18,7 @@ import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.FarmerSurveyModel;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.UI.ActivityEntity;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -69,7 +70,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> isRequestSuccess = new MutableLiveData<>();
 
-
+    public MutableLiveData<String> isformJson = new MutableLiveData<>();
 
     SessionManager sessionManager;
 
@@ -998,7 +999,31 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 //
 //    }
 
+    public void loadEntityData(String farmId, String farmerId, String entityID){
+        Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getEntityData(farmId,farmerId,entityID);
+        getData.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    if (!response.body().get("error").getAsString().equals("true")){
+                        JsonObject responseObject = response.body();
+                        JsonObject dataObject = responseObject.get("data").getAsJsonObject();
+                        JsonObject formJson = dataObject.get("formJSON").getAsJsonObject();
+                        isformJson.setValue(formJson.toString());
+                    }else{
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        isformJson.setValue(msg);
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(constants.Tag, t.getMessage().toString());
+            }
+        });
+
+    }
 
 
 }

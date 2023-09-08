@@ -140,7 +140,8 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     RetrofitClientSurvey retrofitClientSurvey;
 
-    String mode = "", farmId, farmerId, cattleID ="0";
+    String mode = "", farmId, farmerId, cattleID ="0", entityID;
+    String formJson = "";
 
 
     //live data for end Coordinates
@@ -158,6 +159,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     ArrayList<String> imagestoragepath = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +196,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     }
 
-    public void LoadJavaScriptReadOnly(String formjson){
+    public void LoadJavaScriptReadOnly(String formjson, String formData){
         String javascriptCode =
                 "      window['surveyjs-widgets'].inputmask(Survey);\n" +
                         "      window['surveyjs-widgets'].nouislider(Survey);\n" +
@@ -247,6 +249,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                         "\n" +
                         "  const survey = new Survey.Model(" + formjson + ");\n" +
                         "\n" +
+                        "survey.data = "+ formData+";\n"+
                         "  // You can delete the line below if you do not use a customized theme\n" +
                         "  survey.applyTheme(themeJson);\n" +
                         "\n" +
@@ -2101,7 +2104,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        goback();
+        if (mode.equals("readOnly")){
+            super.onBackPressed();
+            sessionManager.saveDashboardFarmFarmerId("", "");
+        }else {
+            goback();
+        }
+
 
     }
 
@@ -2186,7 +2195,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         if (parsedjson.toString().equals("")){
 
-            return "";
+            return "{}";
         }
         else {
 
@@ -2617,13 +2626,27 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
             farmerId = extraspersonalbasic.getString("farmerID");
+            entityID = extraspersonalbasic.getString("entityID");
+            Log.d("farmId",farmId);
+            Log.d("farmerId",farmerId);
+            Log.d("entityID",entityID);
             mode = extraspersonalbasic.getString("mode");
             sessionManager = new SessionManager(this);
             loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("general_diet", "Android.PostFirstFormData(results)");
 
+                surveyViewModel.loadEntityData(farmId, farmerId, entityID);
+
+                surveyViewModel.isformJson.observe(ActivityWebViewSurveyForm.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            formJson = s;
+                            setUpWebView2("general_diet", "Android.PostFirstFormData(results)");
+                        }
+                    }
+                });
 
 
             }
@@ -2755,6 +2778,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         }
     }
+
 
 
     public JsonObject getEntities() {
@@ -2951,7 +2975,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                 if (!sessionManager.getthemstate()) {
                     if (mode.equals("readOnly")){
-                        LoadJavaScriptReadOnly(JsonToInject(getSurveyReadOnly(getFormEntity(key))));
+                        LoadJavaScriptReadOnly(JsonToInject(getSurveyReadOnly(getFormEntity(key))),formJson);
                         Log.d("key",key);
                     }else {
                         Loadgetjavascript2(JsonToInject(getSurveyFormData(getFormEntity(key))), function);

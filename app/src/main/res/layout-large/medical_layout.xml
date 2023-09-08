@@ -271,6 +271,13 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent" />
 
+                <ImageView
+                    android:id="@+id/viewData"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_visibility_24"
+                    android:textAlignment="center"
+                    android:padding="10dp"/>
 
 
 

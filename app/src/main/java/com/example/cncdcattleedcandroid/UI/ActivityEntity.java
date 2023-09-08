@@ -151,6 +151,29 @@ public class ActivityEntity extends AppCompatActivity {
         });
     }
 
+
+    public void loadEntityData(){
+        Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getEntityData("12","5","66");
+        getData.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    if (!response.body().get("error").getAsString().equals("true")){
+                        JsonObject responseObject = response.body();
+                        JsonObject dataObject = responseObject.get("data").getAsJsonObject();
+                        JsonObject formJson = dataObject.get("formJSON").getAsJsonObject();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+    }
     public void LoadData(){
 
         loadingDialog.ShowCustomLoadingDialog();

@@ -1,13 +1,17 @@
 package com.example.cncdcattleedcandroid.UI;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.databinding.ActivityCattleProfileBinding;
@@ -46,10 +50,10 @@ public class ActivityCattleProfile extends AppCompatActivity {
         cattleProfileBinding.farmAddress.setText(sessionManager.getFarmAddress()+", "+sessionManager.getFarmSector());
         cattleProfileBinding.farmerMobile.setText(sessionManager.getMobileNumber()+" / "+sessionManager.getAltNumber());
 
-        cattleProfileBinding.cattleType.setText("Type: "+sessionManager.getcattleType());
-        cattleProfileBinding.cattleGender.setText("Gender: "+sessionManager.getcattleGender());
-        cattleProfileBinding.cattleBreed.setText("Breed: "+sessionManager.getcattleBreed());
-        cattleProfileBinding.cattleSampleId.setText("Sample ID: "+sessionManager.getcattleSampleId());
+        cattleProfileBinding.cattleType.setText(sessionManager.getcattleType());
+        cattleProfileBinding.cattleGender.setText(sessionManager.getcattleGender());
+        cattleProfileBinding.cattleBreed.setText(sessionManager.getcattleBreed());
+        cattleProfileBinding.cattleSampleId.setText(sessionManager.getcattleSampleId());
 
         cattleProfileBinding.viewCattleBasicData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,12 +106,30 @@ public class ActivityCattleProfile extends AppCompatActivity {
                 finish();
             }
         });
+
+        cattleProfileBinding.cattleProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog();
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         sessionManager.saveCattleDetails("","","","");
+
+    }
+
+    public void alertDialog(){
+        AlertDialog.Builder imageView = new AlertDialog.Builder(ActivityCattleProfile.this);
+        View view = LayoutInflater.from(ActivityCattleProfile.this).inflate(R.layout.cattle_image, null, false);
+        imageView.setView(view);
+        ImageView cattleImgView = view.findViewById(R.id.cattleImage);
+        Glide.with(ActivityCattleProfile.this).load(cattleProfileBinding.cattleProfile).into(cattleImgView);
+        imageView.show();
+
 
     }
 }

@@ -116,11 +116,11 @@ public class SessionManager {
         editor.commit();
     }
 
-    public String getFarmId(){
+    public String getDashboardFarmId(){
         return sharedPreferences.getString("farmId","0").toString();
     }
 
-    public String getFarmerId(){
+    public String getDashboardFarmerId(){
         return sharedPreferences.getString("farmerId","0").toString();
     }
 

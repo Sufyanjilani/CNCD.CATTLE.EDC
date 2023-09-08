@@ -215,112 +215,110 @@
 
         </LinearLayout>
 
-        <LinearLayout
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="5dp"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?android:attr/selectableItemBackground">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="Cattel Details:"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textColor="@color/textcolor"-->
+<!--                    android:autoSizeTextType="uniform" />-->
+<!--            </LinearLayout>-->
+
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:textSize="18sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:text="Cattle Type"-->
+<!--                        android:textColor="@color/textcolor"-->
+<!--                        android:autoSizeTextType="uniform" />-->
+<!--                </LinearLayout>-->
+
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:textSize="18sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:text="Cattle Gender"-->
+<!--                        android:textColor="@color/textcolor"-->
+<!--                        android:autoSizeTextType="uniform" />-->
+<!--                </LinearLayout>-->
+
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?android:attr/selectableItemBackground">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:autoSizeTextType="uniform"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="Cattle Breed"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textColor="@color/textcolor"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?android:attr/selectableItemBackground">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:text="Cattle Sample Id"-->
+<!--                    android:textColor="@color/textcolor"-->
+<!--                    android:autoSizeTextType="uniform" />-->
+<!--            </LinearLayout>-->
+
+
+<!--            -->
+
+
+<!--        </LinearLayout>-->
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:orientation="vertical">
+            android:layout_height="380dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:padding="10dp"
-                    android:text="Cattel Details:"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@color/textcolor"
-                    android:autoSizeTextType="uniform" />
-            </LinearLayout>
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/cattleType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:padding="10dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="Cattle Type"
-                        android:textColor="@color/textcolor"
-                        android:autoSizeTextType="uniform" />
-                </LinearLayout>
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/cattleGender"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:padding="10dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="Cattle Gender"
-                        android:textColor="@color/textcolor"
-                        android:autoSizeTextType="uniform" />
-                </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/cattleBreed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
-                    android:padding="10dp"
-                    android:text="Cattle Breed"
-                    android:textAlignment="center"
-                    android:textColor="@color/textcolor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/cattleSampleId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:padding="10dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text="Cattle Sample Id"
-                    android:textColor="@color/textcolor"
-                    android:autoSizeTextType="uniform" />
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="130dp">
-
-            </View>
-
-
-        </LinearLayout>
+        </View>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -348,7 +346,7 @@
 
 
     <LinearLayout
-        android:layout_width="885dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
@@ -447,7 +445,311 @@
 
             </LinearLayout>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="15dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:textSize="18sp"
+                                android:text="Cattle Sample Id: "
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                            <TextView
+                                android:id="@+id/cattleSampleId"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textStyle="bold"
+                                android:textSize="18sp"
+                                android:text=""
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:text="Cattle Type: "
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                            <TextView
+                                android:id="@+id/cattleType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textSize="18sp"
+                                android:layout_marginStart="40dp"
+                                android:textStyle="bold"
+                                android:text=""
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:text="Cattle Gender: "
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                            <TextView
+                                android:id="@+id/cattleGender"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:padding="10dp"
+                                android:textSize="18sp"
+                                android:layout_marginStart="20dp"
+                                android:textStyle="bold"
+                                android:text=""
+                                android:textColor="@color/textcolor"
+                                android:autoSizeTextType="uniform" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeTextType="uniform"
+                                android:padding="10dp"
+                                android:text="Cattle Breed: "
+                                android:textAlignment="center"
+                                android:textColor="@color/textcolor"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cattleBreed"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoSizeTextType="uniform"
+                                android:padding="10dp"
+                                android:layout_marginStart="25dp"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/textcolor"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+
+
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="400dp"
+                        android:layout_height="match_parent">
+
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/cattleProfile"
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/cowmilk"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/frontPode"
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/cowmilk"/>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="350dp"
+                        android:layout_height="match_parent">
+
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/sidePose"
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/cowmilk"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="15dp">
+
+                <LinearLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?android:attr/selectableItemBackground">
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/viewCattleMilkingData"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
+                        app:cornerRadius="10dp"
+                        android:textSize="12dp"
+                        android:backgroundTint="@color/primaryblue"
+                        android:drawableEnd="@drawable/baseline_visibility_24"
+                        android:text="View Milking Data"
+                        android:textColor="@color/textcolor" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent">
+                </View>
+
+                <LinearLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?android:attr/selectableItemBackground">
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/viewCattleMedicalData"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
+                        app:cornerRadius="10dp"
+                        android:textSize="12dp"
+                        android:backgroundTint="@color/primaryblue"
+                        android:drawableEnd="@drawable/baseline_visibility_24"
+                        android:text="View Medical Data"
+                        android:textColor="@color/textcolor" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent">
+                </View>
+
+                <LinearLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?android:attr/selectableItemBackground">
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/viewCattleTraitsData"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
+                        app:cornerRadius="10dp"
+                        android:textSize="12dp"
+                        android:backgroundTint="@color/primaryblue"
+                        android:drawableEnd="@drawable/baseline_visibility_24"
+                        android:text="View Traits Data"
+                        android:textColor="@color/textcolor" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -455,6 +757,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="50dp"
+                android:visibility="gone"
                 android:background="?android:attr/selectableItemBackground">
 
 
@@ -471,78 +774,8 @@
                     android:textColor="@color/textcolor" />
 
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp">
-            </View>
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="?android:attr/selectableItemBackground">
 
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/viewCattleMilkingData"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    app:cornerRadius="10dp"
-                    android:textSize="12dp"
-                    android:backgroundTint="@color/primaryblue"
-                    android:drawableEnd="@drawable/baseline_visibility_24"
-                    android:text="View Milking Data"
-                    android:textColor="@color/textcolor" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp">
-            </View>
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="?android:attr/selectableItemBackground">
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/viewCattleMedicalData"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    app:cornerRadius="10dp"
-                    android:textSize="12dp"
-                    android:backgroundTint="@color/primaryblue"
-                    android:drawableEnd="@drawable/baseline_visibility_24"
-                    android:text="View Medical Data"
-                    android:textColor="@color/textcolor" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp">
-            </View>
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="?android:attr/selectableItemBackground">
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/viewCattleTraitsData"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    app:cornerRadius="10dp"
-                    android:textSize="12dp"
-                    android:backgroundTint="@color/primaryblue"
-                    android:drawableEnd="@drawable/baseline_visibility_24"
-                    android:text="View Traits Data"
-                    android:textColor="@color/textcolor" />
-
-            </LinearLayout>
 
 
 

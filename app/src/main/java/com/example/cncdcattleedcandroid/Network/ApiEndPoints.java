@@ -60,8 +60,10 @@ public interface ApiEndPoints {
     Call<JsonObject> getFarmerData(@Path("farmID") String farmId,
                                    @Path("farmerID") String farmerId);
 
-
-
+    @GET("farmers/{farmID}/{farmerID}/profile/entities/{farmerEntityID}")
+    Call<JsonObject> getEntityData(@Path("farmID") String farmId,
+                                   @Path("farmerID") String farmerId,
+                                    @Path("farmerEntityID") String farmerEntityId);
     @Multipart
     @POST("upload")
     Call<ResponseBody> uploadImagesAndJson(
