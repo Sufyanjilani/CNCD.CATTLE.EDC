@@ -1,6 +1,8 @@
 package com.example.cncdcattleedcandroid.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +85,27 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             @Override
             public void onClick(View v) {
                 ViewDetails(model);
+            }
+        });
+        holder.datagridlayoutBinding.deleteData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ctx);
+                dialog.setTitle("Delete Form");
+                dialog.setMessage("Are You Sure You Want To Delete Record?");
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        
+                    }
+                });
+                dialog.show();
             }
         });
 

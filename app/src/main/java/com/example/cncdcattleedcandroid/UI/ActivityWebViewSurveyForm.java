@@ -45,10 +45,12 @@ import android.widget.Toast;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.ImageInfo;
+import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.Utils.ImageCompression;
 import com.example.cncdcattleedcandroid.Utils.ImageUploader;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
@@ -175,6 +177,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
         LocationUpdates();
         loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this,this);
 
+        surveyViewModel.isRequestSuccess.observe(ActivityWebViewSurveyForm.this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+            }
+        });
 
     }
 
@@ -889,10 +897,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
             String locationCoordinatesEnd = latStart+","+lonStart;
 
+            String finalAppVersion = appVersion;
 
             surveyViewModel.PostFirstFormData(context,
                     questionnaireID,
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -902,6 +911,87 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesStart,
                     locationCoordinatesEnd
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                PostFirstFormData(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//
+//                    surveyViewModel.isRequestSuccess.observe(ActivityWebViewSurveyForm.this, new Observer<Boolean>() {
+//                        @Override
+//                        public void onChanged(Boolean aBoolean) {
+//                            if (!aBoolean){
+//                                AlertDialog alertDialog;
+//                                androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                                alertDialog = dialog.create();
+//                                dialog.setTitle("No internet Connection present at the moment");
+//                                dialog.setMessage("Do you wish to go to internet settings?");
+//                                dialog.setIcon(R.drawable.cowimage);
+//                                dialog.setCancelable(false);
+//                                dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                        PostFirstFormData(formJSON);
+//                                        alertDialog.dismiss();
+//                                    }
+//                                });
+//
+//                                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                    }
+//                                });
+//
+//                                dialog.show();
+//                            }
+//                        }
+//                    });
+//
+//
+//                }
+//            });
+
+
+
+
 
         }
 
@@ -943,11 +1033,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+            String finalAppVersion = appVersion;
+
             surveyViewModel.PostFirstCattleFormData(context,
                     questionnaireID,
                     farmId,
                     farmerId,
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -957,6 +1049,60 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesStart,
                     locationCoordinatesEnd
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//                        surveyViewModel.PostFirstCattleFormData(context,
+//                                questionnaireID,
+//                                farmId,
+//                                farmerId,
+//                                finalAppVersion,
+//                                locationCoordinate,
+//                                formJSON,
+//                                accessToken,
+//                                interviewtakenAt,
+//                                interviewTimeStart,
+//                                interviewTimeEnd,
+//                                locationCoordinatesStart,
+//                                locationCoordinatesEnd
+//                        );
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                PostFirstFormDatacattle(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//                }
+//            });
 
         }
 
@@ -1145,11 +1291,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+            String finalAppVersion = appVersion;
+
             surveyViewModel.SubmitSecondForm(context,
                     questionnaireID,
                     sessionManager.get_Farm_ID(),
                     sessionManager.get_Farmer_ID(),
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -1160,6 +1308,61 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd,
                     entityId
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//                        surveyViewModel.SubmitSecondForm(context,
+//                                questionnaireID,
+//                                sessionManager.get_Farm_ID(),
+//                                sessionManager.get_Farmer_ID(),
+//                                finalAppVersion,
+//                                locationCoordinate,
+//                                formJSON,
+//                                accessToken,
+//                                interviewtakenAt,
+//                                interviewTimeStart,
+//                                interviewTimeEnd,
+//                                locationCoordinatesStart,
+//                                locationCoordinatesEnd,
+//                                entityId
+//                        );
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                SubmitSecondForm(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//                }
+//            });
 
 
         }
@@ -1199,11 +1402,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+            String finalAppVersion = appVersion;
+
             surveyViewModel.SubmitThirdForm(context,
                     questionnaireID,
                     sessionManager.get_Farmer_ID(),
                     sessionManager.get_Farm_ID(),
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -1214,6 +1419,61 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd,
                     entityId
             );
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+                        // Internet is available
+                        // Do your internet-related tasks here
+
+
+                        surveyViewModel.SubmitThirdForm(context,
+                                questionnaireID,
+                                sessionManager.get_Farmer_ID(),
+                                sessionManager.get_Farm_ID(),
+                                finalAppVersion,
+                                locationCoordinate,
+                                formJSON,
+                                accessToken,
+                                interviewtakenAt,
+                                interviewTimeStart,
+                                interviewTimeEnd,
+                                locationCoordinatesStart,
+                                locationCoordinatesEnd,
+                                entityId
+                        );
+
+                    } else {
+                        // No internet connection
+                        // Display a message or handle the lack of internet connection
+                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+                        dialog.setTitle("No internet Connection present at the moment");
+                        dialog.setMessage("Do you wish to go to internet settings?");
+                        dialog.setIcon(R.drawable.cowimage);
+                        dialog.setCancelable(false);
+                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                SubmitThirdForm(formJSON);
+                            }
+                        });
+
+                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            }
+                        });
+
+                        dialog.show();
+                    }
+
+                }
+            });
 
 
         }
@@ -1254,9 +1514,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+            String finalAppVersion = appVersion;
+
             surveyViewModel.SubmitSecondFormCattle(context,
                     questionnaireID,
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -1267,6 +1529,59 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd
 
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//                        surveyViewModel.SubmitSecondFormCattle(context,
+//                                questionnaireID,
+//                                finalAppVersion,
+//                                locationCoordinate,
+//                                formJSON,
+//                                accessToken,
+//                                interviewtakenAt,
+//                                interviewTimeStart,
+//                                interviewTimeEnd,
+//                                locationCoordinatesStart,
+//                                locationCoordinatesEnd
+//
+//                        );
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                SubmitCattleEntityForm(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//                }
+//            });
 
 
         }
@@ -1307,9 +1622,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+
+            String finalAppVersion = appVersion;
+
             surveyViewModel.SubmitThirdFormCattle(context,
                     questionnaireID,
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -1320,27 +1638,79 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd
 
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//                        surveyViewModel.SubmitThirdFormCattle(context,
+//                                questionnaireID,
+//                                finalAppVersion,
+//                                locationCoordinate,
+//                                formJSON,
+//                                accessToken,
+//                                interviewtakenAt,
+//                                interviewTimeStart,
+//                                interviewTimeEnd,
+//                                locationCoordinatesStart,
+//                                locationCoordinatesEnd
+//
+//                        );
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                SubmitCattleEntityForm3(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//                }
+//            });
 
-
-    String[] imageUrls = {"url1", "url2", "url3"};
-
-
-    ArrayList<MultipartBody.Part> imageParts = new ArrayList<>();
-            for (String imageUrl : imageUrls) {
-        File imageFile = new File(imageUrl);
-        RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images[]", imageFile.getName(), imageBody);
-        imageParts.add(imagePart);
-    }
-
-    // Create your JSON object
-    JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("key1", "value1");
-            jsonObject.addProperty("key2", "value2");
-
-    // Convert JSON object to RequestBody
-    RequestBody jsonBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-
+//    String[] imageUrls = {"url1", "url2", "url3"};
+//
+//
+//    ArrayList<MultipartBody.Part> imageParts = new ArrayList<>();
+//            for (String imageUrl : imageUrls) {
+//        File imageFile = new File(imageUrl);
+//        RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+//        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images[]", imageFile.getName(), imageBody);
+//        imageParts.add(imagePart);
+//    }
+//
+//    // Create your JSON object
+//    JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("key1", "value1");
+//            jsonObject.addProperty("key2", "value2");
+//
+//    // Convert JSON object to RequestBody
+//    RequestBody jsonBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+//
 
 //    surveyViewModel.SubmitThirdFormDataMultipart(jsonBody,imageParts);
 
@@ -1382,9 +1752,11 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             String locationCoordinatesEnd = latStart+","+lonStart;
 
 
+            String finalAppVersion = appVersion;
+
             surveyViewModel.SubmitFourthFormCattle(context,
                     questionnaireID,
-                    appVersion,
+                    finalAppVersion,
                     locationCoordinate,
                     formJSON,
                     accessToken,
@@ -1395,6 +1767,59 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     locationCoordinatesEnd
 
             );
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//                        // Internet is available
+//                        // Do your internet-related tasks here
+//
+//
+//                        surveyViewModel.SubmitFourthFormCattle(context,
+//                                questionnaireID,
+//                                finalAppVersion,
+//                                locationCoordinate,
+//                                formJSON,
+//                                accessToken,
+//                                interviewtakenAt,
+//                                interviewTimeStart,
+//                                interviewTimeEnd,
+//                                locationCoordinatesStart,
+//                                locationCoordinatesEnd
+//
+//                        );
+//
+//                    } else {
+//                        // No internet connection
+//                        // Display a message or handle the lack of internet connection
+//                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(context);
+//                        dialog.setTitle("No internet Connection present at the moment");
+//                        dialog.setMessage("Do you wish to go to internet settings?");
+//                        dialog.setIcon(R.drawable.cowimage);
+//                        dialog.setCancelable(false);
+//                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                                SubmitCattleEntityForm4(formJSON);
+//                            }
+//                        });
+//
+//                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.show();
+//                    }
+//
+//                }
+//            });
 
 
         }

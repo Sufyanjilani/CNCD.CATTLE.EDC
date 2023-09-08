@@ -67,6 +67,9 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isMilkWeightSubmitted = new MutableLiveData<Boolean>();
 
 
+    public MutableLiveData<Boolean> isRequestSuccess = new MutableLiveData<>();
+
+
 
     SessionManager sessionManager;
 
@@ -183,11 +186,12 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                     formMsg.setValue(message);
                     isMedicalEntitySubmitted.setValue(true);
 
+
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                     isMedicalEntitySubmitted.setValue(false);
                 }
             }
@@ -259,8 +263,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                     isDietEntitySubmitted.setValue(false);
                 }
             }
@@ -329,6 +333,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
                     String message = response.body().get("msg").getAsString();
                     formMsg.setValue(message);
+                    isRequestSuccess.setValue(true);
 
                 }else {
                     String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
@@ -340,6 +345,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 _isfirstformSent.setValue(false);
+                isRequestSuccess.setValue(false);
             }
         });
 
@@ -398,8 +404,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                     isMilkWeightSubmitted.setValue(false);
 
                 }
@@ -481,8 +487,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                 }
             }
 
@@ -562,8 +568,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                 }
             }
 
@@ -800,8 +806,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
 
                 }
             }
@@ -878,8 +884,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }
                 else{
 
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
                 }
             }
 
@@ -955,8 +961,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
                 }
                 else{
-                    String message = response.body().get("msg").getAsString();
-                    formMsg.setValue(message);
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
 
 
                 }

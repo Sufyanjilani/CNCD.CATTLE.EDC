@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,6 +26,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,6 +68,7 @@ import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityDashboardBinding;
@@ -128,6 +131,7 @@ public class ActivityDashboard extends AppCompatActivity {
     TextView headerName, headerVersion;
     String totalFarms, totalFarmers, totalCattles;
     String farmerID, farmID;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -151,25 +155,27 @@ public class ActivityDashboard extends AppCompatActivity {
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
-        loadingDialog.ShowCustomLoadingDialog();
         activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
         InitializeHeader(navigationView);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
-       setCardsData();
-
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                setrecyclerAdapter();
-
-            }
-        },200);
+//        if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//            // Internet is available
+//            // Do your internet-related tasks here
+//            setCardsData();
+//        } else {
+//            // No internet connection
+//            // Display a message or handle the lack of internet connection
+//            Toast.makeText(ActivityDashboard.this,"No Internet",Toast.LENGTH_SHORT).show();
+//        }
 
 
 
+
+
+
+
+        LoadData();
 
         setAnimation2();
 
@@ -259,13 +265,55 @@ public class ActivityDashboard extends AppCompatActivity {
                         sessionManager.Save_Farm_and_Farmer_ID("","");
                         sessionManager.saveStartCoordinatesAndTime(0,0,"");
                         finish();
-                    }
-                    else{
+                    } else if (s.contains("failed")) {
+
+                        loadingDialog.dissmissDialog();
+                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityDashboard.this);
+                        dialog.setTitle("No internet Connection present at the moment");
+                        dialog.setMessage("Do you wish to go to internet settings?");
+                        dialog.setIcon(R.drawable.cowimage);
+                        dialog.setCancelable(false);
+                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                LoadData();
+
+                            }
+                        });
+
+                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                finishAffinity();
+                            }
+                        });
+
+                        dialog.show();
+
+
+                    } else{
 
                         Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
                     }
                 }
 
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        LoadData();
+                    }
+                },1000);
             }
         });
 
@@ -552,12 +600,13 @@ public class ActivityDashboard extends AppCompatActivity {
                     }
                     cattleAdapter = new CattleAdapter(cattlesArrayList, ActivityDashboard.this);
                     activityDashboardBinding.recycler.setLayoutManager(new LinearLayoutManager(ActivityDashboard.this));
-                    activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+
 
                     int resId = R.anim.slide_up_anim_layout;
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ActivityDashboard.this, resId);
                     activityDashboardBinding.recycler.setLayoutAnimation(animation);
-                    cattleAdapter.notifyDataSetChanged();
+                    //cattleAdapter.notifyDataSetChanged();
+                    activityDashboardBinding.recycler.setAdapter(cattleAdapter);
                     sessionManager.saveDashboardFarmFarmerId(
                             farmID,
                             farmerID
@@ -716,6 +765,57 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
         a.show();
+    }
+
+
+    public void LoadData(){
+
+        loadingDialog.ShowCustomLoadingDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (InternetUtils.isInternetConnected(getApplicationContext())) {
+                    // Internet is available
+                    // Do your internet-related tasks here
+                    setrecyclerAdapter();
+                    setCardsData();
+                    Log.d("if","if");
+
+                } else {
+
+                    // No internet connection
+                    // Display a message or handle the lack of internet connection
+                    androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityDashboard.this);
+                    dialog.setTitle("No internet Connection present at the moment");
+                    dialog.setMessage("Do you wish to go to internet settings?");
+                    dialog.setIcon(R.drawable.cowimage);
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            LoadData();
+                        }
+                    });
+
+                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finishAffinity();
+                        }
+                    });
+
+                    dialog.show();
+                    loadingDialog.dissmissDialog();
+                }
+
+
+
+            }
+        },200);
     }
 }
 

@@ -3,6 +3,8 @@ package com.example.cncdcattleedcandroid.ViewModels;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         sessionManager = new SessionManager(getApplication().getApplicationContext());
         realmDatabaseHlper = new RealmDatabaseHlper();
+
     }
 
     public void Login(String username, String password,String appversion,String locationcoordinates){
