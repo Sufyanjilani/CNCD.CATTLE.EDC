@@ -3,10 +3,13 @@ package com.example.cncdcattleedcandroid.UI;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Adapters.DietAdapter;
 import com.example.cncdcattleedcandroid.Adapters.MedicalAdapter;
@@ -16,6 +19,9 @@ import com.example.cncdcattleedcandroid.Models.MedicalEntityModel;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
+import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.databinding.ActivityEntityBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -31,6 +37,9 @@ public class ActivityEntity extends AppCompatActivity {
     ActivityEntityBinding activityEntityBinding;
     MedicalAdapter medicalAdapter;
     DietAdapter dietAdapter;
+    LoadingDialog loadingDialog;
+
+    Constants constants;
     SessionManager sessionManager;
     String farmId, farmerId;
     @Override
@@ -38,14 +47,15 @@ public class ActivityEntity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityEntityBinding = ActivityEntityBinding.inflate(getLayoutInflater());
         setContentView(activityEntityBinding.getRoot());
+        constants = new Constants();
         sessionManager = new SessionManager(this);
+        loadingDialog = new LoadingDialog(this,this);
 
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
         farmId = extra.getString("farmID");
         farmerId = extra.getString("farmerID");
-        Log.d("farmid",farmId);
-        Log.d("farmerid", farmerId);
+
 
         activityEntityBinding.name.setText(sessionManager.getFarmerName());
         activityEntityBinding.farmName.setText(sessionManager.getFarmName());
@@ -79,7 +89,7 @@ public class ActivityEntity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        getFarmerEntity();
+       LoadData();
     }
 
     public void getFarmerEntity(){
@@ -126,14 +136,67 @@ public class ActivityEntity extends AppCompatActivity {
                         dietAdapter = new DietAdapter(dietModelArrayList, ActivityEntity.this);
                         activityEntityBinding.dietRecyler.setLayoutManager(new LinearLayoutManager(ActivityEntity.this));
                         activityEntityBinding.dietRecyler.setAdapter(dietAdapter);
+                    }else{
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        Toast.makeText(ActivityEntity.this,msg,Toast.LENGTH_SHORT).show();
                     }
+                    loadingDialog.dissmissDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                Log.d(constants.Tag, t.getMessage().toString());
             }
         });
+    }
+
+    public void LoadData(){
+
+        loadingDialog.ShowCustomLoadingDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (InternetUtils.isInternetConnected(getApplicationContext())) {
+                    // Internet is available
+                    // Do your internet-related tasks here
+                    getFarmerEntity();
+                    loadingDialog.dissmissDialog();
+
+                } else {
+                    loadingDialog.dissmissDialog();
+                    // No internet connection
+                    // Display a message or handle the lack of internet connection
+                    androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityEntity.this);
+                    dialog.setTitle("No internet Connection present at the moment");
+                    dialog.setMessage("Do you wish to go to internet settings?");
+                    dialog.setIcon(R.drawable.cowimage);
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            LoadData();
+                        }
+                    });
+
+                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finishAffinity();
+                        }
+                    });
+
+                    dialog.show();
+                    loadingDialog.dissmissDialog();
+                }
+
+
+
+            }
+        },200);
     }
 }

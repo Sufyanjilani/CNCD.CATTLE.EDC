@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
                         "base64"
                         );
 
-//                new RealDBhelper.AppdatabaseAHelper().InsertAppdata(1,"100","200");
 
                 setData();
             }

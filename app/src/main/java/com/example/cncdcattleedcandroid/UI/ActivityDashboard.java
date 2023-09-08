@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,6 +26,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,6 +68,7 @@ import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.OfflineDb.Models.DashboardDataModel;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityDashboardBinding;
@@ -128,6 +131,7 @@ public class ActivityDashboard extends AppCompatActivity {
     TextView headerName, headerVersion;
     String totalFarms, totalFarmers, totalCattles;
     String farmerID, farmID;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -146,44 +150,32 @@ public class ActivityDashboard extends AppCompatActivity {
         databaseHlper.InitializeRealm(this);
         checkThemesState();
         checkAndRequestPermissions();
-        LoadPieChart1();
-        LoadPieChart2();
-        LoadPieChart3();
-//        setUpMPChart();
-//        setData(5, 100);
-        CreateMPPicChart();
         AnimateTextView();
         //CheckisDataSavedOffline();
         realmDatabaseHlper = new RealmDatabaseHlper();
         realmDatabaseHlper.InitializeRealm(this);
         loadingDialog = new LoadingDialog(ActivityDashboard.this,this);
-        loadingDialog.ShowCustomLoadingDialog();
         activityDashboardBinding.researchOfficerName.setText(sessionManager.getName());
         InitializeHeader(navigationView);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
-       setCardsData();
-
-
-
-//        arrayList = viewModel.dashboardData();
-//        Log.d("TAGlist",viewModel.dashboardData().toString());
-//        cattleAdapter = new CattleAdapter(arrayList, ActivityDashboard.this);
-//        activityDashboardBinding.recycler.setLayoutManager(new LinearLayoutManager(ActivityDashboard.this));
-//        activityDashboardBinding.recycler.setAdapter(cattleAdapter);
-
-//        arrayList = viewModel.dashboardData();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                setrecyclerAdapter();
-
-            }
-        },200);
+//        if (InternetUtils.isInternetConnected(getApplicationContext())) {
+//            // Internet is available
+//            // Do your internet-related tasks here
+//            setCardsData();
+//        } else {
+//            // No internet connection
+//            // Display a message or handle the lack of internet connection
+//            Toast.makeText(ActivityDashboard.this,"No Internet",Toast.LENGTH_SHORT).show();
+//        }
 
 
 
+
+
+
+
+        LoadData();
 
         setAnimation2();
 
@@ -193,13 +185,6 @@ public class ActivityDashboard extends AppCompatActivity {
 
         viewModel  = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-
-        // Set a Toolbar to replace the ActionBar.
-
-
-        // This will display an Up icon (<-), we will replace it with hamburger later
-
-        // Find our drawer view
 
 
 
@@ -280,13 +265,55 @@ public class ActivityDashboard extends AppCompatActivity {
                         sessionManager.Save_Farm_and_Farmer_ID("","");
                         sessionManager.saveStartCoordinatesAndTime(0,0,"");
                         finish();
-                    }
-                    else{
+                    } else if (s.contains("failed")) {
+
+                        loadingDialog.dissmissDialog();
+                        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityDashboard.this);
+                        dialog.setTitle("No internet Connection present at the moment");
+                        dialog.setMessage("Do you wish to go to internet settings?");
+                        dialog.setIcon(R.drawable.cowimage);
+                        dialog.setCancelable(false);
+                        dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                LoadData();
+
+                            }
+                        });
+
+                        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                finishAffinity();
+                            }
+                        });
+
+                        dialog.show();
+
+
+                    } else{
 
                         Toast.makeText(ActivityDashboard.this,s,Toast.LENGTH_SHORT).show();
                     }
                 }
 
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        LoadData();
+                    }
+                },1000);
             }
         });
 
@@ -359,16 +386,6 @@ public class ActivityDashboard extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
 
-//
-//        switch(menuItem.getItemId()) {
-//            case R.id.drawersignout:
-//                Toast.makeText(this,"Signout Button pressed",Toast.LENGTH_SHORT).show();
-//                break;
-//            default:
-//                Toast.makeText(this,"Signout Button pressed",Toast.LENGTH_SHORT).show();
-//                break;
-//
-//        }
 
         if (menuItem.getItemId() == R.id.drawersignout) {
 
@@ -388,7 +405,6 @@ public class ActivityDashboard extends AppCompatActivity {
 
         }
 
-        //setTitle(menuItem.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
@@ -474,77 +490,6 @@ public class ActivityDashboard extends AppCompatActivity {
         }
     }
 
-    public void LoadPieChart1() {
-
-        activityDashboardBinding.piechart.addPieSlice(
-                new PieModel(
-                        "R",
-                        10,
-                        Color.parseColor("#FFA726")));
-        activityDashboardBinding.piechart.addPieSlice(
-                new PieModel(
-                        "Python",
-                        15,
-                        Color.parseColor("#66BB6A")));
-        activityDashboardBinding.piechart.addPieSlice(
-                new PieModel(
-                        "C++",
-                        25,
-                        Color.parseColor("#EF5350")));
-        activityDashboardBinding.piechart.addPieSlice(
-                new PieModel(
-                        "Java",
-                        35,
-                        Color.parseColor("#29B6F6")));
-    }
-
-    public void LoadPieChart2() {
-        activityDashboardBinding.piechart2.addPieSlice(
-                new PieModel(
-                        "R",
-                        10,
-                        Color.parseColor("#FFA726")));
-        activityDashboardBinding.piechart2.addPieSlice(
-                new PieModel(
-                        "Python",
-                        15,
-                        Color.parseColor("#66BB6A")));
-        activityDashboardBinding.piechart2.addPieSlice(
-                new PieModel(
-                        "C++",
-                        25,
-                        Color.parseColor("#EF5350")));
-        activityDashboardBinding.piechart2.addPieSlice(
-                new PieModel(
-                        "Java",
-                        35,
-                        Color.parseColor("#29B6F6")));
-
-    }
-
-    public void LoadPieChart3() {
-        activityDashboardBinding.piechart3.addPieSlice(
-                new PieModel(
-                        "R",
-                        10,
-                        Color.parseColor("#FFA726")));
-        activityDashboardBinding.piechart3.addPieSlice(
-                new PieModel(
-                        "Python",
-                        15,
-                        Color.parseColor("#66BB6A")));
-        activityDashboardBinding.piechart3.addPieSlice(
-                new PieModel(
-                        "C++",
-                        25,
-                        Color.parseColor("#EF5350")));
-        activityDashboardBinding.piechart3.addPieSlice(
-                new PieModel(
-                        "Java",
-                        35,
-                        Color.parseColor("#29B6F6")));
-
-    }
 
 
     public void InitializeHeader(NavigationView navigationView) {
@@ -574,235 +519,6 @@ public class ActivityDashboard extends AppCompatActivity {
         });
     }
 
-
-//    public void LoadBubbleChart() {
-//
-//        Scatter bubble = AnyChart.bubble();
-//
-//        bubble.animation(true);
-//
-//        bubble.title().enabled(true);
-//        bubble.title().useHtml(true);
-//        bubble.title()
-//                .padding(0d, 0d, 10d, 0d);
-//
-//        bubble.padding(20d, 20d, 10d, 20d);
-//
-//        bubble.yGrid(true)
-//                .xGrid(true)
-//                .xMinorGrid(true)
-//                .yMinorGrid(true);
-//
-//        bubble.minBubbleSize(5d)
-//                .maxBubbleSize(40d);
-//
-//        bubble.xAxis(0)
-//                .title("Average pulse during training")
-//                .minorTicks(true);
-//        bubble.yAxis(0)
-//                .title("Average power")
-//                .minorTicks(true);
-//
-//        bubble.legend().enabled(true);
-//        bubble.labels().padding(0d, 0d, 10d, 0d);
-//
-//        List<DataEntry> data = new ArrayList<>();
-//        data.add(new CustomBubbleDataEntry(1, 184, 113, "10/13/2014", 20));
-//
-//
-//        bubble.tooltip()
-//                .useHtml(true)
-//                .fontColor("#fff")
-//                .format("function() {\n" +
-//                        "        return this.getData('data') + '<br/>' +\n" +
-//                        "          'Power: <span style=\"color: #d2d2d2; font-size: 12px\">' +\n" +
-//                        "          this.getData('value') + '</span></strong><br/>' +\n" +
-//                        "          'Pulse: <span style=\"color: #d2d2d2; font-size: 12px\">' +\n" +
-//                        "          this.getData('x') + '</span></strong><br/>' +\n" +
-//                        "          'Duration: <span style=\"color: #d2d2d2; font-size: 12px\">' +\n" +
-//                        "          this.getData('size') + ' min.</span></strong>';\n" +
-//                        "      }");
-//        activityDashboardBinding.anychartView.setChart(bubble);
-//    }
-
-
-    private class CustomBubbleDataEntry extends BubbleDataEntry {
-
-        CustomBubbleDataEntry(Integer training, Integer x, Integer value, String data, Integer size) {
-            super(x, value, size);
-            setValue("training", training);
-            setValue("data", data);
-        }
-    }
-
-//    public void AddPolarCHart() {
-//
-//
-//        Polar polar = AnyChart.polar();
-//
-//        List<DataEntry> data = new ArrayList<>();
-//        data.add(new CustomDataEntry("Nail polish", 12814, 4376, 4229));
-//        data.add(new CustomDataEntry("Eyebrow pencil", 13012, 3987, 3932));
-//        data.add(new CustomDataEntry("Rouge", 11624, 3574, 5221));
-//        data.add(new CustomDataEntry("Pomade", 8814, 4376, 9256));
-//        data.add(new CustomDataEntry("Eyeshadows", 12998, 4572, 3308));
-//        data.add(new CustomDataEntry("Eyeliner", 12321, 3417, 5432));
-//        data.add(new CustomDataEntry("Foundation", 10342, 5231, 13701));
-//        data.add(new CustomDataEntry("Lip gloss", 22998, 4572, 4008));
-//        data.add(new CustomDataEntry("Mascara", 11261, 6134, 18712));
-//        data.add(new CustomDataEntry("Powder", 10261, 5134, 25712));
-//
-//        Set set = Set.instantiate();
-//        set.data(data);
-//        Mapping series1Data = set.mapAs("{ x: 'x', value: 'value' }");
-//        Mapping series2Data = set.mapAs("{ x: 'x', value: 'value2' }");
-//        Mapping series3Data = set.mapAs("{ x: 'x', value: 'value3' }");
-//
-//        polar.column(series1Data);
-//
-//        polar.column(series2Data);
-//
-//        polar.column(series3Data);
-//
-//        polar.title("Company Profit Dynamic in Regions by Year");
-//
-//        polar.sortPointsByX(true)
-//                .defaultSeriesType(PolarSeriesType.COLUMN)
-//                .yAxis(false)
-//                .xScale(ScaleTypes.ORDINAL);
-//
-//        polar.title().margin().bottom(20d);
-//
-//
-//        polar.tooltip()
-//                .valuePrefix("$")
-//                .displayMode(TooltipDisplayMode.UNION);
-//
-//        activityDashboardBinding.anychartView.setChart(polar);
-//    }
-
-    private class CustomDataEntry extends ValueDataEntry {
-        CustomDataEntry(String x, Number value, Number value2, Number value3) {
-            super(x, value);
-            setValue("value2", value2);
-            setValue("value3", value3);
-        }
-    }
-
-    public void setUpMPChart() {
-
-        chart = activityDashboardBinding.mpchart;
-        chart.setDrawBarShadow(false);
-        chart.setDrawValueAboveBar(true);
-        chart.getDescription().setEnabled(false);
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        chart.setMaxVisibleValueCount(60);
-
-        // scaling can now only be done on x- and y-axis separately
-        chart.setPinchZoom(false);
-        chart.setDrawGridBackground(false);
-        Legend l = chart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setForm(Legend.LegendForm.SQUARE);
-        l.setFormSize(9f);
-        l.setTextSize(11f);
-        l.setXEntrySpace(4f);
-        l.setTextColor(ContextCompat.getColor(this,R.color.textcolor));
-    }
-
-    private void setData(int count, float range) {
-        float start = 1f;
-        ArrayList<BarEntry> values = new ArrayList<>();
-        for (int i = (int) start; i < start + count; i++) {
-            float val = (float) (Math.random() * (range + 1));
-            if (Math.random() * 100 < 25) {
-                values.add(new BarEntry(i, val, getResources().getDrawable(R.drawable.logout)));
-            } else {
-                values.add(new BarEntry(i, val));
-            }
-        }
-        BarDataSet set1;
-        if (chart.getData() != null &&
-                chart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
-            set1.setValues(values);
-            chart.getData().notifyDataChanged();
-            chart.notifyDataSetChanged();
-        } else {
-            set1 = new BarDataSet(values, "Cattles");
-            set1.setDrawIcons(false);
-            int startColor1 = ContextCompat.getColor(this, android.R.color.holo_orange_light);
-            int startColor2 = ContextCompat.getColor(this, android.R.color.holo_blue_light);
-            int startColor3 = ContextCompat.getColor(this, android.R.color.holo_orange_light);
-            int startColor4 = ContextCompat.getColor(this, android.R.color.holo_green_light);
-            int startColor5 = ContextCompat.getColor(this, android.R.color.holo_red_light);
-            int endColor1 = ContextCompat.getColor(this, android.R.color.holo_blue_dark);
-            int endColor2 = ContextCompat.getColor(this, android.R.color.holo_purple);
-            int endColor3 = ContextCompat.getColor(this, android.R.color.holo_green_dark);
-            int endColor4 = ContextCompat.getColor(this, android.R.color.holo_red_dark);
-            int endColor5 = ContextCompat.getColor(this, android.R.color.holo_orange_dark);
-            List<GradientColor> gradientFills = new ArrayList<>();
-            gradientFills.add(new GradientColor(startColor1, endColor1));
-            gradientFills.add(new GradientColor(startColor2, endColor2));
-            gradientFills.add(new GradientColor(startColor3, endColor3));
-            gradientFills.add(new GradientColor(startColor4, endColor4));
-            gradientFills.add(new GradientColor(startColor5, endColor5));
-            set1.setGradientColors(gradientFills);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-            BarData data = new BarData(dataSets);
-            data.setValueTextColor(ContextCompat.getColor(this,R.color.textcolor));
-            data.setValueTextSize(10f);
-            data.setBarWidth(0.9f);
-            chart.getAxisLeft().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
-            chart.getAxisRight().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
-            chart.getXAxis().setTextColor(ContextCompat.getColor(this,R.color.textcolor));
-            chart.setData(data);
-
-        }
-
-
-    }
-
-    public void CreateMPPicChart(){
-
-        ArrayList<PieEntry> visitors = new ArrayList<>();
-        visitors.add(new PieEntry(2,"Farmers"));
-        visitors.add(new PieEntry(3,"Farms"));
-
-
-        PieDataSet pieDataSet = new PieDataSet(visitors,"");
-        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.textcolor));
-        pieDataSet.setValueTextSize(16f);
-
-
-        PieData pieData = new PieData(pieDataSet);
-        activityDashboardBinding.piempchart.setData(pieData);
-        activityDashboardBinding.piempchart.invalidate();
-        activityDashboardBinding.piempchart.getDescription().setEnabled(false);
-        activityDashboardBinding.piempchart.setCenterTextSize(5f);
-        activityDashboardBinding.piempchart.setCenterText("Cattles");
-        activityDashboardBinding.piempchart.setHoleRadius(0);
-        activityDashboardBinding.piempchart.setCenterTextColor(R.color.textcolor);
-        activityDashboardBinding.piempchart.setEntryLabelTextSize(8f);
-        activityDashboardBinding.piempchart.setEntryLabelColor(R.color.textcolor);
-        activityDashboardBinding.piempchart.setHoleColor(R.color.wholecolor);
-        activityDashboardBinding.piempchart.animate();
-        activityDashboardBinding.piempchart.setEntryLabelColor(ContextCompat.getColor(this, R.color.textcolor));
-        activityDashboardBinding.piempchart.getLegend().setTextColor(ContextCompat.getColor(this, R.color.textcolor));
-
-        //activityDashboardBinding.piempchart.graph.getPaint(activityDashboardBinding.piempchart.PAINT_VALUES).setColor(Color.BLUE);
-
-
-
-    }
 
 
     public void AnimateTextView(){
@@ -861,19 +577,11 @@ public class ActivityDashboard extends AppCompatActivity {
 
     public void setrecyclerAdapter(){
         ArrayList<Cattles> cattlesArrayList = new ArrayList<>();
-//        ArrayList<Cattles> cattleslist = new ArrayList<>();
-//        cattleslist.add(new Cattles("Cow","2"));
-//        cattleslist.add(new Cattles("Goat","3"));
-//        cattleslist.add(new Cattles("Buffalo","4"));
-//        CattleAdapter cattleAdapter = new CattleAdapter(cattleslist,this);
-//        activityDashboardBinding.recycler.setAdapter(cattleAdapter);
-//
         viewModel.dashboardFarmerData.observe(this, new Observer<JsonObject>() {
             @Override
             public void onChanged(JsonObject jsonObject) {
                 if (jsonObject != null){
                     JsonArray farmerData = jsonObject.get("farmers").getAsJsonArray();
-//                    Log.d(constants.Tag, gridObject.toString());
                     for (int i = 0; i < farmerData.size(); i++){
                         JsonObject obj = farmerData.get(i).getAsJsonObject();
                         farmerID = obj.get("farmerID").getAsString();
@@ -892,18 +600,18 @@ public class ActivityDashboard extends AppCompatActivity {
                     }
                     cattleAdapter = new CattleAdapter(cattlesArrayList, ActivityDashboard.this);
                     activityDashboardBinding.recycler.setLayoutManager(new LinearLayoutManager(ActivityDashboard.this));
-                    activityDashboardBinding.recycler.setAdapter(cattleAdapter);
+
 
                     int resId = R.anim.slide_up_anim_layout;
                     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ActivityDashboard.this, resId);
                     activityDashboardBinding.recycler.setLayoutAnimation(animation);
-                    cattleAdapter.notifyDataSetChanged();
+                    //cattleAdapter.notifyDataSetChanged();
+                    activityDashboardBinding.recycler.setAdapter(cattleAdapter);
                     sessionManager.saveDashboardFarmFarmerId(
                             farmID,
                             farmerID
                     );
-//                    Log.d("id",farmID);
-//                    Log.d("id",farmerID);
+
                 }
                 loadingDialog.dissmissDialog();
             }
@@ -948,11 +656,6 @@ public class ActivityDashboard extends AppCompatActivity {
                 ViewCompat.setTransitionName(activityDashboardBinding.profileImagedashboard, transitionName);
 
 
-//                Intent intent = new Intent(this, .class);
-//                View sharedView = findViewById(R.id.profileImagedashboard); // The shared view
-//                String transitionName = getString(R.string.transition_name); // The transition name, make sure it's the same in both activities
-//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, sharedView, transitionName);
-//                startActivity(intent, options.toBundle());
             }
         });
     }
@@ -972,16 +675,7 @@ public class ActivityDashboard extends AppCompatActivity {
     public void AddFarmer(){
 
 
-//        @PrimaryKey int id;
-//        String  name;
-//        String type;
-//        String survey_start_time;
-//        String survey_end_time;
-//        String coordinates_start_latitude;
-//        String coordinates_start_longitude;
-//        String coordinates_end_latitude;
-//        String coordinates_end_longitude;
-//        String formPagesCompleted;
+
 
         Intent i = new Intent(this, ActivityWebViewSurveyForm.class);
         i.putExtra("formID","general_basic");
@@ -1071,6 +765,57 @@ public class ActivityDashboard extends AppCompatActivity {
         });
 
         a.show();
+    }
+
+
+    public void LoadData(){
+
+        loadingDialog.ShowCustomLoadingDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (InternetUtils.isInternetConnected(getApplicationContext())) {
+                    // Internet is available
+                    // Do your internet-related tasks here
+                    setrecyclerAdapter();
+                    setCardsData();
+                    Log.d("if","if");
+
+                } else {
+
+                    // No internet connection
+                    // Display a message or handle the lack of internet connection
+                    androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityDashboard.this);
+                    dialog.setTitle("No internet Connection present at the moment");
+                    dialog.setMessage("Do you wish to go to internet settings?");
+                    dialog.setIcon(R.drawable.cowimage);
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            LoadData();
+                        }
+                    });
+
+                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finishAffinity();
+                        }
+                    });
+
+                    dialog.show();
+                    loadingDialog.dissmissDialog();
+                }
+
+
+
+            }
+        },200);
     }
 }
 

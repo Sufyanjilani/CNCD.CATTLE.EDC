@@ -9,10 +9,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationRequest;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -27,6 +29,7 @@ import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.DashboardViewModel;
 import com.example.cncdcattleedcandroid.ViewModels.LoginViewModel;
@@ -146,9 +149,6 @@ public class ActivityLogin extends AppCompatActivity {
                 }
                 else{
 
-//                    Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
-//                    startActivity(new Intent(ActivityLogin.this, ActivitySettingData.class));
-//                    loadingDialog.dissmissDialog();
                     Login(activityLoginBinding.name.getText().toString(),activityLoginBinding.password.getText().toString());
                 }
             }
@@ -186,19 +186,49 @@ public class ActivityLogin extends AppCompatActivity {
 
     public void Login(String email,String password){
 
+        if (InternetUtils.isInternetConnected(getApplicationContext())) {
+            // Internet is available
+            // Do your internet-related tasks here
+            String appversion = "";
+            try {
+                appversion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+                ;
+            } catch (PackageManager.NameNotFoundException nameNotFoundException) {
 
+                Log.d("package", nameNotFoundException.getMessage().toString());
+            }
 
-        String appversion = "";
-        try {
-            appversion = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0).versionName;
-            ;
-        } catch (PackageManager.NameNotFoundException nameNotFoundException) {
+            loginViewModel.Login(email,password,appversion,lat+","+lon);
+        } else {
+            // No internet connection
+            // Display a message or handle the lack of internet connection
+            androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityLogin.this);
+            dialog.setTitle("No internet Connection present at the moment");
+            dialog.setMessage("Do you wish to go to internet settings?");
+            dialog.setIcon(R.drawable.cowimage);
+            dialog.setCancelable(false);
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
 
-            Log.d("package", nameNotFoundException.getMessage().toString());
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    finishAffinity();
+                }
+            });
+
+            dialog.show();
         }
 
-        loginViewModel.Login(email,password,appversion,lat+","+lon);
+
+
 
     }
 

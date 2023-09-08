@@ -53,8 +53,7 @@ public class FarmerAdapter extends RecyclerView.Adapter<FarmerAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
-//            textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+
         }
     }
 

@@ -5,14 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cncdcattleedcandroid.Adapters.CattleAdapter;
 import com.example.cncdcattleedcandroid.Adapters.DataGridAdapter;
@@ -23,6 +27,7 @@ import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.UI.FarmerAdapter;
 import com.example.cncdcattleedcandroid.Utils.Constants;
+import com.example.cncdcattleedcandroid.Utils.InternetUtils;
 import com.example.cncdcattleedcandroid.Utils.LoadingDialog;
 import com.example.cncdcattleedcandroid.ViewModels.WebViewSurveyViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivityFarmerProfileBinding;
@@ -50,11 +55,11 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     String totalCattles, totalCows, googleMapsURL, totalBuffalo, farmID, farmName, farmAddress, farmSector, created_at, farmerID, farmerName, farmerMobileNumber, farmerMobileAlternative;
 
     String cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID, cBreedName, cattleCreated_at, created_by, updated_at, updated_by, sampleID;
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        getFarmerProfile();
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        LoadData();
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -63,21 +68,6 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 //                loadingDialog.dissmissDialog();
 //            }
 //        },2000);
-
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.ShowCustomLoadingDialog();
-                getFarmerProfile();
-                loadingDialog.dissmissDialog();
-            }
-        },2000);
     }
 
     @Override
@@ -126,8 +116,8 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 
             }
         });
-        loadingDialog.ShowCustomLoadingDialog();
-        getFarmerProfile();
+
+        LoadData();
 
         farmerProfileBinding.locationMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +143,40 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                 Intent intent = new Intent(ActivityFarmerProfile.this, ActivityDashboard.class);
                 sessionManager.saveFarmerData("","","","","","");
                 startActivity(intent);
+            }
+        });
+
+        farmerProfileBinding.viewFarmerData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ActivityFarmerProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","View_general_basic");
+                i.putExtra("farmID",farmID);
+                i.putExtra("farmerID",farmerID);
+                i.putExtra("mode","readOnly");
+                startActivity(i);
+            }
+        });
+
+        farmerProfileBinding.deleteFarmerData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ActivityFarmerProfile.this);
+                dialog.setTitle("Delete Form");
+                dialog.setMessage("Are You Sure You Want To Delete Record?");
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -216,12 +240,12 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                             dataGridModelArrayList.add(dataGridModel);
                         }
 
-                        sessionManager.saveCattleDetails(
-                                cTypeName,
-                                cattleGender,
-                                cBreedName,
-                                sampleID
-                        );
+//                        sessionManager.saveCattleDetails(
+//                                cTypeName,
+//                                cattleGender,
+//                                cBreedName,
+//                                sampleID
+//                        );
                         gridAdapter = new DataGridAdapter(dataGridModelArrayList,ActivityFarmerProfile.this);
                         farmerProfileBinding.recyccattle.setLayoutManager(new LinearLayoutManager(ActivityFarmerProfile.this));
                         farmerProfileBinding.recyccattle.setAdapter(gridAdapter);
@@ -250,6 +274,10 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                                 farmSector,
                                 farmerMobileNumber,
                                 farmerMobileAlternative);
+                    }else {
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        Toast.makeText(ActivityFarmerProfile.this,msg,Toast.LENGTH_SHORT).show();
+
                     }
                     loadingDialog.dissmissDialog();
                 }
@@ -290,6 +318,55 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 //
 //
 //    }
+
+    public void LoadData(){
+
+        loadingDialog.ShowCustomLoadingDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (InternetUtils.isInternetConnected(getApplicationContext())) {
+                    // Internet is available
+                    // Do your internet-related tasks here
+                    getFarmerProfile();
+                    loadingDialog.dissmissDialog();
+
+                } else {
+                    loadingDialog.dissmissDialog();
+                    // No internet connection
+                    // Display a message or handle the lack of internet connection
+                    androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ActivityFarmerProfile.this);
+                    dialog.setTitle("No internet Connection present at the moment");
+                    dialog.setMessage("Do you wish to go to internet settings?");
+                    dialog.setIcon(R.drawable.cowimage);
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                            LoadData();
+                        }
+                    });
+
+                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finishAffinity();
+                        }
+                    });
+
+                    dialog.show();
+                    loadingDialog.dissmissDialog();
+                }
+
+
+
+            }
+        },200);
+    }
 
 
 

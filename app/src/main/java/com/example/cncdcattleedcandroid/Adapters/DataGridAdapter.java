@@ -1,6 +1,8 @@
 package com.example.cncdcattleedcandroid.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cncdcattleedcandroid.Models.DataGridModel;
+import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.UI.ActivityCattleProfile;
 import com.example.cncdcattleedcandroid.UI.ActivityFarmerProfile;
 import com.example.cncdcattleedcandroid.UI.ActivityWebViewSurveyForm;
@@ -27,6 +30,8 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     private Context ctx;
 
     private ArrayList<DataGridModel> filteredData;
+    String cattleID;
+    SessionManager sessionManager;
 
     public DataGridAdapter(ArrayList<DataGridModel> gridModels, Context context){
 
@@ -39,6 +44,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     @Override
     public Viewholer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        DatagridlayoutBinding binding = DatagridlayoutBinding.inflate(LayoutInflater.from(parent.getContext()));
+        sessionManager = new SessionManager(ctx);
         return new Viewholer(binding);
 
     }
@@ -47,6 +53,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     public void onBindViewHolder(@NonNull Viewholer holder, int position) {
 
         DataGridModel model = dataGridModels.get(position);
+        cattleID = model.getCattleID();
         holder.datagridlayoutBinding.cattleSample.setText(model.getSampleID());
         holder.datagridlayoutBinding.cattleBreed.setText(model.getcBreedName());
         holder.datagridlayoutBinding.cattleType.setText(model.getcTypeName());
@@ -61,11 +68,6 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             @Override
             public void onClick(View view) {
 
-//
-//                Intent i = new Intent(ctx, ActivityWebViewSurveyForm.class);
-//                i.putExtra("formID","1");
-//                ctx.startActivity(i);
-
             }
         });
 
@@ -74,6 +76,7 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
             public void onClick(View view) {
                 Intent i = new Intent(ctx, ActivityWebViewSurveyForm.class);
                 i.putExtra("formID","personal_mik_weight");
+                i.putExtra("cattleID", cattleID);
                 ctx.startActivity(i);
             }
         });
@@ -81,13 +84,41 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
         holder.datagridlayoutBinding.viewData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewDetails();
+                ViewDetails(model);
+            }
+        });
+        holder.datagridlayoutBinding.deleteData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(ctx);
+                dialog.setTitle("Delete Form");
+                dialog.setMessage("Are You Sure You Want To Delete Record?");
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        
+                    }
+                });
+                dialog.show();
             }
         });
 
     }
-    public void ViewDetails(){
+    public void ViewDetails(DataGridModel model){
         Intent intent = new Intent(ctx, ActivityCattleProfile.class);
+        intent.putExtra("cattleID", cattleID);
+        sessionManager.saveCattleDetails(
+                model.getcTypeName(),
+                model.getCattleGender(),
+                model.getcBreedName(),
+                model.getSampleID()
+        );
         ctx.startActivity(intent);
     }
 

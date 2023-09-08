@@ -43,9 +43,6 @@ public class CattleAdapter extends RecyclerView.Adapter<CattleAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull CattleAdapter.ViewHolder holder, int position) {
         Cattles cattles = cattlesList.get(position);
-//        holder.cattlelistBinding.farmerId.setText(cattles.getFarmerID());
-//        Log.d("id",cattles.getFarmerID());
-//        holder.cattlelistBinding.farmID.setText(cattles.getFarmID());
         holder.cattlelistBinding.farmName.setText(cattles.getFarmName());
         holder.cattlelistBinding.farmAddress.setText(cattles.getFarmAddress());
         holder.cattlelistBinding.farmerName.setText(cattles.getFarmerName());
@@ -66,16 +63,13 @@ public class CattleAdapter extends RecyclerView.Adapter<CattleAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewHead;
-        public TextView textViewDesc;
+
         CattlelistBinding cattlelistBinding;
 
         public ViewHolder(CattlelistBinding cattlelistBinding) {
             super(cattlelistBinding.getRoot());
             this.cattlelistBinding = cattlelistBinding;
 
-//            textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
-//            textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
         }
     }
 

@@ -121,8 +121,6 @@ public class ActivitySplashScreen extends AppCompatActivity {
                 @Override
                 public void run() {
                     Intent i = new Intent(ActivitySplashScreen.this, ActivityLogin.class);
-//        ActivityOptionsCompat options = ActivityOptionsCompat
-//                .makeSceneTransitionAnimation(ActivitySplashScreen.this,sharedview, "applogoimage");
                     startActivity(i);
                     finish();
 

@@ -131,43 +131,14 @@ public class DashboardViewModel extends AndroidViewModel {
 
                         Log.d(constants.Tag, surveyObject.toString());
 
-//                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
-//                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
-//                    Log.d(constants.Tag, farmerObject.toString());
-//
                         String questionairId = formObject.get("questionnaireID").getAsString();
                         String questionnaireName = formObject.get("questionnaireName").getAsString();
                         String form = formObject.get("questionnaireJSON").getAsString();;
-
-                        //String farmerType = formObject.get("type").getAsString();
-
-//                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
-//                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1object = farmerFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarray = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
-
-
 
 
                         Log.d(constants.info,form);
 
                         realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
-
-//                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
-//                    Log.d(constants.Tag, cattleObject.toString());
-//                    String cattleId = cattleObject.get("id").getAsString();
-//                    String cattleName = cattleObject.get("name").getAsString();
-//                    String cattleType = cattleObject.get("type").getAsString();
-//                    JsonObject cattleFormJson = cattleObject.get("json").getAsJsonObject();
-//                    JsonArray cattleFormPages = cattleFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1objectcattle = cattleFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarraycattle = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1cattle = elementsarray.get(0).getAsJsonObject();
-//
-//                    Log.d("retrieved",form1.toString());
-//
-//                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
 
                         surveyformsResponse.setValue("success");
 
@@ -196,21 +167,9 @@ public class DashboardViewModel extends AndroidViewModel {
 
                     Log.d(constants.Tag, surveyObject.toString());
 
-//                    JsonArray surveyData = surveyObject.get("surveys").getAsJsonArray();
-//                    JsonObject farmerObject = surveyData.get(0).getAsJsonObject();
-//                    Log.d(constants.Tag, farmerObject.toString());
-//
                     String questionairId = formObject.get("questionnaireID").getAsString();
                     String questionnaireName = formObject.get("questionnaireName").getAsString();
                     String form = formObject.get("questionnaireJSON").getAsString();;
-
-                    //String farmerType = formObject.get("type").getAsString();
-
-//                    JsonObject farmerFormJson = farmerObject.get("json").getAsJsonObject();
-//                    JsonArray farmerFormPages = farmerFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1object = farmerFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarray = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1 = elementsarray.get(0).getAsJsonObject();
 
 
 
@@ -219,20 +178,6 @@ public class DashboardViewModel extends AndroidViewModel {
 
                     realDBhelper.insertFarmerForm(questionairId,questionnaireName,form);
 
-//                    JsonObject cattleObject = surveyData.get(1).getAsJsonObject();
-//                    Log.d(constants.Tag, cattleObject.toString());
-//                    String cattleId = cattleObject.get("id").getAsString();
-//                    String cattleName = cattleObject.get("name").getAsString();
-//                    String cattleType = cattleObject.get("type").getAsString();
-//                    JsonObject cattleFormJson = cattleObject.get("json").getAsJsonObject();
-//                    JsonArray cattleFormPages = cattleFormJson.get("pages").getAsJsonArray();
-//                    JsonObject page1objectcattle = cattleFormPages.get(0).getAsJsonObject();
-//                    JsonArray elementsarraycattle = page1object.get("elements").getAsJsonArray();
-//                    JsonObject form1cattle = elementsarray.get(0).getAsJsonObject();
-//
-//                    Log.d("retrieved",form1.toString());
-//
-//                    realDBhelper.insertCattleForm(cattleId, cattleName, cattleType,cattleFormPages.toString());
 
                     surveyformsResponse.setValue("success");
 
@@ -288,6 +233,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
                 if (response.isSuccessful()){
 
+
                     _isLogoutSuccess.setValue("loggedOut");
                     sessionManager.savebarearToken("null");
                 }
@@ -318,14 +264,6 @@ public class DashboardViewModel extends AndroidViewModel {
     }
 
     public ArrayList<Cattles> dashboardData(){
-        JsonObject tokenObject = new JsonObject();
-//       tokenObject.addProperty("accessToken","8e4b79db8cf17f541812ef022974aae6043ef87efd7841a50d9514d6f2cd1088");
-//        tokenObject.addProperty("accessToken", sessionManager.getbearer());
-//        tokenObject.addProperty("sessionID", sessionManager.getSessionID());
-//        sessionManager.getbearer();
-//        Log.d("token1", tokenObject.toString());
-//        Log.d("token2", sessionManager.getbearer());
-        ArrayList<DashboardDataModel> dashboardDataModelArrayList = new ArrayList<>();
         ArrayList<Cattles> cattlesArrayList = new ArrayList<>();
 
         Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getDashboardData();
@@ -344,7 +282,7 @@ public class DashboardViewModel extends AndroidViewModel {
                             JsonObject dataObject = dashboardData.get("data").getAsJsonObject();
                             JsonObject cardObject = dataObject.get("cardsData").getAsJsonObject();
                             Log.d(constants.Tag, cardObject.toString());
-                            ;
+
                             String totalFarms = cardObject.get("totalFarms").getAsString();
                             String totalFarmers = cardObject.get("totalFarmers").getAsString();
                             String totalCattles = cardObject.get("totalCattles").getAsString();
@@ -378,10 +316,14 @@ public class DashboardViewModel extends AndroidViewModel {
 
                             dashboardDataResponse.setValue(response.body().get("msg").getAsString());
                         }
-                    }else{
+                    }
+                    else{
 
-                        isResponseSuccess.setValue(response.body().get("msg").getAsString());
-                        dashboardDataResponse.setValue(response.body().get("msg").getAsString());
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+
+                        isResponseSuccess.setValue(msg);
+                        dashboardDataResponse.setValue(msg);
+                        Log.d("msg",msg);
                     }
 
                 }
