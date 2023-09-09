@@ -409,7 +409,7 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     }
                 }
             }
-            Log.d("tag", results[0].getPath().toString());
+//            Log.d("tag", results[0].getPath().toString());
 
             if (results != null) {
                 final File file = new File(results[0].getPath());
@@ -2106,7 +2106,6 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
     public void onBackPressed() {
         if (mode.equals("readOnly")){
             super.onBackPressed();
-            sessionManager.saveDashboardFarmFarmerId("", "");
         }else {
             goback();
         }
@@ -2655,14 +2654,24 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
             farmerId = extraspersonalbasic.getString("farmerID");
+            entityID = extraspersonalbasic.getString("entityID");
             mode = extraspersonalbasic.getString("mode");
             sessionManager = new SessionManager(this);
             loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 setUpWebView2("general_medical", "Android.PostFirstFormData(results)");
+                surveyViewModel.loadEntityData(farmId, farmerId, entityID);
 
-
+                surveyViewModel.isformJson.observe(ActivityWebViewSurveyForm.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            formJson = s;
+                            setUpWebView2("general_medical", "Android.PostFirstFormData(results)");
+                        }
+                    }
+                });
 
             }
         }

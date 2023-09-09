@@ -330,7 +330,6 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                     // Internet is available
                     // Do your internet-related tasks here
                     getFarmerProfile();
-                    loadingDialog.dissmissDialog();
 
                 } else {
                     loadingDialog.dissmissDialog();

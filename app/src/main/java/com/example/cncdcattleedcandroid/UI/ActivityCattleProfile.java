@@ -6,12 +6,15 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.cncdcattleedcandroid.Network.BaseUrl;
+import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.R;
 import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.databinding.ActivityCattleProfileBinding;
@@ -26,15 +29,21 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityCattleProfile extends AppCompatActivity {
 
     ActivityCattleProfileBinding cattleProfileBinding;
     SessionManager sessionManager;
-    String farmId, farmerId, cattleId;
+    String farmId, farmerId, cattleId, mainImageUrl, frontPoseUrl, sidePoseUrl;
+    String Url = "http://192.168.20.136:8888/public/images/rearattachment_1.png";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +82,7 @@ public class ActivityCattleProfile extends AppCompatActivity {
                 i.putExtra("formID","view_personal_milk");
                 i.putExtra("cattleId",cattleId);
                 i.putExtra("mode","readOnly");
+                Log.d("cattleId",cattleId);
                 startActivity(i);
             }
         });
@@ -107,12 +117,42 @@ public class ActivityCattleProfile extends AppCompatActivity {
             }
         });
 
+        cattleProfileBinding.btnAddMilkCycle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","personal_mik_weight");
+                i.putExtra("cattleID", cattleId);
+                startActivity(i);
+            }
+        });
+
         cattleProfileBinding.cattleProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog();
             }
         });
+
+        cattleProfileBinding.sidePose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogSidePose();
+            }
+        });
+
+        cattleProfileBinding.frontPose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogFrontPose();
+            }
+        });
+
+        getCattleProfileData();
+
+
+
+
     }
 
     @Override
@@ -127,9 +167,106 @@ public class ActivityCattleProfile extends AppCompatActivity {
         View view = LayoutInflater.from(ActivityCattleProfile.this).inflate(R.layout.cattle_image, null, false);
         imageView.setView(view);
         ImageView cattleImgView = view.findViewById(R.id.cattleImage);
-        Glide.with(ActivityCattleProfile.this).load(cattleProfileBinding.cattleProfile).into(cattleImgView);
+        Glide.with(ActivityCattleProfile.this).load(mainImageUrl).into(cattleImgView);
         imageView.show();
-
-
     }
+
+    public void alertDialogFrontPose(){
+        AlertDialog.Builder imageView = new AlertDialog.Builder(ActivityCattleProfile.this);
+        View view = LayoutInflater.from(ActivityCattleProfile.this).inflate(R.layout.cattle_image, null, false);
+        imageView.setView(view);
+        ImageView cattleImgView = view.findViewById(R.id.cattleImage);
+        Glide.with(ActivityCattleProfile.this).load(frontPoseUrl).into(cattleImgView);
+        imageView.show();
+    }
+
+    public void alertDialogSidePose(){
+        AlertDialog.Builder imageView = new AlertDialog.Builder(ActivityCattleProfile.this);
+        View view = LayoutInflater.from(ActivityCattleProfile.this).inflate(R.layout.cattle_image, null, false);
+        imageView.setView(view);
+        ImageView cattleImgView = view.findViewById(R.id.cattleImage);
+        Glide.with(ActivityCattleProfile.this).load(sidePoseUrl).into(cattleImgView);
+        imageView.show();
+    }
+
+    public void getCattleProfileData(){
+        Call<JsonObject> callApi = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getCattleProfile("69");
+        callApi.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    if (!response.body().get("error").getAsString().equals("true")){
+                        JsonObject cattlePorfile = response.body();
+                        JsonObject dataObject = cattlePorfile.get("data").getAsJsonObject();
+
+                        JsonObject cattleDetails = dataObject.get("cattleDetails").getAsJsonObject();
+                        String sampleID = cattleDetails.get("sampleID").getAsString();
+                        String farmerCattleID = cattleDetails.get("farmerCattleID").getAsString();
+                        String cTypeID = cattleDetails.get("cTypeID").getAsString();
+                        String cattleGender = cattleDetails.get("cattleGender").getAsString();
+                        String cBreedID = cattleDetails.get("cBreedID").getAsString();
+                        String breedRecently = cattleDetails.get("breedRecently").getAsString();
+                        String cattle_feed_per_day = cattleDetails.get("cattle_feed_per_day").getAsString();
+                        String greenFeed_kg = cattleDetails.get("greenFeed_kg").getAsString();
+                        String hasGrazing_area = cattleDetails.get("hasGrazing_area").getAsString();
+                        String hoursOf_grazing = cattleDetails.get("hoursOf_grazing").getAsString();
+                        String matedRecently = cattleDetails.get("matedRecently").getAsString();
+                        String teeth_of_cattle = cattleDetails.get("teeth_of_cattle").getAsString();
+                        String wandaFeed_kg = cattleDetails.get("wandaFeed_kg").getAsString();
+
+
+                        JsonObject cattleImages = dataObject.get("cattleImages").getAsJsonObject();
+                        mainImageUrl = cattleImages.get("main_img").getAsString().replace("\\", "");
+                        Log.d("url",mainImageUrl);
+                        frontPoseUrl = cattleImages.get("frontPose_picture").getAsString().replace("\\", "");
+                        sidePoseUrl = cattleImages.get("sidePose_picture").getAsString().replace("\\", "");
+
+                        Glide.with(cattleProfileBinding.cattleProfile).load(mainImageUrl).placeholder(R.drawable.baseline_image_not_supported_24).into(cattleProfileBinding.cattleProfile);
+
+                        Glide.with(cattleProfileBinding.frontPose).load(frontPoseUrl).placeholder(R.drawable.baseline_image_not_supported_24).into(cattleProfileBinding.frontPose);
+
+                        Glide.with(cattleProfileBinding.sidePose).load(sidePoseUrl).placeholder(R.drawable.baseline_image_not_supported_24).into(cattleProfileBinding.sidePose);
+
+                        JsonObject cattleEntities = dataObject.get("cattleEntities").getAsJsonObject();
+                        JsonObject personal_milk = cattleEntities.get("personal_milk").getAsJsonObject();
+                        if (personal_milk == null){
+                            cattleProfileBinding.viewCattleMilkingData.setVisibility(View.GONE);
+                            cattleProfileBinding.addCattleMilkingData.setVisibility(View.VISIBLE);
+                        }else {
+                            cattleProfileBinding.viewCattleMilkingData.setVisibility(View.VISIBLE);
+                            cattleProfileBinding.addCattleMilkingData.setVisibility(View.GONE);
+                        }
+
+                        JsonObject personal_medical = cattleEntities.get("personal_medical").getAsJsonObject();
+                        Log.d("personal_medical", String.valueOf(personal_medical));
+                        if (personal_medical.getAsJsonObject().equals("{}")){
+                            cattleProfileBinding.viewCattleMedicalData.setVisibility(View.GONE);
+                            cattleProfileBinding.addCattleMedicalData.setVisibility(View.VISIBLE);
+                        }else {
+                            cattleProfileBinding.viewCattleMedicalData.setVisibility(View.VISIBLE);
+                            cattleProfileBinding.addCattleMedicalData.setVisibility(View.GONE);
+                        }
+
+                        JsonObject personal_traits = cattleEntities.get("personal_traits").getAsJsonObject();
+                        if (personal_traits == null){
+                            cattleProfileBinding.viewCattleTraitsData.setVisibility(View.GONE);
+                            cattleProfileBinding.addCattleTraitsData.setVisibility(View.VISIBLE);
+                        }else {
+                            cattleProfileBinding.viewCattleTraitsData.setVisibility(View.VISIBLE);
+                            cattleProfileBinding.addCattleTraitsData.setVisibility(View.GONE);
+                        }
+                    }else {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 }

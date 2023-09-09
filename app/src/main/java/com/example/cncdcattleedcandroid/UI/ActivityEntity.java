@@ -65,6 +65,7 @@ public class ActivityEntity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                sessionManager.saveDashboardFarmFarmerId("", "");
             }
         });
 
@@ -185,7 +186,6 @@ public class ActivityEntity extends AppCompatActivity {
                     // Internet is available
                     // Do your internet-related tasks here
                     getFarmerEntity();
-                    loadingDialog.dissmissDialog();
 
                 } else {
                     loadingDialog.dissmissDialog();
@@ -221,5 +221,11 @@ public class ActivityEntity extends AppCompatActivity {
 
             }
         },200);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sessionManager.saveDashboardFarmFarmerId("", "");
     }
 }

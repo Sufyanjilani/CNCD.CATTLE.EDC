@@ -14,9 +14,9 @@
 
         <com.jsibbold.zoomage.ZoomageView
             android:id="@+id/cattleImage"
-            android:layout_width="930dp"
+            android:layout_width="950dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/cow"
+            android:src="@drawable/baseline_image_not_supported_24"
             app:zoomage_animateOnReset="true"
             app:zoomage_autoCenter="true"
             app:zoomage_maxScale="8"

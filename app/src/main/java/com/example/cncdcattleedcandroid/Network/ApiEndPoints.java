@@ -81,4 +81,7 @@ public interface ApiEndPoints {
     @GET("farmers/{farmID}/{farmerID}/profile/entities")
     Call<JsonObject> getFarmerEntity(@Path("farmID") String farmId,
                                    @Path("farmerID") String farmerId);
+
+    @GET("cattles/{cattle_id}/profile")
+    Call<JsonObject> getCattleProfile(@Path("cattle_id") String cattle_id);
 }

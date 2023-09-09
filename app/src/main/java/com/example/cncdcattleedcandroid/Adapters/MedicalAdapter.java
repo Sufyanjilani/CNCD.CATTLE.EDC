@@ -65,7 +65,7 @@ public class MedicalAdapter extends RecyclerView.Adapter<MedicalAdapter.ViewHold
     }
     public void ViewDetails(String farmId, String farmerId, String entityId){
         Intent i = new Intent(context, ActivityWebViewSurveyForm.class);
-        i.putExtra("formID","View_general_diet");
+        i.putExtra("formID","View_general_medical");
         i.putExtra("farmID",farmId);
         i.putExtra("farmerID",farmerId);
         i.putExtra("entityID",entityId);

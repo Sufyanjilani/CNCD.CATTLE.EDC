@@ -780,7 +780,6 @@ public class ActivityDashboard extends AppCompatActivity {
                     // Do your internet-related tasks here
                     setrecyclerAdapter();
                     setCardsData();
-                    Log.d("if","if");
 
                 } else {
 
