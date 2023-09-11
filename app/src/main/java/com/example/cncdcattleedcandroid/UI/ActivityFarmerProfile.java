@@ -141,7 +141,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityFarmerProfile.this, ActivityDashboard.class);
-                sessionManager.saveFarmerData("","","","","","");
+                sessionManager.saveFarmerData("","","","","","", "");
                 startActivity(intent);
             }
         });
@@ -254,7 +254,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                         farmerProfileBinding.animtextcow.setText(totalCows);
                         farmerProfileBinding.animtextbuffalo.setText(totalBuffalo);
                         farmerProfileBinding.name.setText(farmerName);
-                        if (farmerMobileAlternative != "" ){
+                        if (farmerMobileAlternative.equals(null)){
                             farmerProfileBinding.farmerMobile.setText(farmerMobileNumber+" / "+farmerMobileAlternative);
                         }else {
                             farmerProfileBinding.farmerMobile.setText(farmerMobileNumber);
@@ -273,7 +273,8 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                                 farmAddress,
                                 farmSector,
                                 farmerMobileNumber,
-                                farmerMobileAlternative);
+                                farmerMobileAlternative,
+                                googleMapsURL);
                     }else {
                         String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
                         Toast.makeText(ActivityFarmerProfile.this,msg,Toast.LENGTH_SHORT).show();
@@ -525,7 +526,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        sessionManager.saveFarmerData("","","","","","");
+        sessionManager.saveFarmerData("","","","","","","");
         super.onBackPressed();
     }
 }

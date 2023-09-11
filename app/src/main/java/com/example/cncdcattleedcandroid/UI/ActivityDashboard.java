@@ -514,7 +514,7 @@ public class ActivityDashboard extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.d("TAG","clicked");
-                headerVersion.setText("1.0.3");
+                headerVersion.setText("1.0.5");
             }
         });
     }

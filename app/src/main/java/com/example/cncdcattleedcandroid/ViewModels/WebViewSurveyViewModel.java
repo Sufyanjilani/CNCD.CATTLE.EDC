@@ -72,6 +72,10 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> isformJson = new MutableLiveData<>();
 
+    public MutableLiveData<String> isCattelformJson = new MutableLiveData<>();
+
+    public MutableLiveData<String> personalBasicFormComplete = new MutableLiveData<>();
+
     SessionManager sessionManager;
 
 
@@ -701,7 +705,6 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 Log.d(constants.Tag, response.body().toString());
-                _isfirstformSent.setValue(true);
                 JsonObject object = response.body();
 
                 if (!object.get("error").getAsString().equals("true")) {
@@ -711,6 +714,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                         String cattleID = data.get("cattle_id").getAsString();
 
                         sessionManager.SaveCattleID(cattleID);
+                        _isfirstformSent.setValue(true);
+
 
 
                         if (!response.body().get("msg").getAsString().equals("")) {
@@ -999,6 +1004,33 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 //
 //    }
 
+
+    public void loadCattelEntityData(String cattleId){
+        Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getCattleProfile(cattleId);
+        getData.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    if (!response.body().get("error").getAsString().equals("true")){
+                        JsonObject reposeObject = response.body();
+                        JsonObject dataObject = reposeObject.get("data").getAsJsonObject();
+                        JsonObject cattleEntities = dataObject.get("cattleEntities").getAsJsonObject();
+                        JsonObject personal_milk = cattleEntities.get("personal_milk").getAsJsonObject();
+                        JsonObject formJson = personal_milk.get("formJSON").getAsJsonObject();
+                        isCattelformJson.setValue(formJson.toString());
+                    }else {
+                        String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                        isCattelformJson.setValue(msg);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d(constants.Tag, t.getMessage().toString());
+            }
+        });
+    }
     public void loadEntityData(String farmId, String farmerId, String entityID){
         Call<JsonObject> getData = new RetrofitClientSurvey(getApplication().getApplicationContext()).retrofitclient().getEntityData(farmId,farmerId,entityID);
         getData.enqueue(new Callback<JsonObject>() {

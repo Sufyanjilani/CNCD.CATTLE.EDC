@@ -170,7 +170,8 @@ public class SessionManager {
             String farmAddress,
             String farmSector,
             String mobileNumber,
-            String altNumber
+            String altNumber,
+            String googleLocation
     ){
         editor.putString("farmerName",farmerName);
         editor.putString("farmName",farmName);
@@ -178,6 +179,7 @@ public class SessionManager {
         editor.putString("farmSector",farmSector);
         editor.putString("mobileNumber",mobileNumber);
         editor.putString("altNumber",altNumber);
+        editor.putString("googleLocation",googleLocation);
         editor.commit();
     }
 
@@ -203,6 +205,10 @@ public class SessionManager {
 
     public String getAltNumber(){
         return sharedPreferences.getString("altNumber","null");
+    }
+
+    public String getGoogleLocation(){
+        return  sharedPreferences.getString("googleLocation", "null");
     }
 
     public String getName(){

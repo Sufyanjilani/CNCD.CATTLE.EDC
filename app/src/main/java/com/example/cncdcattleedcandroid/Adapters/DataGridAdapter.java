@@ -112,7 +112,8 @@ public class DataGridAdapter extends RecyclerView.Adapter<DataGridAdapter.Viewho
     }
     public void ViewDetails(DataGridModel model){
         Intent intent = new Intent(ctx, ActivityCattleProfile.class);
-        intent.putExtra("cattleID", cattleID);
+        intent.putExtra("cattleID",model.getCattleID());
+        sessionManager.SaveCattleID(model.getCattleID());
         sessionManager.saveCattleDetails(
                 model.getcTypeName(),
                 model.getCattleGender(),

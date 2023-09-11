@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -60,7 +61,12 @@ public class ActivityEntity extends AppCompatActivity {
         activityEntityBinding.name.setText(sessionManager.getFarmerName());
         activityEntityBinding.farmName.setText(sessionManager.getFarmName());
         activityEntityBinding.farmAddress.setText(sessionManager.getFarmAddress()+", "+sessionManager.getFarmSector());
-        activityEntityBinding.farmerMobile.setText(sessionManager.getMobileNumber()+" / "+sessionManager.getAltNumber());
+//        activityEntityBinding.farmerMobile.setText(sessionManager.getMobileNumber()+" / "+sessionManager.getAltNumber());
+        if (sessionManager.getAltNumber().equals(null)){
+            activityEntityBinding.farmerMobile.setText(sessionManager.getMobileNumber()+" / "+sessionManager.getAltNumber());
+        }else {
+            activityEntityBinding.farmerMobile.setText(sessionManager.getMobileNumber());
+        }
         activityEntityBinding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +75,13 @@ public class ActivityEntity extends AppCompatActivity {
             }
         });
 
+        activityEntityBinding.locationMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sessionManager.getGoogleLocation()));
+                startActivity(intent);
+            }
+        });
         activityEntityBinding.btnAddMedical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
