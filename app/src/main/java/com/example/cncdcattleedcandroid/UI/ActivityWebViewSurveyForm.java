@@ -1827,8 +1827,63 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
         }
 
+        @JavascriptInterface
+        public void SubmitCattleEntityForm5(String formjson){
+            String questionnaireID = entityId;
+            String appVersion = "";
+
+
+            Log.d(constants.info, "post called");
+            loadingDialog.dissmissDialog();
+
+
+            try {
+                appVersion = getPackageManager()
+                        .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            String locationCoordinate = latStart+","+lonStart;
+            String formJSON = formjson;
+
+
+            String accessToken = sessionManager.getbearer();
+            String interviewtakenAt = getTimeStamp("Interview_taken_at-");
+            String interviewTimeStart = sessionManager.getStartTimestamp();
+            String interviewTimeEnd = getTimeStamp("end-");
+
+
+            String locationCoordinatesStart = sessionManager.getLatitudeStart() + "," +
+                    sessionManager.getLongitudeStart();
+
+
+            String locationCoordinatesEnd = latStart+","+lonStart;
+
+
+            String finalAppVersion = appVersion;
+
+            surveyViewModel.SubmitFifthFormCattle(
+                    context,
+                    questionnaireID,
+                    finalAppVersion,
+                    locationCoordinate,
+                    formJSON,
+                    accessToken,
+                    interviewtakenAt,
+                    interviewTimeStart,
+                    interviewTimeEnd,
+                    locationCoordinatesStart,
+                    locationCoordinatesEnd
+
+            );
+        }
+
+
 
     }
+
 
 
     public void injectCities() {
@@ -2307,7 +2362,12 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
                     if (aBoolean) {
 
-                        LoadSecondForm("general_diet", "Android.SubmitSecondForm(results)\n" + "dissmissdialog()\n");
+//                        LoadSecondForm("general_diet", "Android.SubmitSecondForm(results)\n" + "dissmissdialog()\n");
+                        Intent i = new Intent(ActivityWebViewSurveyForm.this, ActivityFarmerProfile.class);
+                        i.putExtra("farmId",sessionManager.get_Farm_ID());
+                        i.putExtra("farmerId",sessionManager.get_Farmer_ID());
+                        startActivity(i);
+                        finish();
 
                     }
                 }
@@ -2415,8 +2475,18 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
                     }
                 }
             });
-        }
-        else if (formId.equals("personal_basic")) {
+        } else if (formId.equals("personal_diet")) {
+            LoadFifthForm("personal_diet","Android.SubmitCattleEntityForm5(results)");
+            surveyViewModel.isFifthCattleformSubmitted.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if (aBoolean){
+                        finish();
+                    }
+                }
+            });
+            
+        } else if (formId.equals("personal_basic")) {
 
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
@@ -2792,8 +2862,17 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("personal_medical", "Android.PostFirstFormData(results)");
-
+                surveyViewModel.loadCattelEntityData(cattleID);
+                
+                surveyViewModel.isCattelMedicalformJson.observe(ActivityWebViewSurveyForm.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (!s.isEmpty()){
+                            formJson = s;
+                            setUpWebView2("personal_medical", "Android.PostFirstFormData(results)");
+                        }
+                    }
+                });
 
 
             }
@@ -2802,19 +2881,50 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
             Bundle extraspersonalbasic = getIntent().getExtras();
 //            farmId = extraspersonalbasic.getString("farmID");
 //            farmerId = extraspersonalbasic.getString("farmerID");
-//            cattleID = extraspersonalbasic.getString("cattleId");
+            cattleID = extraspersonalbasic.getString("cattleId");
             mode = extraspersonalbasic.getString("mode");
             sessionManager = new SessionManager(this);
             loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                setUpWebView2("personal_traits", "Android.PostFirstFormData(results)");
-
-
+                surveyViewModel.loadCattelEntityData(cattleID);
+                
+                surveyViewModel.isCattelTraitsformJson.observe(ActivityWebViewSurveyForm.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if(!s.isEmpty()){
+                            formJson = s;
+                            setUpWebView2("personal_traits", "Android.PostFirstFormData(results)");
+                        }
+                    }
+                });
 
             }
-        }
-        else if (formId.equals("personal_mik_weight")) {
+        } else if (formId.equals("view_personal_diet")) {
+            Bundle extraspersonalbasic = getIntent().getExtras();
+//            farmId = extraspersonalbasic.getString("farmID");
+//            farmerId = extraspersonalbasic.getString("farmerID");
+            cattleID = extraspersonalbasic.getString("cattleId");
+            mode = extraspersonalbasic.getString("mode");
+            sessionManager = new SessionManager(this);
+            loadingDialog = new LoadingDialog(ActivityWebViewSurveyForm.this, this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                surveyViewModel.loadCattelEntityData(cattleID);
+
+                surveyViewModel.isCattelDietformJson.observe(ActivityWebViewSurveyForm.this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if(!s.isEmpty()){
+                            formJson = s;
+                            setUpWebView2("personal_diet", "Android.PostFirstFormData(results)");
+                        }
+                    }
+                });
+
+            }
+            
+        } else if (formId.equals("personal_mik_weight")) {
             Bundle extraspersonalbasic = getIntent().getExtras();
             farmId = extraspersonalbasic.getString("farmID");
             farmerId = extraspersonalbasic.getString("farmerID");
@@ -3308,6 +3418,13 @@ public class ActivityWebViewSurveyForm extends AppCompatActivity {
 
 
     public void LoadFourthForm(String formname, String method) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setUpWebView2(formname, method);
+        }
+    }
+
+    public void LoadFifthForm(String formname, String method) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             setUpWebView2(formname, method);

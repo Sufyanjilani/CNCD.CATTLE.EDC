@@ -144,6 +144,10 @@ public class SettingDataViewModel extends AndroidViewModel {
 
                     FetchForm(i);
                     Log.d(constants.Tag, String.valueOf(i));
+                }else if (Integer.parseInt(object.get("personal_diet").getAsString()) == i) {
+
+                    FetchForm(i);
+                    Log.d(constants.Tag, String.valueOf(i));
                 }
 
             }

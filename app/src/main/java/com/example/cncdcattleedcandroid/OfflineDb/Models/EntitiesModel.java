@@ -91,7 +91,9 @@ public class EntitiesModel extends RealmObject {
 
     String personal_mik_weight;
 
-    public EntitiesModel(String general_basic, String general_diet, String general_medical, String personal_basic, String personal_milk, String personal_medical, String personal_traits, String personal_mik_weight) {
+    String personal_diet;
+
+    public EntitiesModel(String general_basic, String general_diet, String general_medical, String personal_basic, String personal_milk, String personal_medical, String personal_traits, String personal_mik_weight, String personal_diet) {
         this.general_basic = general_basic;
         this.general_diet = general_diet;
         this.general_medical = general_medical;
@@ -100,16 +102,14 @@ public class EntitiesModel extends RealmObject {
         this.personal_medical = personal_medical;
         this.personal_traits = personal_traits;
         this.personal_mik_weight = personal_mik_weight;
+        this.personal_diet = personal_diet;
     }
 
+    public String getPersonal_diet() {
+        return personal_diet;
+    }
 
-
-
-
-
-
-
-
-
-
+    public void setPersonal_diet(String personal_diet) {
+        this.personal_diet = personal_diet;
+    }
 }

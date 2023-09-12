@@ -419,7 +419,9 @@ public class RealmDatabaseHlper {
 
             String personal_traits,
 
-            String personal_mik_weight
+            String personal_mik_weight,
+
+            String personal_diet
 
     ){
 
@@ -433,7 +435,9 @@ public class RealmDatabaseHlper {
                 personal_milk,
                 personal_medical,
                 personal_traits,
-                personal_mik_weight
+                personal_mik_weight,
+                personal_diet
+
         );
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -463,6 +467,7 @@ public class RealmDatabaseHlper {
             databasereadObject.addProperty("personal_medical",model.getPersonal_medical());
             databasereadObject.addProperty("personal_traits",model.getPersonal_traits());
             databasereadObject.addProperty("personal_mik_weight",model.getPersonal_mik_weight());
+            databasereadObject.addProperty("personal_diet",model.getPersonal_diet());
 
 
         }

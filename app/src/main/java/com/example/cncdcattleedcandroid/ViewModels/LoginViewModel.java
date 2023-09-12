@@ -90,6 +90,8 @@ public class LoginViewModel extends AndroidViewModel {
 
                             String personal_mik_weight = formconfig.get("personal_mik_weight").getAsString();
 
+                            String personal_diet = formconfig.get("personal_diet").getAsString();
+
 
                             realmDatabaseHlper.InsertEntities(
                                     general_basic,
@@ -99,7 +101,8 @@ public class LoginViewModel extends AndroidViewModel {
                                     personal_milk,
                                     personal_medical,
                                     personal_traits,
-                                    personal_mik_weight
+                                    personal_mik_weight,
+                                    personal_diet
                             );
 
                             Log.d("Log form", general_diet);

@@ -71,6 +71,12 @@ public class ActivityFarmerProfile extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        LoadData();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         farmerProfileBinding = ActivityFarmerProfileBinding.inflate(getLayoutInflater());
@@ -117,7 +123,7 @@ public class ActivityFarmerProfile extends AppCompatActivity {
             }
         });
 
-        LoadData();
+
 
         farmerProfileBinding.locationMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,14 +235,14 @@ public class ActivityFarmerProfile extends AppCompatActivity {
                             cattleGender = cattelObject.get("cattleGender").toString()== null ? "null":cattelObject.get("cattleGender").toString().replace("\"", "");;
                             cBreedID = cattelObject.get("cBreedID").toString()== null ? "null":cattelObject.get("cBreedID").toString().replace("\"", "");;
                             cBreedName = cattelObject.get("cBreedName").toString()== null ? "null":cattelObject.get("cBreedName").toString().replace("\"", "");;
-                            cattleCreated_at = cattelObject.get("created_at").toString()== null ? "null":cattelObject.get("created_at").toString().replace("\"", "");;
+                            cattleCreated_at = cattelObject.get("created_at").toString()== null ? "null":cattelObject.get("created_at").getAsString();
                             created_by = cattelObject.get("created_by").toString()== null ? "null":cattelObject.get("created_by").toString().replace("\"", "");;
                             updated_at = cattelObject.get("updated_at").toString() == null ? "null":cattelObject.get("updated_at").toString().replace("\"", "");;
                             updated_by = cattelObject.get("updated_by").toString()== null ? "null":cattelObject.get("updated_by").toString().replace("\"", "");;
                             sampleID = cattelObject.get("sampleID").toString()== null ? "null":cattelObject.get("sampleID").toString().replace("\"", "");;
 
                             DataGridModel dataGridModel = new DataGridModel(cattleID, farmerCattleID, cTypeID, cTypeName, cattleGender, cBreedID,
-                                    cBreedName, created_at, created_by, updated_at, updated_by, sampleID);
+                                    cBreedName, cattleCreated_at, created_by, updated_at, updated_by, sampleID);
                             dataGridModelArrayList.add(dataGridModel);
                         }
 

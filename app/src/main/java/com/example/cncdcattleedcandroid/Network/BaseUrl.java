@@ -1,5 +1,7 @@
 package com.example.cncdcattleedcandroid.Network;
 
+import com.example.cncdcattleedcandroid.BuildConfig;
+
 public class BaseUrl {
 
     String url = "http://192.168.20.136:8001/api/";
@@ -11,10 +13,12 @@ public class BaseUrl {
 
     String baseurl5 = "http://192.168.20.136:8888/api/v1/";
 
+    String BuilConfigUrl = BuildConfig.API_BASE_URL;
+
 
 
     public String getbaseUlr(){
-        return baseurl5;
+        return BuilConfigUrl;
 
     }
 }

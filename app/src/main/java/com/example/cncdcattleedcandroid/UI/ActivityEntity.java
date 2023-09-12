@@ -43,6 +43,13 @@ public class ActivityEntity extends AppCompatActivity {
     Constants constants;
     SessionManager sessionManager;
     String farmId, farmerId;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LoadData();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +110,7 @@ public class ActivityEntity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-       LoadData();
+
     }
 
     public void getFarmerEntity(){
@@ -118,7 +125,7 @@ public class ActivityEntity extends AppCompatActivity {
                         JsonObject farmerData = response.body();
                         JsonObject dataObject = farmerData.get("data").getAsJsonObject();
                         JsonObject entitiesData = dataObject.get("entitiesData").getAsJsonObject();
-                        JsonArray general_medical = entitiesData.get("general_medical").getAsJsonArray();
+                        JsonArray general_medical = entitiesData.get("general_medical") ==null?new JsonArray():entitiesData.get("general_medical").getAsJsonArray();
                         for (int i = 0; i < general_medical.size(); i++){
                             JsonObject entityData = general_medical.get(i).getAsJsonObject();
                             String farmerEntityID = entityData.get("farmerEntityID").getAsString();
@@ -135,7 +142,7 @@ public class ActivityEntity extends AppCompatActivity {
                         activityEntityBinding.medicalRecyler.setAdapter(medicalAdapter);
 
 
-                        JsonArray general_diet = entitiesData.get("general_diet").getAsJsonArray();
+                        JsonArray general_diet = entitiesData.get("general_diet") ==null?new JsonArray():entitiesData.get("general_diet").getAsJsonArray();
                         for (int i = 0; i < general_diet.size(); i++){
                             JsonObject dietObject = general_diet.get(i).getAsJsonObject();
                             String farmerEntityID = dietObject.get("farmerEntityID").getAsString();

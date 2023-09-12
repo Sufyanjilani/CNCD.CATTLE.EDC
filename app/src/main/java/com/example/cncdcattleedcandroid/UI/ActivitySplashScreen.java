@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.cncdcattleedcandroid.BuildConfig;
 import com.example.cncdcattleedcandroid.Network.RetrofitClientSurvey;
 import com.example.cncdcattleedcandroid.OfflineDb.Helper.RealmDatabaseHlper;
 import com.example.cncdcattleedcandroid.R;
@@ -22,6 +23,8 @@ import com.example.cncdcattleedcandroid.Session.SessionManager;
 import com.example.cncdcattleedcandroid.Utils.Constants;
 import com.example.cncdcattleedcandroid.ViewModels.SettingDataViewModel;
 import com.example.cncdcattleedcandroid.databinding.ActivitySplashScreenBinding;
+import com.example.cncdcattleedcandroid.BuildConfig.*;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -71,6 +74,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
         }
         splashScreenBinding.appVersion.setText("Version: "+appVersion);
 
+        checkMode();
     }
 
 
@@ -127,6 +131,13 @@ public class ActivitySplashScreen extends AppCompatActivity {
                 }
             },2000);
 
+        }
+    }
+
+    public void checkMode(){
+
+        if (BuildConfig.DEBUG){
+            splashScreenBinding.url.setText(BuildConfig.API_BASE_URL);
         }
     }
 

@@ -63,6 +63,8 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> isFourthCattleformSubmitted = new MutableLiveData<Boolean>();
 
+    public MutableLiveData<Boolean> isFifthCattleformSubmitted = new MutableLiveData<Boolean>();
+
     public MutableLiveData<Boolean> isMedicalEntitySubmitted = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> isDietEntitySubmitted = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> isMilkWeightSubmitted = new MutableLiveData<Boolean>();
@@ -73,6 +75,12 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
     public MutableLiveData<String> isformJson = new MutableLiveData<>();
 
     public MutableLiveData<String> isCattelformJson = new MutableLiveData<>();
+
+    public MutableLiveData<String> isCattelDietformJson = new MutableLiveData<>();
+
+    public MutableLiveData<String> isCattelMedicalformJson = new MutableLiveData<>();
+
+    public MutableLiveData<String> isCattelTraitsformJson = new MutableLiveData<>();
 
     public MutableLiveData<String> personalBasicFormComplete = new MutableLiveData<>();
 
@@ -326,12 +334,13 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 Log.d(constants.Tag,response.body().toString());
-                _isfirstformSent.setValue(true);
+
                 JsonObject object = response.body();
                 JsonObject data = object.get("data").getAsJsonObject();
                 String farm_id = data.get("farm_id").getAsString();
                 String farmer_id = data.get("farmer_id").getAsString();
                 sessionManager.Save_Farm_and_Farmer_ID(farmer_id,farm_id);
+
 
                 if (!response.body().get("error").getAsString().equals("true")) {
 
@@ -343,7 +352,7 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                 }else {
                     String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
                     formMsg.setValue(msg);
-                }
+                } _isfirstformSent.setValue(true);
 
             }
 
@@ -985,6 +994,80 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
 
     }
 
+    public void SubmitFifthFormCattle(
+
+            Context context,
+            String questionnaireID,
+            String appVersion,
+            String locationCoordinate,
+            String formJSON,
+            String accessToken,
+            String interviewtakenAt,
+            String interviewTimeStart,
+            String interviewTimeEnd,
+            String locationCoordinatesStart,
+            String locationCoordinatesEnd
+
+
+    ){
+        JsonObject payloadObject = new JsonObject();
+
+
+        Log.d("TAG","called");
+
+
+        String cattleId = sessionManager.getCattleId();
+        payloadObject.addProperty("questionnaireID",questionnaireID);
+        payloadObject.addProperty("appVersion",appVersion);
+        payloadObject.addProperty("locationCoordinates",locationCoordinate);
+        payloadObject.addProperty("formJSON",formJSON);
+        payloadObject.addProperty("accessToken",accessToken);
+        payloadObject.addProperty("interviewTakenAt",interviewtakenAt);
+        payloadObject.addProperty("interviewTimeStart",interviewTimeStart);
+        payloadObject.addProperty("interviewTimeEnd",interviewTimeEnd);
+        payloadObject.addProperty("locationCoordinatesStart",locationCoordinatesStart);
+        payloadObject.addProperty("locationCoordinatesEnd",locationCoordinatesEnd);
+
+
+        Log.d("TAG",payloadObject.toString());
+
+        Call<JsonObject> apicall = new RetrofitClientSurvey(context).retrofitclient().insertCattleEntities(
+
+                cattleId,
+                payloadObject
+
+        );
+        apicall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.d(constants.Tag,response.body().toString());
+
+
+                if (!response.body().get("error").getAsString().equals("true")) {
+                    isFifthCattleformSubmitted.setValue(true);
+
+                    String message = response.body().get("msg").getAsString();
+                    formMsg.setValue(message);
+
+                }
+                else{
+                    String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
+                    formMsg.setValue(msg);
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                //   _is_secondformSent.setValue(false);
+                Log.d(constants.Tag,t.getMessage());
+                isFifthCattleformSubmitted.setValue(false);
+            }
+        });
+    }
+
 //    public void insertFarmerForm(
 //            String id,
 //            String name,
@@ -1016,11 +1099,48 @@ public class WebViewSurveyViewModel extends AndroidViewModel {
                         JsonObject dataObject = reposeObject.get("data").getAsJsonObject();
                         JsonObject cattleEntities = dataObject.get("cattleEntities").getAsJsonObject();
                         JsonObject personal_milk = cattleEntities.get("personal_milk").getAsJsonObject();
-                        JsonObject formJson = personal_milk.get("formJSON").getAsJsonObject();
-                        isCattelformJson.setValue(formJson.toString());
+                        if (personal_milk.size() == 0){
+                            isCattelformJson.setValue(String.valueOf(false));
+                        }else {
+                            JsonObject formJson = personal_milk.get("formJSON").getAsJsonObject();
+                            isCattelformJson.setValue(formJson.toString());
+                        }
+
+
+                        JsonObject personal_medical = cattleEntities.get("personal_medical").getAsJsonObject();
+                        if (personal_medical.size() == 0){
+                            isCattelMedicalformJson.setValue(String.valueOf(false));
+                        }else {
+                            JsonObject personal_medicalformJson = personal_medical.get("formJSON").getAsJsonObject();
+                            isCattelMedicalformJson.setValue(personal_medicalformJson.toString());
+                        }
+
+
+                        JsonObject personal_traits = cattleEntities.get("personal_traits").getAsJsonObject();
+                        if (personal_traits.size() == 0){
+                            isCattelTraitsformJson.setValue(String.valueOf(false));
+                        }else {
+                            JsonObject personal_traitsformJson = personal_traits.get("formJSON").getAsJsonObject();
+                            isCattelTraitsformJson.setValue(personal_traitsformJson.toString());
+                        }
+
+
+                        JsonObject personal_diet = cattleEntities.get("personal_diet").getAsJsonObject();
+                        if (personal_diet.size() == 0){
+                            isCattelDietformJson.setValue(String.valueOf(false));
+                        }else {
+                            JsonObject personal_dietformJson = personal_diet.get("formJSON").getAsJsonObject();
+                            isCattelDietformJson.setValue(personal_dietformJson.toString());
+                        }
+
+
                     }else {
                         String msg = response.body().get("msg") == null ? "null": response.body().get("msg").getAsString();
                         isCattelformJson.setValue(msg);
+                        isCattelMedicalformJson.setValue(msg);
+                        isCattelTraitsformJson.setValue(msg);
+                        isCattelDietformJson.setValue(msg);
+
                     }
                 }
             }

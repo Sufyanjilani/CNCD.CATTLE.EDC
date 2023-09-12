@@ -33,6 +33,10 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "API_BASE_URL", "\"http://192.168.20.136:8888/api/v1/\"")
+        }
+        debug{
+            buildConfigField("String", "API_BASE_URL", "\"http://192.168.20.136:8888/api/v1/\"")
         }
 
 //        debug {
@@ -52,6 +56,7 @@ android {
     buildFeatures{
 
         viewBinding = true;
+        buildConfig = true;
     }
 
 

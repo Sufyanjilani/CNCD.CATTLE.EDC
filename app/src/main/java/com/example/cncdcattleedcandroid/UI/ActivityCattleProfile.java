@@ -147,6 +147,17 @@ public class ActivityCattleProfile extends AppCompatActivity {
             }
         });
 
+        cattleProfileBinding.viewCattleDietData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","view_personal_diet");
+                i.putExtra("cattleId",cattleId);
+                i.putExtra("mode","readOnly");
+                startActivity(i);
+            }
+        });
+
         cattleProfileBinding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +201,16 @@ public class ActivityCattleProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
                 i.putExtra("formID","personal_medical");
+                i.putExtra("cattleID", cattleId);
+                startActivity(i);
+            }
+        });
+
+        cattleProfileBinding.addCattleDietData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ActivityCattleProfile.this, ActivityWebViewSurveyForm.class);
+                i.putExtra("formID","personal_diet");
                 i.putExtra("cattleID", cattleId);
                 startActivity(i);
             }
@@ -311,7 +332,18 @@ public class ActivityCattleProfile extends AppCompatActivity {
 
                         Glide.with(cattleProfileBinding.sidePose).load(sidePoseUrl).placeholder(R.drawable.baseline_image_not_supported_24).into(cattleProfileBinding.sidePose);
 
+
                         JsonObject cattleEntities = dataObject.get("cattleEntities").getAsJsonObject();
+
+                        JsonObject personal_diet = cattleEntities.get("personal_diet").getAsJsonObject();
+                        if (personal_diet.getAsJsonObject().size() == 0){
+                            cattleProfileBinding.viewCattleDietDataLayout.setVisibility(View.GONE);
+                            cattleProfileBinding.addCattleDietDataLayout.setVisibility(View.VISIBLE);
+                        }else {
+                            cattleProfileBinding.viewCattleDietDataLayout.setVisibility(View.VISIBLE);
+                            cattleProfileBinding.addCattleDietDataLayout.setVisibility(View.GONE);
+                        }
+
                         JsonObject personal_milk = cattleEntities.get("personal_milk").getAsJsonObject();
                         if (personal_milk.getAsJsonObject().size() == 0){
                             cattleProfileBinding.viewCattleMilkingDataLayout.setVisibility(View.GONE);
